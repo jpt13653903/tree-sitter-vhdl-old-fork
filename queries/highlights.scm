@@ -1,4 +1,48 @@
-; 3.2 Entity declaration {{{
+; syntax highlighting
+
+(type_mark) @type
+(comment) @comment
+[
+"entity"
+"architecture"
+"is"
+"of"
+"begin"
+"end"
+"port"
+(mode)
+] @keyword
+
+[
+"("
+")"
+"["
+"]"
+] @punctuation.bracket
+
+[ "=>" "<=" "+" ":=" "=" "/=" "<" ">" ] @operator
+
+(expression (character_literal) @number)
+
+(expression (simple_name))
+
+(entity_declaration
+    ; name: (identifier) @function
+    at_end: (simple_name) @variable)
+
+(architecture_body
+    ; name: (identifier) @function
+    entity: (simple_name) @variable
+    at_end: (simple_name) @variable)
+
+; (identifier_list
+;     (identifier) @variable)
+(identifier) @variable
+(simple_concurrent_signal_assignment
+    target: (simple_name) @variable)
+(expression (simple_name) @variable)
+
+; error highlighting
 (entity_header [
     (generic_map_aspect) @error.illegal.map_aspect.generic
     (port_map_aspect)    @error.illegal.map_aspect.port
