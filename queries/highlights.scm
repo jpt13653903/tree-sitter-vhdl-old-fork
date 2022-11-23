@@ -1,5 +1,4 @@
-; syntax highlighting
-
+; 3.2 Entity declaration {{{
 (type_mark) @type
 (comment) @comment
 [
@@ -9,9 +8,12 @@
 "of"
 "begin"
 "end"
-"port"
+"type"
 (mode)
 ] @keyword
+
+"record" @type.builtin
+((entity_header) "port" @keyword)
 
 [
 "("
@@ -20,6 +22,9 @@
 "]"
 ] @punctuation.bracket
 
+"." @delimeter
+";" @delimeter
+
 [ "=>" "<=" "+" ":=" "=" "/=" "<" ">" ] @operator
 
 (expression (character_literal) @number)
@@ -27,9 +32,13 @@
 (expression (simple_name))
 
 (entity_declaration
-    ; name: (identifier) @function
+    name: (identifier) @variable
     at_end: (simple_name) @variable)
 
+(full_type_declaration
+    name: (identifier) @type
+    (record_type_definition
+        at_end: (simple_name) @type))
 (architecture_body
     ; name: (identifier) @function
     entity: (simple_name) @variable
@@ -37,12 +46,12 @@
 
 ; (identifier_list
 ;     (identifier) @variable)
-(identifier) @variable
+; (identifier) @variable
 (simple_concurrent_signal_assignment
     target: (simple_name) @variable)
 (expression (simple_name) @variable)
 
-; error highlighting
+;; error highlighting
 (entity_header [
     (generic_map_aspect) @error.illegal.map_aspect.generic
     (port_map_aspect)    @error.illegal.map_aspect.port

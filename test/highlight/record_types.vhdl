@@ -1,3 +1,12 @@
+    type foo is record end record foo;
+--  ^ keyword
+--       ^ type
+--           ^ keyword
+--              ^ type.builtin
+--                     ^ keyword
+--                         ^ type.builtin
+--                                ^ type
+
 type foo is
     record
     end record bar;
