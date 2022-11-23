@@ -92,6 +92,9 @@
 (conditional_expression
     (simple_name) @variable
 )
+(conditional_expression
+    (parenthesized_expression
+        (simple_name) @variable))
 
 (relation
     (simple_name) @variable)
