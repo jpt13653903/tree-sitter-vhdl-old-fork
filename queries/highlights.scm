@@ -26,6 +26,9 @@
     "else"
     "case"
     "then"
+    "generate"
+    "for"
+    "in"
 
     ; ((port_clause "port"))
     ; ((generic_clause "generic"))
@@ -133,6 +136,9 @@
 
 (label (identifier) @label)
 
+(for_generate_statement
+    at_end: (simple_name) @label)
+
 (entity_instantiation
     entity: (selected_name
         prefix: (simple_name) @namespace
@@ -178,7 +184,15 @@
 
 (simple_concurrent_signal_assignment
     target: (simple_name) @variable)
+
+(simple_concurrent_signal_assignment
+    target: (ambiguous_name
+        prefix: (simple_name) @variable))
+
 (expression (simple_name) @variable)
+
+(parameter_specification
+    name: (identifier) @variable)
 
 ;; error highlighting
 (entity_header [
