@@ -21,6 +21,11 @@
     (mode)
     "port"
     "generic"
+    "if"
+    "elsif"
+    "else"
+    "case"
+    "then"
 
     ; ((port_clause "port"))
     ; ((generic_clause "generic"))
