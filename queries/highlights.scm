@@ -2,14 +2,14 @@
 (type_mark) @type
 (comment) @comment
 [
-"entity"
-"architecture"
-"is"
-"of"
-"begin"
-"end"
-"type"
-(mode)
+    "entity"
+    "architecture"
+    "is"
+    "of"
+    "begin"
+    "end"
+    "type"
+    (mode)
 ] @keyword
 
 "record" @type.builtin
