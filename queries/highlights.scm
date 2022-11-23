@@ -74,7 +74,7 @@
 ] @operator
 
 [
-    (expression (character_literal))
+    ((character_literal))
     (integer_decimal)
 ] @number
 
@@ -87,9 +87,18 @@
         (named_association_element
             formal_part: (simple_name) @field))) ; TODO maybe should be @parameter
 
+(sensitivity_list (_) @variable)
+
+(conditional_expression
+    (simple_name) @variable
+)
+
+(relation
+    (simple_name) @variable)
 (attribute_name
     prefix: (_) @variable
     designator: (_) @field)
+
 (descending_range
     low: (simple_expression (simple_name) @constant))
 (descending_range
@@ -98,7 +107,12 @@
     low: (simple_expression (simple_name) @constant))
 (ascending_range
     high: (simple_expression (simple_name) @constant))
+
 (entity_declaration
+    name: (identifier) @variable
+    at_end: (simple_name) @variable)
+
+(component_declaration
     name: (identifier) @variable
     at_end: (simple_name) @variable)
 
@@ -107,9 +121,19 @@
     (record_type_definition
         at_end: (simple_name) @type))
 (architecture_body
-    ; name: (identifier) @function
+    name: (identifier) @method
     entity: (simple_name) @variable
-    at_end: (simple_name) @variable)
+    at_end: (simple_name) @method)
+
+(component_instantiation
+    component: (simple_name) @variable)
+
+(label (identifier) @label)
+
+(entity_instantiation
+    entity: (selected_name
+        prefix: (simple_name) @namespace
+        suffix: (simple_name) @variable))
 
 (library_clause
     (logical_name_list
@@ -132,6 +156,18 @@
 (signal_interface_declaration
     (identifier_list
         (identifier) @variable))
+
+(signal_declaration
+    (identifier_list
+        (identifier) @variable))
+
+(record_type_definition
+    (_
+    (identifier_list
+        (identifier) @field)))
+
+(simple_waveform_assignment
+    target: (_) @variable)
 
 (constant_interface_declaration
     (identifier_list
