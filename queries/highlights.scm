@@ -47,9 +47,31 @@
 "]"
 ] @punctuation.bracket
 
-[ "." ";" ","] @delimeter
+[
+    "."
+    ";"
+    ","
+    ":"
+] @delimeter
 
-[ "=>" "<=" "+" ":=" "=" "/=" "<" ">" ] @operator
+[
+    "=>"
+    "<="
+    "+"
+    ":="
+    "="
+    "/="
+    "<"
+    ">"
+    "-"
+    "*"
+    "/"
+    "xor"
+    "and"
+    "nand"
+    "or"
+    "nor"
+] @operator
 
 [
     (expression (character_literal))
