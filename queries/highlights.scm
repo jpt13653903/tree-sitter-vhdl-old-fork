@@ -9,12 +9,32 @@
     "begin"
     "end"
     "type"
+    "to"
+    "downto"
+    "signal"
+    "record"
+    "array"
+    "others"
+    "process"
+    "component"
+    "constant"
     (mode)
+    "port"
+    "generic"
+
+    ; ((port_clause "port"))
+    ; ((generic_clause "generic"))
+
+    ; ((port_map_aspect "port"))
+    ; ((generic_map_aspect "generic"))
+    "map"
 ] @keyword
 
-"record" @type.builtin
-((entity_header) "port" @keyword)
 
+[
+    "library"
+    "use"
+] @include
 [
 "("
 ")"
@@ -22,15 +42,35 @@
 "]"
 ] @punctuation.bracket
 
-"." @delimeter
-";" @delimeter
+[ "." ";" ","] @delimeter
 
 [ "=>" "<=" "+" ":=" "=" "/=" "<" ">" ] @operator
 
-(expression (character_literal) @number)
+[
+    (expression (character_literal))
+    (integer_decimal)
+] @number
 
-(expression (simple_name))
+(generic_map_aspect
+    (association_list
+        (named_association_element
+            formal_part: (simple_name) @parameter)))
+(port_map_aspect
+    (association_list
+        (named_association_element
+            formal_part: (simple_name) @field))) ; TODO maybe should be @parameter
 
+(attribute_name
+    prefix: (_) @variable
+    designator: (_) @field)
+(descending_range
+    low: (simple_expression (simple_name) @constant))
+(descending_range
+    high: (simple_expression (simple_name) @constant))
+(ascending_range
+    low: (simple_expression (simple_name) @constant))
+(ascending_range
+    high: (simple_expression (simple_name) @constant))
 (entity_declaration
     name: (identifier) @variable
     at_end: (simple_name) @variable)
@@ -44,9 +84,32 @@
     entity: (simple_name) @variable
     at_end: (simple_name) @variable)
 
-; (identifier_list
-;     (identifier) @variable)
-; (identifier) @variable
+(library_clause
+    (logical_name_list
+        library: (simple_name) @namespace))
+(use_clause
+    (selected_name
+        prefix: (selected_name
+            prefix: (simple_name) @namespace)
+        suffix: (_) @function
+))
+(use_clause
+    (selected_name
+        prefix: (simple_name) @namespace
+))
+
+(constant_declaration
+    (identifier_list
+        (identifier) @constant))
+
+(signal_interface_declaration
+    (identifier_list
+        (identifier) @variable))
+
+(constant_interface_declaration
+    (identifier_list
+        (identifier) @constant))
+
 (simple_concurrent_signal_assignment
     target: (simple_name) @variable)
 (expression (simple_name) @variable)
