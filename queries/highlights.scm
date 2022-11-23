@@ -26,6 +26,7 @@
     "else"
     "case"
     "then"
+    "when"
     "generate"
     "for"
     "in"
@@ -126,6 +127,7 @@
     name: (identifier) @type
     (record_type_definition
         at_end: (simple_name) @type))
+
 (architecture_body
     name: (identifier) @method
     entity: (simple_name) @variable
@@ -135,6 +137,9 @@
     component: (simple_name) @variable)
 
 (label (identifier) @label)
+
+(process_statement
+    at_end: (simple_name) @label)
 
 (for_generate_statement
     at_end: (simple_name) @label)
