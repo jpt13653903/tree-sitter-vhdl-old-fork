@@ -101,6 +101,9 @@
             formal_part: (simple_name) @field))) ; TODO maybe should be @parameter
 
 (sensitivity_list (_) @variable)
+
+(default_expression (simple_name) @variable)
+
 (expression
     (ambiguous_name
         prefix: (simple_name) @function
