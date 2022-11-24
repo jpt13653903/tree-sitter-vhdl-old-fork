@@ -119,14 +119,23 @@
     prefix: (_) @variable
     designator: (_) @field)
 
-(descending_range
-    low: (simple_expression (simple_name) @constant))
-(descending_range
-    high: (simple_expression (simple_name) @constant))
-(ascending_range
-    low: (simple_expression (simple_name) @constant))
-(ascending_range
-    high: (simple_expression (simple_name) @constant))
+
+; ascending and descending specs. TODO see if these can be merged into one
+; query these two are for when there is an expression with multiple arguments,
+; such as (a - b - 1 downto 0)
+(_
+    low: (simple_expression (simple_expression (simple_name) @constant)))
+(_
+    high: (simple_expression (simple_expression (simple_name) @constant))
+)
+; ascending and descending specs. TODO see if these can be merged into one
+; query these two are for when there is an expression with a single argument
+; such as (a downto 0)
+(_
+    low: ((simple_expression (simple_name) @constant)))
+(_
+    high: ((simple_expression (simple_name) @constant))
+)
 
 (entity_declaration
     name: (identifier) @variable
