@@ -30,6 +30,8 @@
     "generate"
     "for"
     "in"
+    "function"
+    "return"
 
     ; ((port_clause "port"))
     ; ((generic_clause "generic"))
@@ -39,6 +41,10 @@
     "map"
 ] @keyword
 
+(function_body
+    designator: (identifier) @function)
+(function_body
+    at_end: (simple_name) @function)
 
 [
     "library"
@@ -95,6 +101,10 @@
             formal_part: (simple_name) @field))) ; TODO maybe should be @parameter
 
 (sensitivity_list (_) @variable)
+(expression
+    (ambiguous_name
+        prefix: (simple_name) @function
+        (expression_list)))
 
 (conditional_expression
     (simple_name) @variable
