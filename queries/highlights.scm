@@ -144,6 +144,9 @@
 (for_generate_statement
     at_end: (simple_name) @label)
 
+(if_generate_statement
+    at_end: (simple_name) @label)
+
 (entity_instantiation
     entity: (selected_name
         prefix: (simple_name) @namespace
