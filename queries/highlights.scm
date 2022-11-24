@@ -82,6 +82,9 @@
     (integer_decimal)
 ] @number
 
+(string_literal) @string
+(bit_string_literal) @string
+
 (generic_map_aspect
     (association_list
         (named_association_element
