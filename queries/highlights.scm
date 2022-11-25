@@ -108,9 +108,12 @@
 
 (default_expression (simple_name) @variable)
 
+; TODO: this capture also captures indexing signals as if they're functions.
+; Don't know if there's anyway around that, might just need to either have
+; function calls highlighted as variables or vice versa
 (expression
     (ambiguous_name
-        prefix: (simple_name) @function
+        prefix: ((simple_name) @variable)
         (expression_list)))
 
 (conditional_expression
@@ -143,6 +146,9 @@
 (_
     high: ((simple_expression (simple_name) @constant))
 )
+
+(expression
+    (simple_expression (simple_name) @variable))
 
 (entity_declaration
     name: (identifier) @variable
@@ -222,9 +228,8 @@
 (simple_concurrent_signal_assignment
     target: (simple_name) @variable)
 
-(simple_concurrent_signal_assignment
-    target: (ambiguous_name
-        prefix: (simple_name) @variable))
+(ambiguous_name
+        prefix: (simple_name) @variable)
 
 (expression (simple_name) @variable)
 
