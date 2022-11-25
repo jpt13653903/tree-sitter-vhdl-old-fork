@@ -28,10 +28,12 @@
     "then"
     "when"
     "generate"
+    "loop"
     "for"
     "in"
     "function"
     "return"
+    "range"
 
     ; ((port_clause "port"))
     ; ((generic_clause "generic"))
@@ -81,6 +83,8 @@
     "nand"
     "or"
     "nor"
+    (attribute_name "'")
+    (index_subtype_definition (any))
 ] @operator
 
 [
