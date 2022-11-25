@@ -159,9 +159,10 @@
     at_end: (simple_name) @variable)
 
 (full_type_declaration
-    name: (identifier) @type
-    (record_type_definition
-        at_end: (simple_name) @type))
+    name: (identifier) @type)
+
+(record_type_definition
+    at_end: (simple_name) @type)
 
 (architecture_body
     name: (identifier) @method
