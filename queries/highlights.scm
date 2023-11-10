@@ -5,6 +5,11 @@
 
 (wait_statement) @keyword.coroutine
 
+[ "assert" "report" "severity" ] @debug
+(severity_expression
+    (simple_name) @constant.builtin (#any-of? @constant.builtin
+        "note" "warning" "error" "failure"))
+
 [
     "package"
     "entity"
@@ -13,6 +18,7 @@
     "to"
     "downto"
     "signal"
+    "variable"
     "record"
     "array"
     "others"
@@ -28,59 +34,33 @@
     "map"
 ] @keyword
 
+[ "pure" "impure" ] @storageclass
+
 [ "is" "begin" "end" ] @keyword.special
 
-[
-    "of"
-    "in"
-] @keyword.operator
+[ "of" "in" ] @keyword.operator
 
-[
-    "for"
-    "loop"
-    "while"
-] @repeat
+[ "for" "loop" "while" ] @repeat
 
-[
-    "if"
-    "elsif"
-    "else"
-    "case"
-    "then"
-    "when"
-] @conditional
+[ "if" "elsif" "else" "case" "then" "when" ] @conditional
 
 (function_body
     designator: (identifier) @function)
 (function_body
     at_end: (simple_name) @function)
 
-[
-    "library"
-    "use"
-] @include
+(procedure_call_statement
+    procedure: (simple_name) @function)
+
+[ "library" "use" ] @include
 
 [ "(" ")" "[" "]" ] @punctuation.bracket
 
 [ "." ";" "," ":" ] @punctuation.delimeter
 
 [
-    "=>"
-    "<="
-    "+"
-    ":="
-    "="
-    "/="
-    "<"
-    ">"
-    "-"
-    "*"
-    "/"
-    "xor"
-    "and"
-    "nand"
-    "or"
-    "nor"
+    "=>" "<=" "+" ":=" "=" "/=" "<" ">" "-" "*" "/"
+    "not" "xor" "and" "nand" "or" "nor"
     (attribute_name "'")
     (index_subtype_definition (any))
 ] @operator
@@ -88,10 +68,18 @@
 [
     ((character_literal))
     (integer_decimal)
+    (real_decimal)
 ] @number
 
 (string_literal) @string
 (bit_string_literal) @string
+
+(assertion_statement
+    (string_expression
+        (string_literal) @string @spell))
+(report_statement
+    (string_expression
+        (string_literal) @string @spell))
 
 (physical_literal
     unit: (simple_name) @attribute)
@@ -268,7 +256,15 @@
         "get_rand_max" "sqrt" "cbrt" "exp" "log" "log2" "sin" "cos" "tan" "asin"
         "acos" "atan" "atan2" "sinh" "cosh" "tanh" "asinh" "acosh" "atanh"))
 
+(procedure_call_statement
+    procedure: (simple_name) @function.builtin (#any-of? @function.builtin
+        "sign" "ceil" "floor" "round" "fmax" "fmin" "uniform" "srand" "rand"
+        "get_rand_max" "sqrt" "cbrt" "exp" "log" "log2" "sin" "cos" "tan" "asin"
+        "acos" "atan" "atan2" "sinh" "cosh" "tanh" "asinh" "acosh" "atanh"))
+
 (expression (simple_name) @variable)
+
+((simple_name) @variable.builtin (#eq? @variable.builtin "now"))
 
 (parameter_specification
     name: (identifier) @variable)
