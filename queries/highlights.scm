@@ -1,6 +1,6 @@
 ; 3.2 Entity declaration {{{
 (type_mark) @type
-(comment) @comment
+(comment) @comment @spell
 [
     "entity"
     "architecture"
