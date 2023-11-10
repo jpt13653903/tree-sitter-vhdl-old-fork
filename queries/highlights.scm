@@ -1,13 +1,14 @@
 ; 3.2 Entity declaration {{{
 (type_mark) @type
 (comment) @comment @spell
+(mode) @type.qualifier
+
+(wait_statement) @keyword.coroutine
+
 [
+    "package"
     "entity"
     "architecture"
-    "is"
-    "of"
-    "begin"
-    "end"
     "type"
     "to"
     "downto"
@@ -18,30 +19,36 @@
     "process"
     "component"
     "constant"
-    (mode)
     "port"
     "generic"
+    "generate"
+    "function"
+    "return"
+    "range"
+    "map"
+] @keyword
+
+[ "is" "begin" "end" ] @keyword.special
+
+[
+    "of"
+    "in"
+] @keyword.operator
+
+[
+    "for"
+    "loop"
+    "while"
+] @repeat
+
+[
     "if"
     "elsif"
     "else"
     "case"
     "then"
     "when"
-    "generate"
-    "loop"
-    "for"
-    "in"
-    "function"
-    "return"
-    "range"
-
-    ; ((port_clause "port"))
-    ; ((generic_clause "generic"))
-
-    ; ((port_map_aspect "port"))
-    ; ((generic_map_aspect "generic"))
-    "map"
-] @keyword
+] @conditional
 
 (function_body
     designator: (identifier) @function)
@@ -52,19 +59,10 @@
     "library"
     "use"
 ] @include
-[
-"("
-")"
-"["
-"]"
-] @punctuation.bracket
 
-[
-    "."
-    ";"
-    ","
-    ":"
-] @delimeter
+[ "(" ")" "[" "]" ] @punctuation.bracket
+
+[ "." ";" "," ":" ] @punctuation.delimeter
 
 [
     "=>"
@@ -95,14 +93,18 @@
 (string_literal) @string
 (bit_string_literal) @string
 
+(physical_literal
+    unit: (simple_name) @attribute)
+
 (generic_map_aspect
     (association_list
         (named_association_element
             formal_part: (simple_name) @parameter)))
+
 (port_map_aspect
     (association_list
         (named_association_element
-            formal_part: (simple_name) @field))) ; TODO maybe should be @parameter
+            formal_part: (simple_name) @property)))
 
 (sensitivity_list (_) @variable)
 
@@ -117,8 +119,8 @@
         (expression_list)))
 
 (conditional_expression
-    (simple_name) @variable
-)
+    (simple_name) @variable)
+
 (conditional_expression
     (parenthesized_expression
         (simple_name) @variable))
@@ -128,7 +130,6 @@
 (attribute_name
     prefix: (_) @variable
     designator: (_) @field)
-
 
 ; ascending and descending specs. TODO see if these can be merged into one
 ; query these two are for when there is an expression with multiple arguments,
@@ -150,23 +151,28 @@
 (expression
     (simple_expression (simple_name) @variable))
 
+(package_declaration
+    name: (identifier) @namespace)
+(package_declaration
+    at_end: (simple_name) @namespace)
+
 (entity_declaration
-    name: (identifier) @variable
-    at_end: (simple_name) @variable)
+    name: (identifier) @namespace
+    at_end: (simple_name) @namespace)
 
 (component_declaration
     name: (identifier) @variable
     at_end: (simple_name) @variable)
 
 (full_type_declaration
-    name: (identifier) @type)
+    name: (identifier) @type.definition)
 
 (record_type_definition
     at_end: (simple_name) @type)
 
 (architecture_body
     name: (identifier) @method
-    entity: (simple_name) @variable
+    entity: (simple_name) @namespace
     at_end: (simple_name) @method)
 
 (component_instantiation
@@ -186,7 +192,7 @@
 (entity_instantiation
     entity: (selected_name
         prefix: (simple_name) @namespace
-        suffix: (simple_name) @variable))
+        suffix: (simple_name) @namespace))
 
 (library_clause
     (logical_name_list
@@ -214,6 +220,16 @@
     (identifier_list
         (identifier) @variable))
 
+(entity_header
+    (port_clause
+        (signal_interface_declaration
+            (identifier_list
+                (identifier) @field))))
+
+(component_instantiation_statement
+    (label
+        (identifier) @label))
+
 (record_type_definition
     (_
     (identifier_list
@@ -226,11 +242,31 @@
     (identifier_list
         (identifier) @constant))
 
+(generic_clause
+    (constant_interface_declaration
+        (identifier_list
+            (identifier) @parameter)))
+
 (simple_concurrent_signal_assignment
     target: (simple_name) @variable)
 
 (ambiguous_name
-        prefix: (simple_name) @variable)
+    prefix: (simple_name) @variable)
+
+(ambiguous_name
+    prefix: (simple_name) @function.builtin (#match? @function.builtin
+        "^\(\(rising\|falling\)_edge\)$"))
+
+(ambiguous_name
+    prefix: (simple_name) @type (#match? @type
+        "^\(std_logic\(_vector\)\?\|real\|\(to_\)\?\(\(\(un\)\?signed\)\|integer\)\)$"))
+
+; math_real
+(ambiguous_name
+    prefix: (simple_name) @function.builtin (#any-of? @function.builtin
+        "sign" "ceil" "floor" "round" "fmax" "fmin" "uniform" "srand" "rand"
+        "get_rand_max" "sqrt" "cbrt" "exp" "log" "log2" "sin" "cos" "tan" "asin"
+        "acos" "atan" "atan2" "sinh" "cosh" "tanh" "asinh" "acosh" "atanh"))
 
 (expression (simple_name) @variable)
 
@@ -238,6 +274,8 @@
     name: (identifier) @variable)
 
 ;; error highlighting
+(ERROR) @error
+
 (entity_header [
     (generic_map_aspect) @error.illegal.map_aspect.generic
     (port_map_aspect)    @error.illegal.map_aspect.port
