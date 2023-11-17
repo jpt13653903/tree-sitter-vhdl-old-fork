@@ -267,6 +267,10 @@
 
 (expression (simple_name) @variable)
 
+(expression
+    (simple_name) @variable.builtin (#match? @variable.builtin
+       "^\(true\|false\)$"))
+
 ((simple_name) @variable.builtin (#eq? @variable.builtin "now"))
 
 (parameter_specification
