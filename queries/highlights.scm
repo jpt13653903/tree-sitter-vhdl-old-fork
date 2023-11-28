@@ -11,6 +11,7 @@
         "note" "warning" "error" "failure"))
 
 [
+    "alias"
     "package"
     "entity"
     "architecture"
