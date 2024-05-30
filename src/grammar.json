@@ -2,8 +2,20 @@
   "name": "vhdl",
   "rules": {
     "source_file": {
-      "type": "PATTERN",
-      "value": "hello"
+      "type": "REPEAT",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "keyword"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "builtinFunc"
+          }
+        ]
+      }
     }
   },
   "extras": [
@@ -14,7 +26,16 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "keyword"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "builtinFunc"
+    }
+  ],
   "inline": [],
   "supertypes": []
 }

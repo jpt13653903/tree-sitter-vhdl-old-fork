@@ -7,8 +7,7 @@ module.exports = grammar({
   ],
 
   rules: {
-    // TODO: add the actual grammar rules
-    source_file: $ => /hello/
+    source_file: $ => repeat(choice($.keyword, $.builtinFunc))
   }
 });
 
