@@ -7,7 +7,7 @@
 //! let code = r#"
 //! "#;
 //! let mut parser = tree_sitter::Parser::new();
-//! parser.set_language(&tree_sitter_VHDL::language()).expect("Error loading Vhdl grammar");
+//! parser.set_language(&tree_sitter_vhdl::language()).expect("Error loading Vhdl grammar");
 //! let tree = parser.parse(code, None).unwrap();
 //! assert!(!tree.root_node().has_error());
 //! ```
@@ -20,14 +20,14 @@
 use tree_sitter::Language;
 
 extern "C" {
-    fn tree_sitter_VHDL() -> Language;
+    fn tree_sitter_vhdl() -> Language;
 }
 
 /// Get the tree-sitter [Language][] for this grammar.
 ///
 /// [Language]: https://docs.rs/tree-sitter/*/tree_sitter/struct.Language.html
 pub fn language() -> Language {
-    unsafe { tree_sitter_VHDL() }
+    unsafe { tree_sitter_vhdl() }
 }
 
 /// The content of the [`node-types.json`][] file for this grammar.

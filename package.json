@@ -50,8 +50,8 @@
   },
   "tree-sitter": [
     {
-      "scope": "source.VHDL",
-      "injection-regex": "^VHDL$"
+      "scope": "source.vhdl",
+      "injection-regex": "^vhdl$"
     }
   ]
 }

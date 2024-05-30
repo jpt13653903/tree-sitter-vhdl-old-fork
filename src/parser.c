@@ -16,19 +16,19 @@
 #define PRODUCTION_ID_COUNT 1
 
 enum ts_symbol_identifiers {
-  anon_sym_hello = 1,
+  aux_sym_source_file_token1 = 1,
   sym_source_file = 2,
 };
 
 static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
-  [anon_sym_hello] = "hello",
+  [aux_sym_source_file_token1] = "source_file_token1",
   [sym_source_file] = "source_file",
 };
 
 static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
-  [anon_sym_hello] = anon_sym_hello,
+  [aux_sym_source_file_token1] = aux_sym_source_file_token1,
   [sym_source_file] = sym_source_file,
 };
 
@@ -37,8 +37,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = true,
   },
-  [anon_sym_hello] = {
-    .visible = true,
+  [aux_sym_source_file_token1] = {
+    .visible = false,
     .named = false,
   },
   [sym_source_file] = {
@@ -88,7 +88,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(ts_builtin_sym_end);
       END_STATE();
     case 6:
-      ACCEPT_TOKEN(anon_sym_hello);
+      ACCEPT_TOKEN(aux_sym_source_file_token1);
       END_STATE();
     default:
       return false;
@@ -105,11 +105,11 @@ static const TSLexMode ts_lex_modes[STATE_COUNT] = {
 static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   [0] = {
     [ts_builtin_sym_end] = ACTIONS(1),
-    [anon_sym_hello] = ACTIONS(1),
+    [aux_sym_source_file_token1] = ACTIONS(1),
   },
   [1] = {
     [sym_source_file] = STATE(3),
-    [anon_sym_hello] = ACTIONS(3),
+    [aux_sym_source_file_token1] = ACTIONS(3),
   },
 };
 

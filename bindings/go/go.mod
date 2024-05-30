@@ -1,4 +1,4 @@
-module github.com/tree-sitter/tree-sitter-VHDL
+module github.com/tree-sitter/tree-sitter-vhdl
 
 go 1.22
 

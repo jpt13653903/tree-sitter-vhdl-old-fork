@@ -1,6 +1,6 @@
 VERSION := 0.0.1
 
-LANGUAGE_NAME := tree-sitter-VHDL
+LANGUAGE_NAME := tree-sitter-vhdl
 
 # repository
 SRC_DIR := src

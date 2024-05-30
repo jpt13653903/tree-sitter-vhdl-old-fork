@@ -2,7 +2,7 @@
   "name": "vhdl",
   "rules": {
     "source_file": {
-      "type": "STRING",
+      "type": "PATTERN",
       "value": "hello"
     }
   },
