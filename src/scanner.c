@@ -65,9 +65,7 @@ int32_t advance(TSLexer *lexer)
     lexer->advance(lexer, false);
     int32_t lookahead = lexer->lookahead;
     if(lookahead >= 'A' && lookahead <= 'Z') lookahead += 'a' - 'A';
-    #ifdef DEBUG
-        debug("lookahead = %c(0x%x)\n", (char)lookahead, lookahead);
-    #endif
+    debug("lookahead = %c(0x%x)\n", (char)lookahead, lookahead);
     return lookahead;
 }
 //------------------------------------------------------------------------------

@@ -52,7 +52,8 @@
     {
       "scope": "source.vhdl",
       "file-types": ["vhd", "vhdl"],
-      "injection-regex": "^vhdl$"
+      "injection-regex": "^vhdl$",
+      "highlights": "queries/highlights.scm"
     }
   ]
 }
