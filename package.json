@@ -51,6 +51,7 @@
   "tree-sitter": [
     {
       "scope": "source.vhdl",
+      "file-types": ["vhd", "vhdl"],
       "injection-regex": "^vhdl$"
     }
   ]

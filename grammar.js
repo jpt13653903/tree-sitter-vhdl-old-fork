@@ -3,11 +3,27 @@ module.exports = grammar({
 
   externals: $ => [
     $.keyword,
-    $.builtinFunc
+    $.builtinFunc,
+    $.error_sentinel
+  ],
+
+  extras: $ => [
+    $.comment,
+    $.tool_directive,
+    /\s/,
   ],
 
   rules: {
-    source_file: $ => repeat(choice($.keyword, $.builtinFunc))
+    source_file: $ => repeat(choice($.keyword, $.builtinFunc)),
+
+    // keyword: $ => /[Hh][Ee][Ll][Ll][Oo]/,
+    // builtinFunc: $ => /[Ff][Uu][Nn][Cc]/,
+
+    comment: $ => token(choice(
+      /--.*/,
+      seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/')
+    )),
+    tool_directive: $ => token(/`.*/),
   }
 });
 
