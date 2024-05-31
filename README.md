@@ -18,7 +18,7 @@ Not listed features are implemented already.
 The parser accepts some illegal constructions to be able to provide precise
 error highlight.
 
-See `./tests/highlight/` and `./queries/highlights.scm` for a list of errors.
+See `./tests/highlight/` and `./queries/vhdl/highlights.scm` for a list of errors.
 
 ## References
 * IEEE Std 1076-2008
