@@ -1,25 +1,339 @@
 [
   {
-    "type": "source_file",
+    "type": "entity_declaration",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "builtinFunc",
+          "type": "begin",
           "named": true
         },
         {
-          "type": "keyword",
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "entity",
+          "named": true
+        },
+        {
+          "type": "entity_simple_name",
+          "named": true
+        },
+        {
+          "type": "entity_statement_part",
+          "named": true
+        },
+        {
+          "type": "formal_port_clause",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "is",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "builtinFunc",
+    "type": "entity_simple_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "entity_statement_part",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "formal_port_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_list",
+          "named": true
+        },
+        {
+          "type": "port",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "identifier_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_object_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_object_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_signal_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_signal_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bus",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier_list",
+          "named": true
+        },
+        {
+          "type": "mode",
+          "named": true
+        },
+        {
+          "type": "signal",
+          "named": true
+        },
+        {
+          "type": "subtype_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mode",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "buffer",
+          "named": true
+        },
+        {
+          "type": "in",
+          "named": true
+        },
+        {
+          "type": "inout",
+          "named": true
+        },
+        {
+          "type": "linkage",
+          "named": true
+        },
+        {
+          "type": "out",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "resolution_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "entity_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subtype_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "resolution_indication",
+          "named": true
+        },
+        {
+          "type": "type_mark",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_mark",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "builtin_type",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
+    "type": ":=",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "begin",
+    "named": true
+  },
+  {
+    "type": "buffer",
+    "named": true
+  },
+  {
+    "type": "builtin_type",
+    "named": true
+  },
+  {
+    "type": "bus",
     "named": true
   },
   {
@@ -27,7 +341,43 @@
     "named": true
   },
   {
-    "type": "keyword",
+    "type": "end",
+    "named": true
+  },
+  {
+    "type": "entity",
+    "named": true
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "in",
+    "named": true
+  },
+  {
+    "type": "inout",
+    "named": true
+  },
+  {
+    "type": "is",
+    "named": true
+  },
+  {
+    "type": "linkage",
+    "named": true
+  },
+  {
+    "type": "out",
+    "named": true
+  },
+  {
+    "type": "port",
+    "named": true
+  },
+  {
+    "type": "signal",
     "named": true
   },
   {

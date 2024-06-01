@@ -2,20 +2,318 @@
   "name": "vhdl",
   "rules": {
     "source_file": {
-      "type": "REPEAT",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "keyword"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "builtinFunc"
+      "type": "SYMBOL",
+      "name": "entity_declaration"
+    },
+    "entity_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "entity"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "is"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "formal_port_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "begin"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "entity_statement_part"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "end"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "entity"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "entity_simple_name"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "formal_port_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "port"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "interface_list"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "interface_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "interface_declaration"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ";"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "interface_declaration"
+              }
+            ]
           }
-        ]
+        }
+      ]
+    },
+    "interface_declaration": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "interface_object_declaration"
+        }
+      ]
+    },
+    "interface_object_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "interface_signal_declaration"
+        }
+      ]
+    },
+    "interface_signal_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "signal"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier_list"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "mode"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "subtype_indication"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "bus"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ":="
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "identifier_list": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "identifier"
       }
+    },
+    "mode": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "in"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "out"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inout"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "buffer"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "linkage"
+        }
+      ]
+    },
+    "subtype_indication": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "resolution_indication"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_mark"
+        }
+      ]
+    },
+    "resolution_indication": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "type_mark": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "builtin_type"
+        }
+      ]
+    },
+    "expression": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "entity_statement_part": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "entity_statement": {
+      "type": "SYMBOL",
+      "name": "identifier"
+    },
+    "entity_simple_name": {
+      "type": "SYMBOL",
+      "name": "identifier"
     },
     "comment": {
       "type": "TOKEN",
@@ -73,11 +371,423 @@
   "externals": [
     {
       "type": "SYMBOL",
-      "name": "keyword"
+      "name": "identifier"
     },
     {
       "type": "SYMBOL",
-      "name": "builtinFunc"
+      "name": "after"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "alias"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "all"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "architecture"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "array"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "assert"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "begin"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "block"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "buffer"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "bus"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "case"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "component"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "configuration"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "constant"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "context"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "default"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "disconnect"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "downto"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "else"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "elsif"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "entity"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "exit"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "file"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "for"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "force"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "function"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "generate"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "generic"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "group"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "guarded"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "if"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "impure"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "in"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "inertial"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "inout"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "is"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "label"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "library"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "linkage"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "loop"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "map"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "new"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "next"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "null"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "of"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "on"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "open"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "others"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "out"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "package"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "parameter"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "port"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "postponed"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "procedure"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "process"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "property"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "protected"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "pure"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "range"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "record"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "register"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reject"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "release"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "report"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "return"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "select"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "sequence"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "severity"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "shared"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "signal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "subtype"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "then"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "transport"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "unaffected"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "units"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "until"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "use"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "variable"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "vunit"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "wait"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "when"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "while"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "with"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_function"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_pure_function"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_range"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_signal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_subtype"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "attribute_value"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "builtin_function"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "builtin_type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_adding"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_condition"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_logical"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_miscellaneous"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_multiplying"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_relational"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_shift"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operator_sign"
     },
     {
       "type": "SYMBOL",

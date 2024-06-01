@@ -2,7 +2,8 @@ package tree_sitter_vhdl
 
 // #cgo CFLAGS: -std=c11 -fPIC
 // #include "../../src/parser.c"
-// // NOTE: if your language has an external scanner, add it here.
+// #include "../../src/scanner.c"
+// #include "../../src/TokenTree.c"
 import "C"
 
 import "unsafe"
