@@ -1,3 +1,9 @@
+.vs
+.vscode
+*.bak
+*.swp
+~*
+
 # Rust artifacts
 Cargo.lock
 target/
