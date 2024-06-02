@@ -556,8 +556,8 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
                 return true;
             }
 
-        }else if(type->type == TOKEN_STANDARD_TOOL_DIRECTIVE ||
-                 type->type == TOKEN_COMMON_TOOL_DIRECTIVE){
+        }else if(type->type == TOKEN_TOOL_DIRECTIVE_STANDARD ||
+                 type->type == TOKEN_TOOL_DIRECTIVE_COMMON){
             if(finish_tool_directive(lexer, true)){
                 lexer->result_symbol = type->type;
             }else{

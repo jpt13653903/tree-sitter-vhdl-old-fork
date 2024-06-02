@@ -148,6 +148,7 @@ static void register_delimiters(TokenTree* token_tree)
     token_tree_insert(token_tree, "]",   DELIMITER_RIGHT_SQUARE_BRACKET);
     token_tree_insert(token_tree, "?",   DELIMITER_QUESTION_MARK);
     token_tree_insert(token_tree, "@",   DELIMITER_COMMERCIAL_AT);
+    token_tree_insert(token_tree, "^",   DELIMITER_CIRCUMFLEX);
 
     token_tree_insert(token_tree, "=>",  DELIMITER_ARROW);
     token_tree_insert(token_tree, "**",  DELIMITER_EXPONENTIATE);
@@ -239,17 +240,17 @@ static void register_base_specifiers(TokenTree* token_tree)
 
 static void register_directives(TokenTree* token_tree)
 {
-    token_tree_insert(token_tree, "`protect", TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`if",      TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`elsif",   TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`else",    TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`end",     TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`end if",  TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`warning", TOKEN_STANDARD_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`error",   TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`protect", TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`if",      TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`elsif",   TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`else",    TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`end",     TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`end if",  TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`warning", TOKEN_TOOL_DIRECTIVE_STANDARD);
+    token_tree_insert(token_tree, "`error",   TOKEN_TOOL_DIRECTIVE_STANDARD);
 
-    token_tree_insert(token_tree, "`define",  TOKEN_COMMON_TOOL_DIRECTIVE);
-    token_tree_insert(token_tree, "`include", TOKEN_COMMON_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`define",  TOKEN_TOOL_DIRECTIVE_COMMON);
+    token_tree_insert(token_tree, "`include", TOKEN_TOOL_DIRECTIVE_COMMON);
 }
 //------------------------------------------------------------------------------
 

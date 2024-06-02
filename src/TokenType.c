@@ -147,6 +147,7 @@
             case DELIMITER_COMMERCIAL_AT:                  return "DELIMITER_COMMERCIAL_AT";
 
             case DELIMITER_ARROW:                          return "DELIMITER_ARROW";
+            case DELIMITER_CIRCUMFLEX:                     return "DELIMITER_CIRCUMFLEX";
             case DELIMITER_EXPONENTIATE:                   return "DELIMITER_EXPONENTIATE";
             case DELIMITER_VARIABLE_ASSIGNMENT:            return "DELIMITER_VARIABLE_ASSIGNMENT";
             case DELIMITER_INEQUALITY:                     return "DELIMITER_INEQUALITY";
@@ -175,8 +176,8 @@
             case TOKEN_BIT_STRING_LITERAL:                 return "TOKEN_BIT_STRING_LITERAL";
             case TOKEN_COMMENT:                            return "TOKEN_COMMENT";
             case TOKEN_TOOL_DIRECTIVE:                     return "TOKEN_TOOL_DIRECTIVE";
-            case TOKEN_STANDARD_TOOL_DIRECTIVE:            return "TOKEN_STANDARD_TOOL_DIRECTIVE";
-            case TOKEN_COMMON_TOOL_DIRECTIVE:              return "TOKEN_COMMON_TOOL_DIRECTIVE";
+            case TOKEN_TOOL_DIRECTIVE_STANDARD:            return "TOKEN_TOOL_DIRECTIVE_STANDARD";
+            case TOKEN_TOOL_DIRECTIVE_COMMON:              return "TOKEN_TOOL_DIRECTIVE_COMMON";
 
             case TOKEN_END_MARKER:                         return "TOKEN_END_MARKER";
 

@@ -8,7 +8,15 @@
       "required": true,
       "types": [
         {
-          "type": "delimiter_semicolon",
+          "type": "begin",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "entity",
           "named": true
         },
         {
@@ -20,27 +28,15 @@
           "named": true
         },
         {
+          "type": "is",
+          "named": true
+        },
+        {
           "type": "port_clause",
           "named": true
         },
         {
-          "type": "reserved_begin",
-          "named": true
-        },
-        {
-          "type": "reserved_end",
-          "named": true
-        },
-        {
-          "type": "reserved_entity",
-          "named": true
-        },
-        {
-          "type": "reserved_is",
-          "named": true
-        },
-        {
-          "type": "simple_name",
+          "type": "semicolon",
           "named": true
         }
       ]
@@ -70,35 +66,35 @@
       "required": true,
       "types": [
         {
+          "type": "based_literal",
+          "named": true
+        },
+        {
+          "type": "based_literal_float",
+          "named": true
+        },
+        {
+          "type": "bit_string_literal",
+          "named": true
+        },
+        {
+          "type": "character_literal",
+          "named": true
+        },
+        {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
+          "type": "decimal_literal_float",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "token_based_literal",
-          "named": true
-        },
-        {
-          "type": "token_based_literal_float",
-          "named": true
-        },
-        {
-          "type": "token_bit_string_literal",
-          "named": true
-        },
-        {
-          "type": "token_character_literal",
-          "named": true
-        },
-        {
-          "type": "token_decimal_literal",
-          "named": true
-        },
-        {
-          "type": "token_decimal_literal_float",
-          "named": true
-        },
-        {
-          "type": "token_string_literal",
+          "type": "string_literal",
           "named": true
         }
       ]
@@ -143,11 +139,11 @@
       "required": true,
       "types": [
         {
-          "type": "delimiter_semicolon",
+          "type": "interface_declaration",
           "named": true
         },
         {
-          "type": "interface_declaration",
+          "type": "semicolon",
           "named": true
         }
       ]
@@ -177,11 +173,11 @@
       "required": true,
       "types": [
         {
-          "type": "delimiter_colon",
+          "type": "bus",
           "named": true
         },
         {
-          "type": "delimiter_variable_assignment",
+          "type": "colon",
           "named": true
         },
         {
@@ -197,15 +193,15 @@
           "named": true
         },
         {
-          "type": "reserved_bus",
-          "named": true
-        },
-        {
-          "type": "reserved_signal",
+          "type": "signal",
           "named": true
         },
         {
           "type": "subtype_indication",
+          "named": true
+        },
+        {
+          "type": "variable_assignment",
           "named": true
         }
       ]
@@ -220,23 +216,23 @@
       "required": true,
       "types": [
         {
-          "type": "reserved_buffer",
+          "type": "buffer",
           "named": true
         },
         {
-          "type": "reserved_in",
+          "type": "in",
           "named": true
         },
         {
-          "type": "reserved_inout",
+          "type": "inout",
           "named": true
         },
         {
-          "type": "reserved_linkage",
+          "type": "linkage",
           "named": true
         },
         {
-          "type": "reserved_out",
+          "type": "out",
           "named": true
         }
       ]
@@ -251,23 +247,23 @@
       "required": true,
       "types": [
         {
-          "type": "delimiter_left_parenthesis",
-          "named": true
-        },
-        {
-          "type": "delimiter_right_parenthesis",
-          "named": true
-        },
-        {
-          "type": "delimiter_semicolon",
-          "named": true
-        },
-        {
           "type": "interface_list",
           "named": true
         },
         {
-          "type": "reserved_port",
+          "type": "left_parenthesis",
+          "named": true
+        },
+        {
+          "type": "port",
+          "named": true
+        },
+        {
+          "type": "right_parenthesis",
+          "named": true
+        },
+        {
+          "type": "semicolon",
           "named": true
         }
       ]
@@ -275,21 +271,6 @@
   },
   {
     "type": "resolution_indication",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "simple_name",
     "named": true,
     "fields": {},
     "children": {
@@ -357,23 +338,55 @@
     }
   },
   {
-    "type": "delimiter_colon",
+    "type": "based_literal",
     "named": true
   },
   {
-    "type": "delimiter_left_parenthesis",
+    "type": "based_literal_float",
     "named": true
   },
   {
-    "type": "delimiter_right_parenthesis",
+    "type": "begin",
     "named": true
   },
   {
-    "type": "delimiter_semicolon",
+    "type": "bit_string_literal",
     "named": true
   },
   {
-    "type": "delimiter_variable_assignment",
+    "type": "buffer",
+    "named": true
+  },
+  {
+    "type": "bus",
+    "named": true
+  },
+  {
+    "type": "character_literal",
+    "named": true
+  },
+  {
+    "type": "colon",
+    "named": true
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "decimal_literal",
+    "named": true
+  },
+  {
+    "type": "decimal_literal_float",
+    "named": true
+  },
+  {
+    "type": "end",
+    "named": true
+  },
+  {
+    "type": "entity",
     "named": true
   },
   {
@@ -381,99 +394,67 @@
     "named": true
   },
   {
+    "type": "in",
+    "named": true
+  },
+  {
+    "type": "inout",
+    "named": true
+  },
+  {
+    "type": "is",
+    "named": true
+  },
+  {
+    "type": "left_parenthesis",
+    "named": true
+  },
+  {
     "type": "library_type",
     "named": true
   },
   {
-    "type": "reserved_begin",
+    "type": "linkage",
     "named": true
   },
   {
-    "type": "reserved_buffer",
+    "type": "out",
     "named": true
   },
   {
-    "type": "reserved_bus",
+    "type": "port",
     "named": true
   },
   {
-    "type": "reserved_end",
+    "type": "right_parenthesis",
     "named": true
   },
   {
-    "type": "reserved_entity",
+    "type": "semicolon",
     "named": true
   },
   {
-    "type": "reserved_in",
+    "type": "signal",
     "named": true
   },
   {
-    "type": "reserved_inout",
+    "type": "string_literal",
     "named": true
   },
   {
-    "type": "reserved_is",
+    "type": "tool_directive",
     "named": true
   },
   {
-    "type": "reserved_linkage",
+    "type": "tool_directive_common",
     "named": true
   },
   {
-    "type": "reserved_out",
+    "type": "tool_directive_standard",
     "named": true
   },
   {
-    "type": "reserved_port",
-    "named": true
-  },
-  {
-    "type": "reserved_signal",
-    "named": true
-  },
-  {
-    "type": "token_based_literal",
-    "named": true
-  },
-  {
-    "type": "token_based_literal_float",
-    "named": true
-  },
-  {
-    "type": "token_bit_string_literal",
-    "named": true
-  },
-  {
-    "type": "token_character_literal",
-    "named": true
-  },
-  {
-    "type": "token_comment",
-    "named": true
-  },
-  {
-    "type": "token_common_tool_directive",
-    "named": true
-  },
-  {
-    "type": "token_decimal_literal",
-    "named": true
-  },
-  {
-    "type": "token_decimal_literal_float",
-    "named": true
-  },
-  {
-    "type": "token_standard_tool_directive",
-    "named": true
-  },
-  {
-    "type": "token_string_literal",
-    "named": true
-  },
-  {
-    "type": "token_tool_directive",
+    "type": "variable_assignment",
     "named": true
   }
 ]
