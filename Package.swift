@@ -36,7 +36,6 @@ let package = Package(
                 sources: [
                     "src/parser.c",
                     "src/scanner.c",
-                    "src/TokenTree.c",
                 ],
                 resources: [
                     .copy("queries")

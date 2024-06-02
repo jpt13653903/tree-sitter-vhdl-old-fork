@@ -6,8 +6,18 @@ This started off as a fork from [Alexandre Muller](https://github.com/alemuller/
 As such many of the contents might still be from that repository, so I don't
 claim authorship for everything.  The parser is largely rewritten, however.
 
+## References
+
+- [VHDL-2000](https://edg.uchicago.edu/~tang/VHDLref.pdf)
+- [VHDL-2008](https://faculty-web.msoe.edu/johnsontimoj/Common/FILES/VHDL_2008.pdf)
+- [VHDL-2019](https://doi.org/10.1109/IEEESTD.2019.8938196)
+- [VHDL Library Files](https://standards.ieee.org/downloads/) (search for "1076")
+- [VSCode Modern VHDL](https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml)
+
 ## Setup Process
 
+This grammar has not been merged into the official tree-sitter yet, so you need
+to perform a manual setup process.
 Configure your `treesitter.lua` (or equivalent) as follows:
 
 ```lua
@@ -16,7 +26,7 @@ local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
 parser_config.vhdl = {
   install_info = {
     url = "https://github.com/jpt13653903/tree-sitter-vhdl.git",
-    files = { 'src/parser.c', 'src/scanner.c', 'src/TokenTree.c' },
+    files = { 'src/parser.c', 'src/scanner.c' },
     branch = 'main',
     generate_requires_npm = false,
     requires_generate_from_grammar = false,

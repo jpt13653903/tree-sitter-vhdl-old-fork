@@ -12,9 +12,42 @@ jpt13653903@gmail.com
 #include "tree_sitter/alloc.h"
 //------------------------------------------------------------------------------
 
+static TypeNode* type_node_new(TokenType type)
+{
+    TypeNode* this = ts_malloc(sizeof(TypeNode));
+    this->type = type;
+    this->next = 0;
+    return this;
+}
+//------------------------------------------------------------------------------
+
+static void type_node_free(TypeNode* this)
+{
+    if(this->next) type_node_free(this->next);
+    ts_free(this);
+}
+//------------------------------------------------------------------------------
+
+static TypeNode* type_node_insert(TypeNode* head, TokenType type)
+{
+    TypeNode* temp = head;
+    while(temp){
+        if(temp->type == type){
+            warning("Duplicate entry for type %d", type);
+            return head;
+        }
+        temp = temp->next;
+    }
+
+    temp = type_node_new(type);
+    temp->next = head;
+    return temp;
+}
+//------------------------------------------------------------------------------
+
 typedef struct NodeTag{
     uint32_t  character; // The character at the current depth
-    TokenType type; // UNKNOWN => this is not a valid entry
+    TypeNode* type;      // Linked list of types
 
     struct NodeTag* left;
     struct NodeTag* right;
@@ -41,7 +74,7 @@ static Node* node_new(char character)
     this->left = this->right = this->next = 0;
 
     this->character = (unsigned)character;
-    this->type      = UNKNOWN;
+    this->type      = 0;
 
     return this;
 }
@@ -49,9 +82,10 @@ static Node* node_new(char character)
 
 static void node_free(Node* this)
 {
-    if(this->next ) node_free(this->next);
-    if(this->left ) node_free(this->left);
-    if(this->right) node_free(this->right);
+    if(this->next)  node_free     (this->next);
+    if(this->left)  node_free     (this->left);
+    if(this->right) node_free     (this->right);
+    if(this->type)  type_node_free(this->type);
     ts_free(this);
 }
 //------------------------------------------------------------------------------
@@ -79,6 +113,16 @@ void token_tree_insert(TokenTree* this, const char* pattern, TokenType type)
 }
 //------------------------------------------------------------------------------
 
+static void node_setup(Node* node, const char* pattern, TokenType type)
+{
+    if(pattern[0] == '_'){
+        if(!node->type) node->type = type_node_insert(node->type, IDENTIFIER_EXPECTING_LETTER);
+    }
+    if(pattern[1]) node->next = insert(node->next, pattern+1, type);
+    else           node->type = type_node_insert(node->type, type);
+}
+//------------------------------------------------------------------------------
+
 static Node* insert(
     Node*       root,
     const char* pattern,
@@ -95,8 +139,7 @@ static Node* insert(
         if(*pattern < temp->character){
             node        = node_new(*pattern);
             node->right = temp;
-            if(pattern[1]) node->next = insert(node->next, pattern+1, type);
-            else           node->type = type;
+            node_setup(node, pattern, type);
             if(prev) prev->right = node;
             else     root        = node;
             return root;
@@ -106,23 +149,12 @@ static Node* insert(
             temp = temp->right;
 
         }else{
-            if(pattern[1]){
-                temp->next = insert(temp->next, pattern+1, type);
-            }else{
-                // If temp->type null, this node does not have a token assigned yet
-                // If the types are the same, this is an alias, and therefore valid
-                if((temp->type != UNKNOWN) && (temp->type != type)){
-                    error("Duplicate token entry: ...%s = %d", pattern, (int)type);
-                }else{
-                    temp->type = type;
-                }
-            }
+            node_setup(temp, pattern, type);
             return root;
         }
     }
     node = node_new(*pattern);
-    if(pattern[1]) node->next = insert(node->next, pattern+1, type);
-    else           node->type = type;
+    node_setup(node, pattern, type);
     if(prev) prev->right = node;
     else     root        = node;
 
@@ -220,39 +252,11 @@ static int32_t advance(TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
-static bool is_letter_or_digit(int32_t lookahead)
-{
-    return (lookahead >= 'a' && lookahead <= 'z') ||
-           (lookahead >= '0' && lookahead <= '9');
-}
-//------------------------------------------------------------------------------
-
-static bool finish_identifier(TSLexer* lexer)
-{
-    int32_t lookahead = lowercase(lexer->lookahead);
-    bool    result = false;
-
-    while(!lexer->eof(lexer)){
-        lexer->mark_end(lexer);
-        if(lookahead == '_') lookahead = advance(lexer);
-        if(!is_letter_or_digit(lookahead)) return result;
-        lookahead = advance(lexer);
-        result = true;
-    }
-    return result;
-}
-//------------------------------------------------------------------------------
-
-TokenType token_tree_match(TokenTree* this, TSLexer* lexer, bool accept_identifier)
+TypeNode* token_tree_match(TokenTree* this, TSLexer* lexer)
 {
     int32_t   lookahead = lowercase(lexer->lookahead);
-    TokenType type      = UNKNOWN;
+    TypeNode* type      = 0;
     Node*     node      = this->root;
-
-    if(accept_identifier){
-        // Must start with a letter
-        if(lookahead < 'a' || lookahead > 'z') accept_identifier = false;
-    }
 
     while(node){
         if(lexer->eof(lexer)) return type;
@@ -264,86 +268,16 @@ TokenType token_tree_match(TokenTree* this, TSLexer* lexer, bool accept_identifi
             node = node->right;
 
         }else{
-            if(accept_identifier){
-                lexer->mark_end(lexer);
-                if(lookahead == '_'){
-                    lookahead = advance(lexer);
-                    if(!is_letter_or_digit(lookahead)) return IDENTIFIER;
-                }else{
-                    lookahead = advance(lexer);
-                }
-            }else{
-                lookahead = advance(lexer);
-            }
-            if(node->type != UNKNOWN){ // Keep track of the best option
+            lookahead = advance(lexer);
+            if(node->type){ // Keep track of the best option
                 lexer->mark_end(lexer);
                 type = node->type;
             }
             node = node->next;
         }
     }
-    debug("type = %d", type);
-    if(accept_identifier){
-        if(finish_identifier(lexer) || type == UNKNOWN) type = IDENTIFIER;
-    }
+    debug("type->head = %s", type ? token_type_to_string(type->type) : "UNKNOWN");
     return type;
 }
 //------------------------------------------------------------------------------
 
-/*
-TokenType token_tree_match(TokenTree* this, const int32_t* Pattern, int* Count){
-    int       n    = 0;
-    TokenType type = UNKNOWN;
-
-    *Count = 0;
-
-    Node* node = this->root;
-
-    while(node){
-        if(*pattern < node->character){
-            node = node->left;
-
-        }else if(*pattern > node->character){
-            node = node->right;
-
-        }else{
-            n++;
-            if(node->type != UNKNOWN){ // Keep track of the best option
-                *count = n;
-                type   = node->type;
-            }
-            if(pattern[1]){
-                pattern++;
-                node = node->next;
-            }else{
-                return type;
-            }
-        }
-    }
-    return type;
-}
-//------------------------------------------------------------------------------
-
-TokenType token_tree_find(TokenTree* this, const int32_t* pattern){
-    Node* node = this->root;
-
-    while(node){
-        if(*pattern < node->character){
-            node = node->left;
-
-        }else if(*pattern > node->character){
-            node = node->right;
-
-        }else{
-            if(pattern[1]){
-                pattern++;
-                node = node->next;
-            }else{
-                return node->type;
-            }
-        }
-    }
-    return UNKNOWN;
-}
-//------------------------------------------------------------------------------
-*/

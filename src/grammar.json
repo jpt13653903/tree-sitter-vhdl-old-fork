@@ -10,7 +10,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "entity"
+          "name": "reserved_entity"
         },
         {
           "type": "SYMBOL",
@@ -18,14 +18,14 @@
         },
         {
           "type": "SYMBOL",
-          "name": "is"
+          "name": "reserved_is"
         },
         {
           "type": "CHOICE",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "formal_port_clause"
+              "name": "port_clause"
             },
             {
               "type": "BLANK"
@@ -40,7 +40,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "begin"
+                  "name": "reserved_begin"
                 },
                 {
                   "type": "SYMBOL",
@@ -55,14 +55,14 @@
         },
         {
           "type": "SYMBOL",
-          "name": "end"
+          "name": "reserved_end"
         },
         {
           "type": "CHOICE",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "entity"
+              "name": "reserved_entity"
             },
             {
               "type": "BLANK"
@@ -74,7 +74,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "entity_simple_name"
+              "name": "simple_name"
             },
             {
               "type": "BLANK"
@@ -82,33 +82,33 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": ";"
+          "type": "SYMBOL",
+          "name": "delimiter_semicolon"
         }
       ]
     },
-    "formal_port_clause": {
+    "port_clause": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "port"
+          "name": "reserved_port"
         },
         {
-          "type": "STRING",
-          "value": "("
+          "type": "SYMBOL",
+          "name": "delimiter_left_parenthesis"
         },
         {
           "type": "SYMBOL",
           "name": "interface_list"
         },
         {
-          "type": "STRING",
-          "value": ")"
+          "type": "SYMBOL",
+          "name": "delimiter_right_parenthesis"
         },
         {
-          "type": "STRING",
-          "value": ";"
+          "type": "SYMBOL",
+          "name": "delimiter_semicolon"
         }
       ]
     },
@@ -125,8 +125,8 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": ";"
+                "type": "SYMBOL",
+                "name": "delimiter_semicolon"
               },
               {
                 "type": "SYMBOL",
@@ -163,7 +163,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "signal"
+              "name": "reserved_signal"
             },
             {
               "type": "BLANK"
@@ -175,8 +175,8 @@
           "name": "identifier_list"
         },
         {
-          "type": "STRING",
-          "value": ":"
+          "type": "SYMBOL",
+          "name": "delimiter_colon"
         },
         {
           "type": "CHOICE",
@@ -199,7 +199,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "bus"
+              "name": "reserved_bus"
             },
             {
               "type": "BLANK"
@@ -213,8 +213,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": ":="
+                  "type": "SYMBOL",
+                  "name": "delimiter_variable_assignment"
                 },
                 {
                   "type": "SYMBOL",
@@ -241,23 +241,23 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "in"
+          "name": "reserved_in"
         },
         {
           "type": "SYMBOL",
-          "name": "out"
+          "name": "reserved_out"
         },
         {
           "type": "SYMBOL",
-          "name": "inout"
+          "name": "reserved_inout"
         },
         {
           "type": "SYMBOL",
-          "name": "buffer"
+          "name": "reserved_buffer"
         },
         {
           "type": "SYMBOL",
-          "name": "linkage"
+          "name": "reserved_linkage"
         }
       ]
     },
@@ -295,7 +295,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "builtin_type"
+          "name": "library_type"
         }
       ]
     },
@@ -311,7 +311,7 @@
       "type": "SYMBOL",
       "name": "identifier"
     },
-    "entity_simple_name": {
+    "simple_name": {
       "type": "SYMBOL",
       "name": "identifier"
     },
@@ -375,351 +375,623 @@
     },
     {
       "type": "SYMBOL",
-      "name": "after"
+      "name": "reserved_abs"
     },
     {
       "type": "SYMBOL",
-      "name": "alias"
+      "name": "reserved_access"
     },
     {
       "type": "SYMBOL",
-      "name": "all"
+      "name": "reserved_after"
     },
     {
       "type": "SYMBOL",
-      "name": "architecture"
+      "name": "reserved_alias"
     },
     {
       "type": "SYMBOL",
-      "name": "array"
+      "name": "reserved_all"
     },
     {
       "type": "SYMBOL",
-      "name": "assert"
+      "name": "reserved_and"
     },
     {
       "type": "SYMBOL",
-      "name": "attribute"
+      "name": "reserved_architecture"
     },
     {
       "type": "SYMBOL",
-      "name": "begin"
+      "name": "reserved_array"
     },
     {
       "type": "SYMBOL",
-      "name": "block"
+      "name": "reserved_assert"
     },
     {
       "type": "SYMBOL",
-      "name": "buffer"
+      "name": "reserved_assume"
     },
     {
       "type": "SYMBOL",
-      "name": "bus"
+      "name": "reserved_assume_guarantee"
     },
     {
       "type": "SYMBOL",
-      "name": "case"
+      "name": "reserved_attribute"
     },
     {
       "type": "SYMBOL",
-      "name": "component"
+      "name": "reserved_begin"
     },
     {
       "type": "SYMBOL",
-      "name": "configuration"
+      "name": "reserved_block"
     },
     {
       "type": "SYMBOL",
-      "name": "constant"
+      "name": "reserved_body"
     },
     {
       "type": "SYMBOL",
-      "name": "context"
+      "name": "reserved_buffer"
     },
     {
       "type": "SYMBOL",
-      "name": "default"
+      "name": "reserved_bus"
     },
     {
       "type": "SYMBOL",
-      "name": "disconnect"
+      "name": "reserved_case"
     },
     {
       "type": "SYMBOL",
-      "name": "downto"
+      "name": "reserved_component"
     },
     {
       "type": "SYMBOL",
-      "name": "else"
+      "name": "reserved_configuration"
     },
     {
       "type": "SYMBOL",
-      "name": "elsif"
+      "name": "reserved_constant"
     },
     {
       "type": "SYMBOL",
-      "name": "end"
+      "name": "reserved_context"
     },
     {
       "type": "SYMBOL",
-      "name": "entity"
+      "name": "reserved_cover"
     },
     {
       "type": "SYMBOL",
-      "name": "exit"
+      "name": "reserved_default"
     },
     {
       "type": "SYMBOL",
-      "name": "file"
+      "name": "reserved_disconnect"
     },
     {
       "type": "SYMBOL",
-      "name": "for"
+      "name": "reserved_downto"
     },
     {
       "type": "SYMBOL",
-      "name": "force"
+      "name": "reserved_else"
     },
     {
       "type": "SYMBOL",
-      "name": "function"
+      "name": "reserved_elsif"
     },
     {
       "type": "SYMBOL",
-      "name": "generate"
+      "name": "reserved_end"
     },
     {
       "type": "SYMBOL",
-      "name": "generic"
+      "name": "reserved_entity"
     },
     {
       "type": "SYMBOL",
-      "name": "group"
+      "name": "reserved_exit"
     },
     {
       "type": "SYMBOL",
-      "name": "guarded"
+      "name": "reserved_fairness"
     },
     {
       "type": "SYMBOL",
-      "name": "if"
+      "name": "reserved_file"
     },
     {
       "type": "SYMBOL",
-      "name": "impure"
+      "name": "reserved_for"
     },
     {
       "type": "SYMBOL",
-      "name": "in"
+      "name": "reserved_force"
     },
     {
       "type": "SYMBOL",
-      "name": "inertial"
+      "name": "reserved_function"
     },
     {
       "type": "SYMBOL",
-      "name": "inout"
+      "name": "reserved_generate"
     },
     {
       "type": "SYMBOL",
-      "name": "is"
+      "name": "reserved_generic"
     },
     {
       "type": "SYMBOL",
-      "name": "label"
+      "name": "reserved_group"
     },
     {
       "type": "SYMBOL",
-      "name": "library"
+      "name": "reserved_guarded"
     },
     {
       "type": "SYMBOL",
-      "name": "linkage"
+      "name": "reserved_if"
     },
     {
       "type": "SYMBOL",
-      "name": "literal"
+      "name": "reserved_impure"
     },
     {
       "type": "SYMBOL",
-      "name": "loop"
+      "name": "reserved_in"
     },
     {
       "type": "SYMBOL",
-      "name": "map"
+      "name": "reserved_inertial"
     },
     {
       "type": "SYMBOL",
-      "name": "new"
+      "name": "reserved_inout"
     },
     {
       "type": "SYMBOL",
-      "name": "next"
+      "name": "reserved_is"
     },
     {
       "type": "SYMBOL",
-      "name": "null"
+      "name": "reserved_label"
     },
     {
       "type": "SYMBOL",
-      "name": "of"
+      "name": "reserved_library"
     },
     {
       "type": "SYMBOL",
-      "name": "on"
+      "name": "reserved_linkage"
     },
     {
       "type": "SYMBOL",
-      "name": "open"
+      "name": "reserved_literal"
     },
     {
       "type": "SYMBOL",
-      "name": "others"
+      "name": "reserved_loop"
     },
     {
       "type": "SYMBOL",
-      "name": "out"
+      "name": "reserved_map"
     },
     {
       "type": "SYMBOL",
-      "name": "package"
+      "name": "reserved_mod"
     },
     {
       "type": "SYMBOL",
-      "name": "parameter"
+      "name": "reserved_nand"
     },
     {
       "type": "SYMBOL",
-      "name": "port"
+      "name": "reserved_new"
     },
     {
       "type": "SYMBOL",
-      "name": "postponed"
+      "name": "reserved_next"
     },
     {
       "type": "SYMBOL",
-      "name": "procedure"
+      "name": "reserved_nor"
     },
     {
       "type": "SYMBOL",
-      "name": "process"
+      "name": "reserved_not"
     },
     {
       "type": "SYMBOL",
-      "name": "property"
+      "name": "reserved_null"
     },
     {
       "type": "SYMBOL",
-      "name": "protected"
+      "name": "reserved_of"
     },
     {
       "type": "SYMBOL",
-      "name": "pure"
+      "name": "reserved_on"
     },
     {
       "type": "SYMBOL",
-      "name": "range"
+      "name": "reserved_open"
     },
     {
       "type": "SYMBOL",
-      "name": "record"
+      "name": "reserved_or"
     },
     {
       "type": "SYMBOL",
-      "name": "register"
+      "name": "reserved_others"
     },
     {
       "type": "SYMBOL",
-      "name": "reject"
+      "name": "reserved_out"
     },
     {
       "type": "SYMBOL",
-      "name": "release"
+      "name": "reserved_package"
     },
     {
       "type": "SYMBOL",
-      "name": "report"
+      "name": "reserved_parameter"
     },
     {
       "type": "SYMBOL",
-      "name": "return"
+      "name": "reserved_port"
     },
     {
       "type": "SYMBOL",
-      "name": "select"
+      "name": "reserved_postponed"
     },
     {
       "type": "SYMBOL",
-      "name": "sequence"
+      "name": "reserved_procedure"
     },
     {
       "type": "SYMBOL",
-      "name": "severity"
+      "name": "reserved_process"
     },
     {
       "type": "SYMBOL",
-      "name": "shared"
+      "name": "reserved_property"
     },
     {
       "type": "SYMBOL",
-      "name": "signal"
+      "name": "reserved_protected"
     },
     {
       "type": "SYMBOL",
-      "name": "subtype"
+      "name": "reserved_pure"
     },
     {
       "type": "SYMBOL",
-      "name": "then"
+      "name": "reserved_range"
     },
     {
       "type": "SYMBOL",
-      "name": "transport"
+      "name": "reserved_record"
     },
     {
       "type": "SYMBOL",
-      "name": "type"
+      "name": "reserved_register"
     },
     {
       "type": "SYMBOL",
-      "name": "unaffected"
+      "name": "reserved_reject"
     },
     {
       "type": "SYMBOL",
-      "name": "units"
+      "name": "reserved_release"
     },
     {
       "type": "SYMBOL",
-      "name": "until"
+      "name": "reserved_rem"
     },
     {
       "type": "SYMBOL",
-      "name": "use"
+      "name": "reserved_report"
     },
     {
       "type": "SYMBOL",
-      "name": "variable"
+      "name": "reserved_restrict"
     },
     {
       "type": "SYMBOL",
-      "name": "vunit"
+      "name": "reserved_restrict_guarantee"
     },
     {
       "type": "SYMBOL",
-      "name": "wait"
+      "name": "reserved_return"
     },
     {
       "type": "SYMBOL",
-      "name": "when"
+      "name": "reserved_rol"
     },
     {
       "type": "SYMBOL",
-      "name": "while"
+      "name": "reserved_ror"
     },
     {
       "type": "SYMBOL",
-      "name": "with"
+      "name": "reserved_select"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_sequence"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_severity"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_signal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_shared"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_sla"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_sll"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_sra"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_srl"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_strong"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_subtype"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_then"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_to"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_transport"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_unaffected"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_units"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_until"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_use"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_variable"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_vmode"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_vprop"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_vunit"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_wait"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_when"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_while"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_with"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_xnor"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_xor"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "reserved_end_marker"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_ampersand"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_tick"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_left_parenthesis"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_right_parenthesis"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_multiply"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_plus_sign"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_comma"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_minus_sign"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_dot"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_divide"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_colon"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_semicolon"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_less_than_sign"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_equals_sign"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_greater_than_sign"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_grave_accent"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_vertical_bar"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_left_square_bracket"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_right_square_bracket"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_question_mark"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_commercial_at"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_arrow"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_exponentiate"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_variable_assignment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_inequality"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_greater_than_or_equal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_less_than_or_equal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_signal_assignment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_box"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_condition_conversion"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_equality"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_inequality"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_less_than"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_less_than_or_equal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_greater_than"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_matching_greater_than_or_equal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_double_less_than"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_double_greater_than"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "delimiter_end_marker"
     },
     {
       "type": "SYMBOL",
@@ -751,43 +1023,15 @@
     },
     {
       "type": "SYMBOL",
-      "name": "builtin_function"
+      "name": "library_constant"
     },
     {
       "type": "SYMBOL",
-      "name": "builtin_type"
+      "name": "library_function"
     },
     {
       "type": "SYMBOL",
-      "name": "operator_adding"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_condition"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_logical"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_miscellaneous"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_multiplying"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_relational"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_shift"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "operator_sign"
+      "name": "library_type"
     },
     {
       "type": "SYMBOL",

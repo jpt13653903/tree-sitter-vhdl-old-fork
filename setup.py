@@ -37,7 +37,6 @@ setup(
                 "bindings/python/tree_sitter_vhdl/binding.c",
                 "src/parser.c",
                 "src/scanner.c",
-                "src/TokenTree.c",
             ],
             extra_compile_args=[
                 "-std=c11",

@@ -20,6 +20,12 @@ balanced sub-tree of the next character, etc.
 #include "tree_sitter/parser.h"
 //------------------------------------------------------------------------------
 
+typedef struct TypeNodeTag{
+    TokenType           type;
+    struct TypeNodeTag* next;
+} TypeNode;
+//------------------------------------------------------------------------------
+
 typedef struct TokenTreeTag{
     void* root;
 } TokenTree;
@@ -31,14 +37,8 @@ void       token_tree_free(TokenTree* this);
 void token_tree_insert (TokenTree* this, const char* pattern, TokenType type);
 void token_tree_balance(TokenTree* this);
 
-// Finds the longest match and returns the token type
-TokenType token_tree_match(TokenTree* this, TSLexer* lexer, bool accept_identifier);
-
-// // Finds the longest match and returns the token type and character count
-// TokenType token_tree_match(TokenTree* this, const int32_t* Pattern, int* Count);
-//
-// // Finds an exact match only
-// TokenType token_tree_find(TokenTree* this, const int32_t* Pattern);
+// Finds the longest match and returns the token type linked list
+TypeNode* token_tree_match(TokenTree* this, TSLexer* lexer);
 //------------------------------------------------------------------------------
 
 #endif

@@ -12,7 +12,6 @@
         "bindings/node/binding.cc",
         "src/parser.c",
         "src/scanner.c",
-        "src/TokenTree.c",
       ],
       "conditions": [
         ["OS!='win'", {

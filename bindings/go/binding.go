@@ -3,7 +3,6 @@ package tree_sitter_vhdl
 // #cgo CFLAGS: -std=c11 -fPIC
 // #include "../../src/parser.c"
 // #include "../../src/scanner.c"
-// #include "../../src/TokenTree.c"
 import "C"
 
 import "unsafe"

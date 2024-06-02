@@ -3,6 +3,7 @@
 *.bak
 *.swp
 ~*
+debug.log
 
 # Rust artifacts
 Cargo.lock

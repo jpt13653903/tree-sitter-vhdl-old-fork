@@ -8,19 +8,7 @@
       "required": true,
       "types": [
         {
-          "type": "begin",
-          "named": true
-        },
-        {
-          "type": "end",
-          "named": true
-        },
-        {
-          "type": "entity",
-          "named": true
-        },
-        {
-          "type": "entity_simple_name",
+          "type": "delimiter_semicolon",
           "named": true
         },
         {
@@ -28,30 +16,31 @@
           "named": true
         },
         {
-          "type": "formal_port_clause",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "is",
+          "type": "port_clause",
           "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "entity_simple_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
+        },
         {
-          "type": "identifier",
+          "type": "reserved_begin",
+          "named": true
+        },
+        {
+          "type": "reserved_end",
+          "named": true
+        },
+        {
+          "type": "reserved_entity",
+          "named": true
+        },
+        {
+          "type": "reserved_is",
+          "named": true
+        },
+        {
+          "type": "simple_name",
           "named": true
         }
       ]
@@ -82,25 +71,6 @@
       "types": [
         {
           "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "formal_port_clause",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "interface_list",
-          "named": true
-        },
-        {
-          "type": "port",
           "named": true
         }
       ]
@@ -145,6 +115,10 @@
       "required": true,
       "types": [
         {
+          "type": "delimiter_semicolon",
+          "named": true
+        },
+        {
           "type": "interface_declaration",
           "named": true
         }
@@ -175,7 +149,11 @@
       "required": true,
       "types": [
         {
-          "type": "bus",
+          "type": "delimiter_colon",
+          "named": true
+        },
+        {
+          "type": "delimiter_variable_assignment",
           "named": true
         },
         {
@@ -191,7 +169,11 @@
           "named": true
         },
         {
-          "type": "signal",
+          "type": "reserved_bus",
+          "named": true
+        },
+        {
+          "type": "reserved_signal",
           "named": true
         },
         {
@@ -210,23 +192,54 @@
       "required": true,
       "types": [
         {
-          "type": "buffer",
+          "type": "reserved_buffer",
           "named": true
         },
         {
-          "type": "in",
+          "type": "reserved_in",
           "named": true
         },
         {
-          "type": "inout",
+          "type": "reserved_inout",
           "named": true
         },
         {
-          "type": "linkage",
+          "type": "reserved_linkage",
           "named": true
         },
         {
-          "type": "out",
+          "type": "reserved_out",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "port_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "delimiter_left_parenthesis",
+          "named": true
+        },
+        {
+          "type": "delimiter_right_parenthesis",
+          "named": true
+        },
+        {
+          "type": "delimiter_semicolon",
+          "named": true
+        },
+        {
+          "type": "interface_list",
+          "named": true
+        },
+        {
+          "type": "reserved_port",
           "named": true
         }
       ]
@@ -234,6 +247,21 @@
   },
   {
     "type": "resolution_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "simple_name",
     "named": true,
     "fields": {},
     "children": {
@@ -290,62 +318,38 @@
       "required": true,
       "types": [
         {
-          "type": "builtin_type",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "library_type",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "(",
-    "named": false
-  },
-  {
-    "type": ")",
-    "named": false
-  },
-  {
-    "type": ":",
-    "named": false
-  },
-  {
-    "type": ":=",
-    "named": false
-  },
-  {
-    "type": ";",
-    "named": false
-  },
-  {
-    "type": "begin",
-    "named": true
-  },
-  {
-    "type": "buffer",
-    "named": true
-  },
-  {
-    "type": "builtin_type",
-    "named": true
-  },
-  {
-    "type": "bus",
-    "named": true
-  },
-  {
     "type": "comment",
     "named": true
   },
   {
-    "type": "end",
+    "type": "delimiter_colon",
     "named": true
   },
   {
-    "type": "entity",
+    "type": "delimiter_left_parenthesis",
+    "named": true
+  },
+  {
+    "type": "delimiter_right_parenthesis",
+    "named": true
+  },
+  {
+    "type": "delimiter_semicolon",
+    "named": true
+  },
+  {
+    "type": "delimiter_variable_assignment",
     "named": true
   },
   {
@@ -353,31 +357,55 @@
     "named": true
   },
   {
-    "type": "in",
+    "type": "library_type",
     "named": true
   },
   {
-    "type": "inout",
+    "type": "reserved_begin",
     "named": true
   },
   {
-    "type": "is",
+    "type": "reserved_buffer",
     "named": true
   },
   {
-    "type": "linkage",
+    "type": "reserved_bus",
     "named": true
   },
   {
-    "type": "out",
+    "type": "reserved_end",
     "named": true
   },
   {
-    "type": "port",
+    "type": "reserved_entity",
     "named": true
   },
   {
-    "type": "signal",
+    "type": "reserved_in",
+    "named": true
+  },
+  {
+    "type": "reserved_inout",
+    "named": true
+  },
+  {
+    "type": "reserved_is",
+    "named": true
+  },
+  {
+    "type": "reserved_linkage",
+    "named": true
+  },
+  {
+    "type": "reserved_out",
+    "named": true
+  },
+  {
+    "type": "reserved_port",
+    "named": true
+  },
+  {
+    "type": "reserved_signal",
     "named": true
   },
   {
