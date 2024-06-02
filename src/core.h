@@ -166,6 +166,9 @@ static void register_delimiters(TokenTree* token_tree)
     token_tree_insert(token_tree, "?>=", DELIMITER_MATCHING_GREATER_THAN_OR_EQUAL);
     token_tree_insert(token_tree, "<<",  DELIMITER_DOUBLE_LESS_THAN);
     token_tree_insert(token_tree, ">>",  DELIMITER_DOUBLE_GREATER_THAN);
+
+    token_tree_insert(token_tree, "--",  COMMENT_LINE_START);
+    token_tree_insert(token_tree, "/*",  COMMENT_BLOCK_START);
 }
 //------------------------------------------------------------------------------
 
@@ -231,6 +234,22 @@ static void register_base_specifiers(TokenTree* token_tree)
     token_tree_insert(token_tree, "so\"", BASE_SPECIFIER_SIGNED_OCTAL);
     token_tree_insert(token_tree, "sx\"", BASE_SPECIFIER_SIGNED_HEX);
     token_tree_insert(token_tree, "d\"",  BASE_SPECIFIER_DECIMAL);
+}
+//------------------------------------------------------------------------------
+
+static void register_directives(TokenTree* token_tree)
+{
+    token_tree_insert(token_tree, "`protect", TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`if",      TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`elsif",   TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`else",    TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`end",     TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`end if",  TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`warning", TOKEN_STANDARD_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`error",   TOKEN_STANDARD_TOOL_DIRECTIVE);
+
+    token_tree_insert(token_tree, "`define",  TOKEN_COMMON_TOOL_DIRECTIVE);
+    token_tree_insert(token_tree, "`include", TOKEN_COMMON_TOOL_DIRECTIVE);
 }
 //------------------------------------------------------------------------------
 

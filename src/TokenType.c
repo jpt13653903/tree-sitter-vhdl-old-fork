@@ -164,6 +164,20 @@
             case DELIMITER_DOUBLE_LESS_THAN:               return "DELIMITER_DOUBLE_LESS_THAN";
             case DELIMITER_DOUBLE_GREATER_THAN:            return "DELIMITER_DOUBLE_GREATER_THAN";
 
+            case DELIMITER_END_MARKER:                     return "DELIMITER_END_MARKER";
+
+            case TOKEN_DECIMAL_LITERAL:                    return "TOKEN_DECIMAL_LITERAL";
+            case TOKEN_BASED_LITERAL:                      return "TOKEN_BASED_LITERAL";
+            case TOKEN_CHARACTER_LITERAL:                  return "TOKEN_CHARACTER_LITERAL";
+            case TOKEN_STRING_LITERAL:                     return "TOKEN_STRING_LITERAL";
+            case TOKEN_BIT_STRING_LITERAL:                 return "TOKEN_BIT_STRING_LITERAL";
+            case TOKEN_COMMENT:                            return "TOKEN_COMMENT";
+            case TOKEN_TOOL_DIRECTIVE:                     return "TOKEN_TOOL_DIRECTIVE";
+            case TOKEN_STANDARD_TOOL_DIRECTIVE:            return "TOKEN_STANDARD_TOOL_DIRECTIVE";
+            case TOKEN_COMMON_TOOL_DIRECTIVE:              return "TOKEN_COMMON_TOOL_DIRECTIVE";
+
+            case TOKEN_END_MARKER:                         return "TOKEN_END_MARKER";
+
             case ATTRIBUTE_FUNCTION:                       return "ATTRIBUTE_FUNCTION";
             case ATTRIBUTE_PURE_FUNCTION:                  return "ATTRIBUTE_PURE_FUNCTION";
             case ATTRIBUTE_RANGE:                          return "ATTRIBUTE_RANGE";
@@ -177,6 +191,9 @@
             case LIBRARY_TYPE:                             return "LIBRARY_TYPE";
 
             case ERROR_SENTINEL:                           return "ERROR_SENTINEL";
+
+            case COMMENT_LINE_START:                       return "COMMENT_LINE_START";
+            case COMMENT_BLOCK_START:                      return "COMMENT_BLOCK_START";
 
             case BASE_SPECIFIER_BINARY:                    return "BASE_SPECIFIER_BINARY";
             case BASE_SPECIFIER_OCTAL:                     return "BASE_SPECIFIER_OCTAL";
@@ -202,14 +219,14 @@
 bool can_be_identifier(TokenType type)
 {
     return (type == IDENTIFIER) ||
-           (type >  DELIMITER_END_MARKER && type < ERROR_SENTINEL);
+           (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL);
 }
 //------------------------------------------------------------------------------
 
 bool can_start_identifier(TokenType type)
 {
-    return (type >= IDENTIFIER           && type < RESERVED_END_MARKER) ||
-           (type >  DELIMITER_END_MARKER && type < ERROR_SENTINEL     ) ||
+    return (type >= IDENTIFIER       && type < RESERVED_END_MARKER) ||
+           (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL     ) ||
            (type == IDENTIFIER_EXPECTING_LETTER);
 }
 //------------------------------------------------------------------------------

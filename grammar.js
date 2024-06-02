@@ -171,6 +171,18 @@ module.exports = grammar({
 
     $.delimiter_end_marker, // Scanner internal use only
 
+    $.token_decimal_literal,
+    $.token_based_literal,
+    $.token_character_literal,
+    $.token_string_literal,
+    $.token_bit_string_literal,
+    $.token_comment,
+    $.token_tool_directive,
+    $.token_standard_tool_directive,
+    $.token_common_tool_directive,
+
+    $.token_end_marker, // Scanner internal use only
+
     $.attribute_function,
     $.attribute_pure_function,
     $.attribute_range,
@@ -187,8 +199,10 @@ module.exports = grammar({
   ],
 
   extras: $ => [
-    $.comment,
-    $.tool_directive,
+    $.token_comment,
+    $.token_tool_directive,
+    $.token_standard_tool_directive,
+    $.token_common_tool_directive,
     /\s/,
   ],
 
@@ -267,7 +281,12 @@ module.exports = grammar({
     //   $.record_constraint
     // ),
 
-    expression: $ => $.identifier, // TODO: Fix
+    expression: $ => choice( // TODO: Fix
+      $.identifier,
+      $.token_character_literal,
+      $.token_string_literal,
+      $.token_bit_string_literal
+    ),
 
     // entity_declarative_part: $ => repeat($.entity_declarative_item),
 
@@ -300,12 +319,6 @@ module.exports = grammar({
     entity_statement: $ => $.identifier, // TODO: Fix
 
     simple_name: $ => $.identifier,
-
-    comment: $ => token(choice(
-      /--.*/,
-      seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/')
-    )),
-    tool_directive: $ => token(/`.*/),
   }
 });
 

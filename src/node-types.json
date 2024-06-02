@@ -72,6 +72,18 @@
         {
           "type": "identifier",
           "named": true
+        },
+        {
+          "type": "token_bit_string_literal",
+          "named": true
+        },
+        {
+          "type": "token_character_literal",
+          "named": true
+        },
+        {
+          "type": "token_string_literal",
+          "named": true
         }
       ]
     }
@@ -329,10 +341,6 @@
     }
   },
   {
-    "type": "comment",
-    "named": true
-  },
-  {
     "type": "delimiter_colon",
     "named": true
   },
@@ -409,7 +417,31 @@
     "named": true
   },
   {
-    "type": "tool_directive",
+    "type": "token_bit_string_literal",
+    "named": true
+  },
+  {
+    "type": "token_character_literal",
+    "named": true
+  },
+  {
+    "type": "token_comment",
+    "named": true
+  },
+  {
+    "type": "token_common_tool_directive",
+    "named": true
+  },
+  {
+    "type": "token_standard_tool_directive",
+    "named": true
+  },
+  {
+    "type": "token_string_literal",
+    "named": true
+  },
+  {
+    "type": "token_tool_directive",
     "named": true
   }
 ]

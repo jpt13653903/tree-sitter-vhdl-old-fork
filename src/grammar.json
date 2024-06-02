@@ -300,8 +300,25 @@
       ]
     },
     "expression": {
-      "type": "SYMBOL",
-      "name": "identifier"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_character_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_string_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_bit_string_literal"
+        }
+      ]
     },
     "entity_statement_part": {
       "type": "SYMBOL",
@@ -314,52 +331,24 @@
     "simple_name": {
       "type": "SYMBOL",
       "name": "identifier"
-    },
-    "comment": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "PATTERN",
-            "value": "--.*"
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "/*"
-              },
-              {
-                "type": "PATTERN",
-                "value": "[^*]*\\*+([^/*][^*]*\\*+)*"
-              },
-              {
-                "type": "STRING",
-                "value": "/"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "tool_directive": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "`.*"
-      }
     }
   },
   "extras": [
     {
       "type": "SYMBOL",
-      "name": "comment"
+      "name": "token_comment"
     },
     {
       "type": "SYMBOL",
-      "name": "tool_directive"
+      "name": "token_tool_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_standard_tool_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_common_tool_directive"
     },
     {
       "type": "PATTERN",
@@ -992,6 +981,46 @@
     {
       "type": "SYMBOL",
       "name": "delimiter_end_marker"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_decimal_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_based_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_character_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_string_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_bit_string_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_tool_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_standard_tool_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_common_tool_directive"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_end_marker"
     },
     {
       "type": "SYMBOL",

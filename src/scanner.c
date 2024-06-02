@@ -47,6 +47,7 @@ void* tree_sitter_vhdl_external_scanner_create()
     register_delimiters                   (token_tree);
     register_attributes                   (token_tree);
     register_base_specifiers              (token_tree);
+    register_directives                   (token_tree);
 
     register_std_env_functions            (token_tree);
 
@@ -116,16 +117,16 @@ static void skipWhitespace(TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
-static bool extended_identifier(TSLexer* lexer)
+static bool bounded_token(TSLexer* lexer)
 {
-    if(lexer->lookahead != '\\') return false;
+    int32_t bound = lexer->lookahead;
     lexer->advance(lexer, false);
 
     while(!lexer->eof(lexer)){
-        if(lexer->lookahead == '\\'){
+        if(lexer->lookahead == bound){
             lexer->advance(lexer, false);
             lexer->mark_end(lexer);
-            if(lexer->lookahead != '\\') return true;
+            if(lexer->lookahead != bound) return true;
         }
         lexer->advance(lexer, false);
     }
@@ -160,6 +161,153 @@ static bool finish_identifier(TSLexer* lexer, bool expect_letter)
 }
 //------------------------------------------------------------------------------
 
+static bool binary_string_literal(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        if(lexer->lookahead < '0' || lexer->lookahead > '1') break;
+        lexer->advance(lexer, false);
+    }
+    if(lexer->lookahead != '"') return false;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool octal_string_literal(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        if(lexer->lookahead < '0' || lexer->lookahead > '7') break;
+        lexer->advance(lexer, false);
+    }
+    if(lexer->lookahead != '"') return false;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool decimal_string_literal(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        if(lexer->lookahead < '0' || lexer->lookahead > '9') break;
+        lexer->advance(lexer, false);
+    }
+    if(lexer->lookahead != '"') return false;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool is_hex_digit(int32_t character)
+{
+    return (character >= '0' && character <= '9') ||
+           (character >= 'a' && character <= 'f') ||
+           (character >= 'A' && character <= 'F');
+}
+//------------------------------------------------------------------------------
+
+static bool hex_string_literal(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        if(!is_hex_digit(lexer->lookahead)) break;
+        lexer->advance(lexer, false);
+    }
+    if(lexer->lookahead != '"') return false;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool finish_string_literal(TSLexer* lexer, TokenType type)
+{
+    switch(type){
+        case BASE_SPECIFIER_BINARY:
+        case BASE_SPECIFIER_UNSIGNED_BINARY:
+        case BASE_SPECIFIER_SIGNED_BINARY:
+            return binary_string_literal(lexer);
+
+        case BASE_SPECIFIER_OCTAL:
+        case BASE_SPECIFIER_UNSIGNED_OCTAL:
+        case BASE_SPECIFIER_SIGNED_OCTAL:
+            return octal_string_literal(lexer);
+
+        case BASE_SPECIFIER_HEX:
+        case BASE_SPECIFIER_UNSIGNED_HEX:
+        case BASE_SPECIFIER_SIGNED_HEX:
+            return hex_string_literal(lexer);
+
+        case BASE_SPECIFIER_DECIMAL:
+            return decimal_string_literal(lexer);
+
+        default:
+            error("Unrecognised type %s", token_type_to_string(type));
+            return false;
+    }
+}
+//------------------------------------------------------------------------------
+
+static void finish_line_comment(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '\r' || lexer->lookahead == '\n'){
+            lexer->advance(lexer, false);
+            lexer->mark_end(lexer);
+            return;
+        }
+        lexer->advance(lexer, false);
+    }
+}
+//------------------------------------------------------------------------------
+
+static bool finish_block_comment(TSLexer* lexer)
+{
+    while(!lexer->eof(lexer)){
+        if(lexer->lookahead == '*'){
+            lexer->advance(lexer, false);
+            if(lexer->lookahead == '/'){
+                lexer->advance(lexer, false);
+                lexer->mark_end(lexer);
+                return true;
+            }
+        }else{
+            lexer->advance(lexer, false);
+        }
+    }
+}
+//------------------------------------------------------------------------------
+
+static bool finish_tool_directive(TSLexer* lexer, bool known)
+{
+    bool result = true;
+    if(known){
+        if((lexer->lookahead == '_') ||
+           (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
+           (lexer->lookahead >= 'A' && lexer->lookahead <= 'Z')) result = false;
+
+    }else{
+        if((lexer->lookahead < 'a' || lexer->lookahead > 'z') &&
+           (lexer->lookahead < 'A' || lexer->lookahead > 'Z')) result = false;
+    }
+    finish_line_comment(lexer);
+    return result;
+}
+//------------------------------------------------------------------------------
+
+bool may_start_with_digit(const bool* valid_symbols)
+{
+    return valid_symbols[TOKEN_DECIMAL_LITERAL] ||
+           valid_symbols[TOKEN_BASED_LITERAL]   ||
+           valid_symbols[TOKEN_BIT_STRING_LITERAL];
+}
+//------------------------------------------------------------------------------
+
 bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, const bool* valid_symbols)
 {
     skipWhitespace(lexer);
@@ -167,20 +315,36 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
     if(valid_symbols[ERROR_SENTINEL]){
         debug("Error correction mode");
         return false;
-    }
 
-    if(valid_symbols[IDENTIFIER] && extended_identifier(lexer)){
+    }else if(valid_symbols[IDENTIFIER] && lexer->lookahead == '\\'){
+        if(!bounded_token(lexer)) return false;
         lexer->result_symbol = IDENTIFIER;
         debug("Returning type IDENTIFIER");
         return true;
+
+    }else if(valid_symbols[TOKEN_STRING_LITERAL] && lexer->lookahead == '"'){
+        if(!bounded_token(lexer)) return false;
+        lexer->result_symbol = TOKEN_STRING_LITERAL;
+        debug("Returning type TOKEN_STRING_LITERAL");
+        return true;
+
+    }else if(valid_symbols[TOKEN_CHARACTER_LITERAL] && lexer->lookahead == '\''){
+        lexer->advance(lexer, false);
+        if(lexer->eof(lexer)) return false;
+        lexer->advance(lexer, false);
+        if(lexer->lookahead != '\'') return false;
+        lexer->advance(lexer, false);
+        lexer->result_symbol = TOKEN_CHARACTER_LITERAL;
+        debug("Returning type TOKEN_CHARACTER_LITERAL");
+        return true;
+
+    }else if(lexer->lookahead >= '0' && lexer->lookahead <= '9'){
+        if(!may_start_with_digit(valid_symbols)) return false;
+        // TODO: Handle all things that start with digits
     }
 
     bool first_char_is_letter = (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
                                 (lexer->lookahead >= 'A' && lexer->lookahead <= 'Z');
-
-    if(lexer->lookahead >= '0' && lexer->lookahead <= '9'){
-        // TODO: Handle all things that start with numbers
-    }
 
     TypeNode* type = token_tree_match(token_tree, lexer);
 
@@ -198,17 +362,48 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
     }
 
     while(type){
-        if(can_start_identifier(type->type) &&
-           finish_identifier(lexer, type->type == IDENTIFIER_EXPECTING_LETTER)){
+        if(type->type == COMMENT_LINE_START){
+            finish_line_comment(lexer);
+            lexer->result_symbol = TOKEN_COMMENT;
+            debug("Returning type TOKEN_COMMENT");
+            return true;
+
+        }else if(type->type == COMMENT_BLOCK_START){
+            if(finish_block_comment(lexer)){
+                lexer->result_symbol = TOKEN_COMMENT;
+                debug("Returning type TOKEN_COMMENT");
+                return true;
+            }
+
+        }else if(type->type == DELIMITER_GRAVE_ACCENT){
+            if(finish_tool_directive(lexer, false)){
+                lexer->result_symbol = TOKEN_TOOL_DIRECTIVE;
+                debug("Returning type TOKEN_TOOL_DIRECTIVE");
+                return true;
+            }
+
+        }else if(type->type == TOKEN_STANDARD_TOOL_DIRECTIVE ||
+                 type->type == TOKEN_COMMON_TOOL_DIRECTIVE){
+            if(finish_tool_directive(lexer, true)){
+                lexer->result_symbol = type->type;
+            }else{
+                lexer->result_symbol = TOKEN_TOOL_DIRECTIVE;
+            }
+            debug("Returning type %s", token_type_to_string(lexer->result_symbol));
+            return true;
+
+        }else if(can_start_identifier(type->type) &&
+            finish_identifier(lexer, type->type == IDENTIFIER_EXPECTING_LETTER)){
             lexer->result_symbol = IDENTIFIER;
             debug("Returning type IDENTIFIER");
             return true;
 
         }else if(is_base_specifier(type->type)){
-            // if(finish_string_literal(type->type)){
-            //     lexer->result_symbol = STRING_LITERAL;
-            //     return true;
-            // }
+            if(finish_string_literal(lexer, type->type)){
+                lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+                debug("Returning type TOKEN_BIT_STRING_LITERAL");
+                return true;
+            }
 
         }else if(valid_symbols[type->type]){
             lexer->result_symbol = type->type;
