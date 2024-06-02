@@ -5,6 +5,9 @@ module.exports = grammar({
    * the VHDL-2008 standard), which makes handling case insensitivity and
    * multiple look-ahead easier.
    *
+   * In addition to the lexical elements, it also tokenises often-used
+   * library identifiers and built-in attributes.
+   *
    * It also makes all searches binary, in contrast to parser.c that mostly
    * use linear searches (probably because it has to preserve priority).
    */
@@ -172,7 +175,9 @@ module.exports = grammar({
     $.delimiter_end_marker, // Scanner internal use only
 
     $.token_decimal_literal,
+    $.token_decimal_literal_float,
     $.token_based_literal,
+    $.token_based_literal_float,
     $.token_character_literal,
     $.token_string_literal,
     $.token_bit_string_literal,
@@ -191,7 +196,9 @@ module.exports = grammar({
     $.attribute_type,
     $.attribute_value,
 
+    $.library_attribute,
     $.library_constant,
+    $.library_constant_boolean,
     $.library_function,
     $.library_type,
 
@@ -283,6 +290,10 @@ module.exports = grammar({
 
     expression: $ => choice( // TODO: Fix
       $.identifier,
+      $.token_decimal_literal,
+      $.token_decimal_literal_float,
+      $.token_based_literal,
+      $.token_based_literal_float,
       $.token_character_literal,
       $.token_string_literal,
       $.token_bit_string_literal

@@ -32,8 +32,8 @@ static void register_std_standard_types(TokenTree* token_tree)
 static void register_std_standard_constants(TokenTree* token_tree)
 {
     // Sourced from "https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml"
-    token_tree_insert(token_tree, "true",         LIBRARY_CONSTANT);
-    token_tree_insert(token_tree, "false",        LIBRARY_CONSTANT);
+    token_tree_insert(token_tree, "true",         LIBRARY_CONSTANT_BOOLEAN);
+    token_tree_insert(token_tree, "false",        LIBRARY_CONSTANT_BOOLEAN);
 
     token_tree_insert(token_tree, "nul",          LIBRARY_CONSTANT);
     token_tree_insert(token_tree, "soh",          LIBRARY_CONSTANT);
@@ -101,7 +101,7 @@ static void register_std_standard_functions(TokenTree* token_tree)
 {
     // Sourced from "https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml"
     token_tree_insert(token_tree, "now",     LIBRARY_FUNCTION);
-    token_tree_insert(token_tree, "foreign", LIBRARY_FUNCTION);
+    token_tree_insert(token_tree, "foreign", LIBRARY_ATTRIBUTE);
 }
 //------------------------------------------------------------------------------
 

@@ -308,6 +308,22 @@
         },
         {
           "type": "SYMBOL",
+          "name": "token_decimal_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_decimal_literal_float"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_based_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "token_based_literal_float"
+        },
+        {
+          "type": "SYMBOL",
           "name": "token_character_literal"
         },
         {
@@ -988,7 +1004,15 @@
     },
     {
       "type": "SYMBOL",
+      "name": "token_decimal_literal_float"
+    },
+    {
+      "type": "SYMBOL",
       "name": "token_based_literal"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "token_based_literal_float"
     },
     {
       "type": "SYMBOL",
@@ -1052,7 +1076,15 @@
     },
     {
       "type": "SYMBOL",
+      "name": "library_attribute"
+    },
+    {
+      "type": "SYMBOL",
       "name": "library_constant"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "library_constant_boolean"
     },
     {
       "type": "SYMBOL",

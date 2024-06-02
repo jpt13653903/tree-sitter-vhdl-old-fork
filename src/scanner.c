@@ -228,24 +228,10 @@ static bool hex_string_literal(TSLexer* lexer)
 static bool finish_string_literal(TSLexer* lexer, TokenType type)
 {
     switch(type){
-        case BASE_SPECIFIER_BINARY:
-        case BASE_SPECIFIER_UNSIGNED_BINARY:
-        case BASE_SPECIFIER_SIGNED_BINARY:
-            return binary_string_literal(lexer);
-
-        case BASE_SPECIFIER_OCTAL:
-        case BASE_SPECIFIER_UNSIGNED_OCTAL:
-        case BASE_SPECIFIER_SIGNED_OCTAL:
-            return octal_string_literal(lexer);
-
-        case BASE_SPECIFIER_HEX:
-        case BASE_SPECIFIER_UNSIGNED_HEX:
-        case BASE_SPECIFIER_SIGNED_HEX:
-            return hex_string_literal(lexer);
-
-        case BASE_SPECIFIER_DECIMAL:
-            return decimal_string_literal(lexer);
-
+        case BASE_SPECIFIER_BINARY:  return binary_string_literal (lexer);
+        case BASE_SPECIFIER_OCTAL:   return octal_string_literal  (lexer);
+        case BASE_SPECIFIER_DECIMAL: return decimal_string_literal(lexer);
+        case BASE_SPECIFIER_HEX:     return hex_string_literal    (lexer);
         default:
             error("Unrecognised type %s", token_type_to_string(type));
             return false;
@@ -300,11 +286,173 @@ static bool finish_tool_directive(TSLexer* lexer, bool known)
 }
 //------------------------------------------------------------------------------
 
-bool may_start_with_digit(const bool* valid_symbols)
+static bool may_start_with_digit(const bool* valid_symbols)
 {
-    return valid_symbols[TOKEN_DECIMAL_LITERAL] ||
-           valid_symbols[TOKEN_BASED_LITERAL]   ||
+    return valid_symbols[TOKEN_DECIMAL_LITERAL]       ||
+           valid_symbols[TOKEN_DECIMAL_LITERAL_FLOAT] ||
+           valid_symbols[TOKEN_BASED_LITERAL]         ||
+           valid_symbols[TOKEN_BASED_LITERAL_FLOAT]   ||
            valid_symbols[TOKEN_BIT_STRING_LITERAL];
+}
+//------------------------------------------------------------------------------
+
+static int parse_integer(TSLexer* lexer)
+{
+    int result = 0;
+    while(!lexer->eof(lexer)){
+        lexer->mark_end(lexer);
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        if(lexer->lookahead < '0' || lexer->lookahead > '9') return result;
+
+        result *= 10;
+        result += lexer->lookahead - '0';
+        lexer->advance(lexer, false);
+    }
+    return result;
+}
+//------------------------------------------------------------------------------
+
+static bool parse_decimal_exponent(TSLexer* lexer)
+{
+    lexer->advance(lexer, false);
+    if(lexer->lookahead == '+' || lexer->lookahead == '-') lexer->advance(lexer, false);
+    if(lexer->lookahead < '0' || lexer->lookahead > '9') return false;
+
+    parse_integer(lexer);
+
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool parse_decimal_fraction(TSLexer* lexer)
+{
+    lexer->advance(lexer, false);
+    if(lexer->lookahead < '0' || lexer->lookahead > '9') return false;
+
+    lexer->result_symbol = TOKEN_DECIMAL_LITERAL_FLOAT;
+    parse_integer(lexer);
+
+    if(lexer->lookahead == 'e' || lexer->lookahead == 'E'){
+        return parse_decimal_exponent(lexer);
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static int to_digit(int32_t character)
+{
+    if(character >= '0' && character <= '9') return character - '0';
+    if(character >= 'a' && character <= 'z') return character - 'a' + 10;
+    if(character >= 'A' && character <= 'Z') return character - 'A' + 10;
+    return -1;
+}
+//------------------------------------------------------------------------------
+
+static bool based_integer(TSLexer* lexer, int base)
+{
+    while(!lexer->eof(lexer)){
+        lexer->mark_end(lexer);
+        if(lexer->lookahead == '_') lexer->advance(lexer, false);
+        int digit = to_digit(lexer->lookahead);
+        if(digit < 0) return true;
+        if(digit >= base) return false;
+        lexer->advance(lexer, false);
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool parse_base_literal(TSLexer* lexer, int base)
+{
+    lexer->advance(lexer, false);
+    lexer->result_symbol = TOKEN_BASED_LITERAL;
+
+    if(!based_integer(lexer, base)) return false;
+    if(lexer->lookahead == '.'){
+        lexer->advance(lexer, false);
+        lexer->result_symbol = TOKEN_BASED_LITERAL_FLOAT;
+        if(!based_integer(lexer, base)) return false;
+    }
+    if(lexer->lookahead != '#') return false;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    if(lexer->lookahead == 'e' || lexer->lookahead == 'E'){
+        lexer->result_symbol = TOKEN_BASED_LITERAL_FLOAT;
+        return parse_decimal_exponent(lexer);
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+
+static bool parse_digit_based_literal(TSLexer* lexer)
+{
+    TokenType type;
+
+    lexer->result_symbol = TOKEN_DECIMAL_LITERAL;
+
+    int base = parse_integer(lexer);
+    debug("base = %d", base);
+
+    switch(lowercase(lexer->lookahead)){
+        case '.':
+            return parse_decimal_fraction(lexer);
+
+        case 'e':
+            lexer->result_symbol = TOKEN_DECIMAL_LITERAL_FLOAT;
+            return parse_decimal_exponent(lexer);
+
+        case '#':
+            return parse_base_literal(lexer, base);
+
+        case 'b':
+            lexer->advance(lexer, false);
+            if(lexer->lookahead != '"') return true;
+            lexer->advance(lexer, false);
+            lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+            return finish_string_literal(lexer, BASE_SPECIFIER_BINARY);
+        case 'o':
+            lexer->advance(lexer, false);
+            if(lexer->lookahead != '"') return true;
+            lexer->advance(lexer, false);
+            lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+            return finish_string_literal(lexer, BASE_SPECIFIER_OCTAL);
+        case 'd':
+            lexer->advance(lexer, false);
+            if(lexer->lookahead != '"') return true;
+            lexer->advance(lexer, false);
+            lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+            return finish_string_literal(lexer, BASE_SPECIFIER_DECIMAL);
+        case 'x':
+            lexer->advance(lexer, false);
+            if(lexer->lookahead != '"') return true;
+            lexer->advance(lexer, false);
+            lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+            return finish_string_literal(lexer, BASE_SPECIFIER_HEX);
+
+        case 'u':
+        case 's':
+            switch(advance(lexer)){
+                case 'b':
+                    type = BASE_SPECIFIER_BINARY;
+                    break;
+                case 'o':
+                    type = BASE_SPECIFIER_OCTAL;
+                    break;
+                case 'x':
+                    type = BASE_SPECIFIER_HEX;
+                    break;
+                default:
+                    return true;
+            }
+            lexer->advance(lexer, false);
+            if(lexer->lookahead != '"') return true;
+            lexer->advance(lexer, false);
+            lexer->result_symbol = TOKEN_BIT_STRING_LITERAL;
+            return finish_string_literal(lexer, type);
+
+        default:
+            return true;
+    }
 }
 //------------------------------------------------------------------------------
 
@@ -340,7 +488,9 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
 
     }else if(lexer->lookahead >= '0' && lexer->lookahead <= '9'){
         if(!may_start_with_digit(valid_symbols)) return false;
-        // TODO: Handle all things that start with digits
+        if(!parse_digit_based_literal(lexer)) return false;
+        debug("returning type %s", token_type_to_string(lexer->result_symbol));
+        return true;
     }
 
     bool first_char_is_letter = (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||

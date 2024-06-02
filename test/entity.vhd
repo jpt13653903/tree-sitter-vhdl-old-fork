@@ -22,5 +22,13 @@ entity MyModule is port(
   signal testing : in integer := d"6789";
   signal testing : in integer := "My String Literal";
   signal testing : in integer := ''';
-  signal testing : in integer := 'x'
+  signal testing : in integer := 'x';
+  signal testing : in integer := 25d"123456789";
+  signal testing : in integer := 5#1234#;
+  signal testing : in integer := 5#12.34#;
+  signal testing : in integer := 5#1234#e7;
+  signal testing : in integer := 5#12.34#e7;
+  signal testing : in float   := 123.456;
+  signal testing : in float   := 123.456e8;
+  signal testing : in float   := 123e8
 ); end entity MyModule;

@@ -167,7 +167,9 @@
             case DELIMITER_END_MARKER:                     return "DELIMITER_END_MARKER";
 
             case TOKEN_DECIMAL_LITERAL:                    return "TOKEN_DECIMAL_LITERAL";
+            case TOKEN_DECIMAL_LITERAL_FLOAT:              return "TOKEN_DECIMAL_LITERAL_FLOAT";
             case TOKEN_BASED_LITERAL:                      return "TOKEN_BASED_LITERAL";
+            case TOKEN_BASED_LITERAL_FLOAT:                return "TOKEN_BASED_LITERAL_FLOAT";
             case TOKEN_CHARACTER_LITERAL:                  return "TOKEN_CHARACTER_LITERAL";
             case TOKEN_STRING_LITERAL:                     return "TOKEN_STRING_LITERAL";
             case TOKEN_BIT_STRING_LITERAL:                 return "TOKEN_BIT_STRING_LITERAL";
@@ -186,7 +188,9 @@
             case ATTRIBUTE_TYPE:                           return "ATTRIBUTE_TYPE";
             case ATTRIBUTE_VALUE:                          return "ATTRIBUTE_VALUE";
 
+            case LIBRARY_ATTRIBUTE:                        return "LIBRARY_ATTRIBUTE";
             case LIBRARY_CONSTANT:                         return "LIBRARY_CONSTANT";
+            case LIBRARY_CONSTANT_BOOLEAN:                 return "LIBRARY_CONSTANT_BOOLEAN";
             case LIBRARY_FUNCTION:                         return "LIBRARY_FUNCTION";
             case LIBRARY_TYPE:                             return "LIBRARY_TYPE";
 
@@ -197,14 +201,8 @@
 
             case BASE_SPECIFIER_BINARY:                    return "BASE_SPECIFIER_BINARY";
             case BASE_SPECIFIER_OCTAL:                     return "BASE_SPECIFIER_OCTAL";
-            case BASE_SPECIFIER_HEX:                       return "BASE_SPECIFIER_HEX";
-            case BASE_SPECIFIER_UNSIGNED_BINARY:           return "BASE_SPECIFIER_UNSIGNED_BINARY";
-            case BASE_SPECIFIER_UNSIGNED_OCTAL:            return "BASE_SPECIFIER_UNSIGNED_OCTAL";
-            case BASE_SPECIFIER_UNSIGNED_HEX:              return "BASE_SPECIFIER_UNSIGNED_HEX";
-            case BASE_SPECIFIER_SIGNED_BINARY:             return "BASE_SPECIFIER_SIGNED_BINARY";
-            case BASE_SPECIFIER_SIGNED_OCTAL:              return "BASE_SPECIFIER_SIGNED_OCTAL";
-            case BASE_SPECIFIER_SIGNED_HEX:                return "BASE_SPECIFIER_SIGNED_HEX";
             case BASE_SPECIFIER_DECIMAL:                   return "BASE_SPECIFIER_DECIMAL";
+            case BASE_SPECIFIER_HEX:                       return "BASE_SPECIFIER_HEX";
 
             case IDENTIFIER_EXPECTING_LETTER:              return "IDENTIFIER_EXPECTING_LETTER";
 
@@ -233,7 +231,7 @@ bool can_start_identifier(TokenType type)
 
 bool is_base_specifier(TokenType type)
 {
-    return (type >= BASE_SPECIFIER_BINARY && type <= BASE_SPECIFIER_DECIMAL);
+    return (type >= BASE_SPECIFIER_BINARY && type <= BASE_SPECIFIER_HEX);
 }
 //------------------------------------------------------------------------------
 
