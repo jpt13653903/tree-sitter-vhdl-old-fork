@@ -25,10 +25,12 @@ entity MyModule is port(
   signal testing : in integer := 'x';
   signal testing : in integer := 25d"123456789";
   signal testing : in integer := 5#1234#;
-  signal testing : in integer := 5#12.34#;
-  signal testing : in integer := 5#1234#e7;
-  signal testing : in integer := 5#12.34#e7;
+  signal testing : in float   := 5#12.34#;
+  signal testing : in float   := 12#1234aba#e7;
+  signal testing : in float   := 5#12.34#e7;
   signal testing : in float   := 123.456;
   signal testing : in float   := 123.456e8;
-  signal testing : in float   := 123e8
+  signal testing : in float   := 123e8;
+  signal testing : in std_logic := "UX01ZWLH-";
+  signal testing : in std_logic := x"UX01ZWLH-"
 ); end entity MyModule;

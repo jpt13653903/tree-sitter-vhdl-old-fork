@@ -161,11 +161,29 @@ static bool finish_identifier(TSLexer* lexer, bool expect_letter)
 }
 //------------------------------------------------------------------------------
 
+static bool is_special_value(int32_t value)
+{
+    switch(value){
+        case 'u':
+        case 'x':
+        case 'z':
+        case 'w':
+        case 'l':
+        case 'h':
+        case '-':
+            return true;
+        default:
+            return false;
+    }
+}
+//------------------------------------------------------------------------------
+
 static bool binary_string_literal(TSLexer* lexer)
 {
     while(!lexer->eof(lexer)){
         if(lexer->lookahead == '_') lexer->advance(lexer, false);
-        if(lexer->lookahead < '0' || lexer->lookahead > '1') break;
+        if((lexer->lookahead < '0' || lexer->lookahead > '1') &&
+           !is_special_value(lowercase(lexer->lookahead))) break;
         lexer->advance(lexer, false);
     }
     if(lexer->lookahead != '"') return false;
@@ -179,7 +197,8 @@ static bool octal_string_literal(TSLexer* lexer)
 {
     while(!lexer->eof(lexer)){
         if(lexer->lookahead == '_') lexer->advance(lexer, false);
-        if(lexer->lookahead < '0' || lexer->lookahead > '7') break;
+        if((lexer->lookahead < '0' || lexer->lookahead > '7') &&
+           !is_special_value(lowercase(lexer->lookahead))) break;
         lexer->advance(lexer, false);
     }
     if(lexer->lookahead != '"') return false;
@@ -193,7 +212,8 @@ static bool decimal_string_literal(TSLexer* lexer)
 {
     while(!lexer->eof(lexer)){
         if(lexer->lookahead == '_') lexer->advance(lexer, false);
-        if(lexer->lookahead < '0' || lexer->lookahead > '9') break;
+        if((lexer->lookahead < '0' || lexer->lookahead > '9') &&
+           !is_special_value(lowercase(lexer->lookahead))) break;
         lexer->advance(lexer, false);
     }
     if(lexer->lookahead != '"') return false;
@@ -215,7 +235,8 @@ static bool hex_string_literal(TSLexer* lexer)
 {
     while(!lexer->eof(lexer)){
         if(lexer->lookahead == '_') lexer->advance(lexer, false);
-        if(!is_hex_digit(lexer->lookahead)) break;
+        if(!is_hex_digit(lexer->lookahead) &&
+           !is_special_value(lowercase(lexer->lookahead))) break;
         lexer->advance(lexer, false);
     }
     if(lexer->lookahead != '"') return false;
@@ -392,6 +413,9 @@ static bool parse_digit_based_literal(TSLexer* lexer)
 
     int base = parse_integer(lexer);
     debug("base = %d", base);
+    // NOTE: VHDL-2008 limits the base to 16, but I feel it's pointless to
+    //       enforce, so I don't.  A future version will most likely relax
+    //       that rule.
 
     switch(lowercase(lexer->lookahead)){
         case '.':
