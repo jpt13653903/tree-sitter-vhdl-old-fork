@@ -137,7 +137,7 @@
     (ROR) (SELECT) (SEQUENCE) (SEVERITY) (SIGNAL) (SHARED) (SLA) (SLL) (SRA)
     (SRL) (STRONG) (SUBTYPE) (THEN) (TO) (TRANSPORT) (TYPE) (UNAFFECTED) (UNITS)
     (UNTIL) (USE) (VARIABLE) (VIEW) (VPKG) (VMODE) (VPROP) (VUNIT) (WAIT) (WHEN)
-    (WHILE) (WITH) (XNOR) (XOR)
+    (WHILE) (WITH) (XNOR) (XOR) (box)
 ] @keyword
 
 (tool_directive) @keyword.directive
@@ -148,18 +148,24 @@
 (directive_warning) @comment.warning
 
 [
-    (ampersand) (tick) (left_parenthesis) (right_parenthesis) (multiply)
-    (plus_sign) (comma) (minus_sign) (dot) (divide) (colon) (semicolon)
-    (less_than_sign) (equals_sign) (greater_than_sign) (grave_accent)
-    (vertical_bar) (left_square_bracket) (right_square_bracket)
-    (question_mark) (commercial_at)
-
-    (arrow) (circumflex) (exponentiate) (variable_assignment) (inequality)
-    (greater_than_or_equal) (less_than_or_equal) (signal_assignment) (box)
-    (condition_conversion) (matching_equality) (matching_inequality)
-    (matching_less_than) (matching_less_than_or_equal) (matching_greater_than)
-    (matching_greater_than_or_equal) (double_less_than) (double_greater_than)
+    (ampersand) (multiply) (plus_sign) (minus_sign) (divide) (less_than_sign)
+    (equals_sign) (greater_than_sign) (vertical_bar) (question_mark)
+    (commercial_at) (arrow) (circumflex) (exponentiate) (variable_assignment)
+    (inequality) (greater_than_or_equal) (less_than_or_equal)
+    (signal_assignment) (condition_conversion) (matching_equality)
+    (matching_inequality) (matching_less_than) (matching_less_than_or_equal)
+    (matching_greater_than) (matching_greater_than_or_equal)
+    (double_less_than) (double_greater_than)
 ] @operator
+
+[ (tick) (comma) (dot) (semicolon) ] @punctuation.delimiters
+
+[
+    (left_parenthesis)    (right_parenthesis)
+    (left_square_bracket) (right_square_bracket)
+] @punctuation.bracket
+
+(colon) @punctuation.special
 
 [
     (decimal_literal)
@@ -183,17 +189,14 @@
     (attribute_subtype)
     (attribute_type)
     (attribute_value)
+    (library_attribute)
 ] @attribute.builtin
 
-[
-    (library_attribute)
-    (library_constant)
-    (library_function)
-    (library_type)
-] @function.builtin
-
-(library_constant_boolean) @boolean
+(library_constant)           @constant.builtin
+(library_function)           @function.builtin
+(library_type)               @type.builtin
+(library_constant_boolean)   @boolean
 (library_constant_character) @character
-(library_constant_debug) @keyword.debug
-(library_constant_unit) @keyword.modifier
+(library_constant_debug)     @keyword.debug
+(library_constant_unit)      @keyword.modifier
 
