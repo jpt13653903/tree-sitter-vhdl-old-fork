@@ -15,7 +15,6 @@ typedef enum TokenTypeTag{
     RESERVED_ARRAY,
     RESERVED_ASSERT,
     RESERVED_ASSUME,
-    RESERVED_ASSUME_GUARANTEE,
     RESERVED_ATTRIBUTE,
     RESERVED_BEGIN,
     RESERVED_BLOCK,
@@ -78,6 +77,7 @@ typedef enum TokenTypeTag{
     RESERVED_PROCESS,
     RESERVED_PROPERTY,
     RESERVED_PROTECTED,
+    RESERVED_PRIVATE,
     RESERVED_PURE,
     RESERVED_RANGE,
     RESERVED_RECORD,
@@ -87,7 +87,6 @@ typedef enum TokenTypeTag{
     RESERVED_REM,
     RESERVED_REPORT,
     RESERVED_RESTRICT,
-    RESERVED_RESTRICT_GUARANTEE,
     RESERVED_RETURN,
     RESERVED_ROL,
     RESERVED_ROR,
@@ -111,6 +110,8 @@ typedef enum TokenTypeTag{
     RESERVED_UNTIL,
     RESERVED_USE,
     RESERVED_VARIABLE,
+    RESERVED_VIEW,
+    RESERVED_VPKG,
     RESERVED_VMODE,
     RESERVED_VPROP,
     RESERVED_VUNIT,
@@ -122,6 +123,15 @@ typedef enum TokenTypeTag{
     RESERVED_XOR,
 
     RESERVED_END_MARKER, // Internal use only
+
+    DIRECTIVE_BODY,
+    DIRECTIVE_CONSTANT_BUILTIN,
+    DIRECTIVE_ERROR,
+    DIRECTIVE_NEWLINE,
+    DIRECTIVE_PROTECT,
+    DIRECTIVE_WARNING,
+
+    DIRECTIVE_END_MARKER, // Internal use only
 
     DELIMITER_AMPERSAND,
     DELIMITER_TICK,
@@ -174,9 +184,6 @@ typedef enum TokenTypeTag{
     TOKEN_STRING_LITERAL,
     TOKEN_BIT_STRING_LITERAL,
     TOKEN_COMMENT,
-    TOKEN_TOOL_DIRECTIVE,
-    TOKEN_TOOL_DIRECTIVE_STANDARD,
-    TOKEN_TOOL_DIRECTIVE_COMMON,
 
     TOKEN_END_MARKER, // Internal use only
 
@@ -212,7 +219,7 @@ typedef enum TokenTypeTag{
 
 const char* token_type_to_string(TokenType type);
 
-bool can_be_identifier   (TokenType type);
+bool can_be_identifier   (Scanner* scanner, TokenType type);
 bool can_start_identifier(TokenType type);
 bool is_base_specifier   (TokenType type);
 //------------------------------------------------------------------------------

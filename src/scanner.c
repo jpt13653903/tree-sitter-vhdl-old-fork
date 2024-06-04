@@ -2,8 +2,18 @@
 //------------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <string.h>
+//------------------------------------------------------------------------------
+
 #include "tree_sitter/parser.h"
 #include "debug_macros.h"
+//------------------------------------------------------------------------------
+
+typedef struct ScannerTag{
+    bool is_in_directive;
+} Scanner;
+//------------------------------------------------------------------------------
+
 #include "TokenType.h"
 #include "TokenTree.h"
 //------------------------------------------------------------------------------
@@ -33,86 +43,107 @@
 #include "TokenTree.c"
 //------------------------------------------------------------------------------
 
+static TokenTree* token_tree     = 0;
+static int        instance_count = 0;
+//------------------------------------------------------------------------------
+
 void* tree_sitter_vhdl_external_scanner_create()
 {
-    TokenTree* token_tree = token_tree_new();
     if(!token_tree){
-        error("Cannot allocate memory for the token tree");
-        return 0;
+        token_tree = token_tree_new();
+        if(!token_tree){
+            error("Cannot allocate memory for the token tree");
+            return 0;
+        }
+
+        debug("Building the token tree...");
+
+        register_reserved                     (token_tree);
+        register_directives                   (token_tree);
+        register_delimiters                   (token_tree);
+        register_attributes                   (token_tree);
+        register_base_specifiers              (token_tree);
+
+        register_std_env_functions            (token_tree);
+
+        register_std_standard_types           (token_tree);
+        register_std_standard_constants       (token_tree);
+        register_std_standard_functions       (token_tree);
+
+        register_std_textio_types             (token_tree);
+        register_std_textio_constants         (token_tree);
+        register_std_textio_functions         (token_tree);
+
+        register_ieee_std_logic_1164_types    (token_tree);
+        register_ieee_std_logic_1164_functions(token_tree);
+
+        register_ieee_numeric_std_types       (token_tree);
+        register_ieee_numeric_std_functions   (token_tree);
+
+        register_ieee_fixed_pkg_types         (token_tree);
+        register_ieee_fixed_pkg_constants     (token_tree);
+        register_ieee_fixed_pkg_functions     (token_tree);
+
+        register_ieee_float_pkg_types         (token_tree);
+        register_ieee_float_pkg_constants     (token_tree);
+        register_ieee_float_pkg_functions     (token_tree);
+
+        register_ieee_math_real_constants     (token_tree);
+        register_ieee_math_real_functions     (token_tree);
+
+        register_ieee_math_complex_types      (token_tree);
+        register_ieee_math_complex_constants  (token_tree);
+        register_ieee_math_complex_functions  (token_tree);
+
+        debug("Balancing the token tree");
+        token_tree_balance(token_tree);
     }
+    instance_count++;
 
-    debug("Building the token tree...");
+    Scanner* scanner = ts_calloc(1, sizeof(Scanner));
 
-    register_reserved                     (token_tree);
-    register_delimiters                   (token_tree);
-    register_attributes                   (token_tree);
-    register_base_specifiers              (token_tree);
-    register_directives                   (token_tree);
-
-    register_std_env_functions            (token_tree);
-
-    register_std_standard_types           (token_tree);
-    register_std_standard_constants       (token_tree);
-    register_std_standard_functions       (token_tree);
-
-    register_std_textio_types             (token_tree);
-    register_std_textio_constants         (token_tree);
-    register_std_textio_functions         (token_tree);
-
-    register_ieee_std_logic_1164_types    (token_tree);
-    register_ieee_std_logic_1164_functions(token_tree);
-
-    register_ieee_numeric_std_types       (token_tree);
-    register_ieee_numeric_std_functions   (token_tree);
-
-    register_ieee_fixed_pkg_types         (token_tree);
-    register_ieee_fixed_pkg_constants     (token_tree);
-    register_ieee_fixed_pkg_functions     (token_tree);
-
-    register_ieee_float_pkg_types         (token_tree);
-    register_ieee_float_pkg_constants     (token_tree);
-    register_ieee_float_pkg_functions     (token_tree);
-
-    register_ieee_math_real_constants     (token_tree);
-    register_ieee_math_real_functions     (token_tree);
-
-    register_ieee_math_complex_types      (token_tree);
-    register_ieee_math_complex_constants  (token_tree);
-    register_ieee_math_complex_functions  (token_tree);
-
-    debug("Balancing the token tree");
-    token_tree_balance(token_tree);
-
-    return token_tree;
+    return scanner;
 }
 //------------------------------------------------------------------------------
 
-void tree_sitter_vhdl_external_scanner_destroy(void* token_tree)
+void tree_sitter_vhdl_external_scanner_destroy(Scanner* scanner)
 {
-    if(token_tree) token_tree_free(token_tree);
+    ts_free(scanner);
+
+    instance_count--;
+    if(!instance_count){
+        if(token_tree) token_tree_free(token_tree);
+        token_tree = 0;
+    }
 }
 //------------------------------------------------------------------------------
 
-unsigned tree_sitter_vhdl_external_scanner_serialize(void* token_tree, char* buffer)
+unsigned tree_sitter_vhdl_external_scanner_serialize(Scanner* scanner, char* buffer)
 {
-    return 0;
+    memcpy(buffer, scanner, sizeof(Scanner));
+    return sizeof(Scanner);
 }
 //------------------------------------------------------------------------------
 
-void tree_sitter_vhdl_external_scanner_deserialize(void* token_tree, const char* buffer, unsigned length)
+void tree_sitter_vhdl_external_scanner_deserialize(Scanner* scanner, const char* buffer, unsigned length)
 {
-    /* NOOP */
+    memcpy(scanner, buffer, length);
 }
 //------------------------------------------------------------------------------
 
-static void skipWhitespace(TSLexer* lexer)
+static void skip_whitespace(Scanner* scanner, TSLexer* lexer)
 {
-    while(lexer->lookahead == ' '  ||
-          lexer->lookahead == '\t' ||
-          lexer->lookahead == '\n' ||
-          lexer->lookahead == '\r' ){
-        debug("Skipping whitespace");
-        lexer->advance(lexer, true);
+    if(scanner->is_in_directive){
+        while(lexer->lookahead == ' ' || lexer->lookahead == '\t'){
+            debug("Skipping whitespace");
+            lexer->advance(lexer, true);
+        }
+    }else{
+        while(lexer->lookahead == ' '  || lexer->lookahead == '\t' ||
+              lexer->lookahead == '\n' || lexer->lookahead == '\r' ){
+            debug("Skipping whitespace and newlines");
+            lexer->advance(lexer, true);
+        }
     }
 }
 //------------------------------------------------------------------------------
@@ -290,23 +321,6 @@ static bool finish_block_comment(TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
-static bool finish_tool_directive(TSLexer* lexer, bool known)
-{
-    bool result = true;
-    if(known){
-        if((lexer->lookahead == '_') ||
-           (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
-           (lexer->lookahead >= 'A' && lexer->lookahead <= 'Z')) result = false;
-
-    }else{
-        if((lexer->lookahead < 'a' || lexer->lookahead > 'z') &&
-           (lexer->lookahead < 'A' || lexer->lookahead > 'Z')) result = false;
-    }
-    finish_line_comment(lexer);
-    return result;
-}
-//------------------------------------------------------------------------------
-
 static bool may_start_with_digit(const bool* valid_symbols)
 {
     return valid_symbols[TOKEN_DECIMAL_LITERAL]       ||
@@ -480,9 +494,25 @@ static bool parse_digit_based_literal(TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
-bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, const bool* valid_symbols)
+static bool graphic_characters(TSLexer* lexer)
 {
-    skipWhitespace(lexer);
+    if(lexer->lookahead == '\n' || lexer->lookahead == '\r') return false;
+
+    while(!lexer->eof(lexer)){
+        debug("lookahead = %c(0x%x)", (char)lexer->lookahead, lexer->lookahead);
+        if(lexer->lookahead == ' '  || lexer->lookahead == '\t' ||
+           lexer->lookahead == '\n' || lexer->lookahead == '\r'){
+            return true;
+        }
+        lexer->advance(lexer, false);
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+
+bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols)
+{
+    skip_whitespace(scanner, lexer);
 
     if(valid_symbols[ERROR_SENTINEL]){
         debug("Error correction mode");
@@ -515,6 +545,11 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
         if(!parse_digit_based_literal(lexer)) return false;
         debug("returning type %s", token_type_to_string(lexer->result_symbol));
         return true;
+
+    }else if(valid_symbols[DIRECTIVE_BODY] && graphic_characters(lexer)){
+        lexer->result_symbol = DIRECTIVE_BODY;
+        debug("returning type DIRECTIVE_BODY");
+        return true;
     }
 
     bool first_char_is_letter = (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
@@ -535,6 +570,8 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
         return true;
     }
 
+    bool turn_into_identifier = false;
+
     while(type){
         if(type->type == COMMENT_LINE_START){
             finish_line_comment(lexer);
@@ -548,23 +585,6 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
                 debug("Returning type TOKEN_COMMENT");
                 return true;
             }
-
-        }else if(type->type == DELIMITER_GRAVE_ACCENT){
-            if(finish_tool_directive(lexer, false)){
-                lexer->result_symbol = TOKEN_TOOL_DIRECTIVE;
-                debug("Returning type TOKEN_TOOL_DIRECTIVE");
-                return true;
-            }
-
-        }else if(type->type == TOKEN_TOOL_DIRECTIVE_STANDARD ||
-                 type->type == TOKEN_TOOL_DIRECTIVE_COMMON){
-            if(finish_tool_directive(lexer, true)){
-                lexer->result_symbol = type->type;
-            }else{
-                lexer->result_symbol = TOKEN_TOOL_DIRECTIVE;
-            }
-            debug("Returning type %s", token_type_to_string(lexer->result_symbol));
-            return true;
 
         }else if(can_start_identifier(type->type) &&
             finish_identifier(lexer, type->type == IDENTIFIER_EXPECTING_LETTER)){
@@ -581,15 +601,25 @@ bool tree_sitter_vhdl_external_scanner_scan(void* token_tree, TSLexer* lexer, co
 
         }else if(valid_symbols[type->type]){
             lexer->result_symbol = type->type;
+
+            if(scanner->is_in_directive){
+               scanner->is_in_directive = (type->type != DIRECTIVE_NEWLINE);
+            }else{
+               scanner->is_in_directive = (type->type == DELIMITER_GRAVE_ACCENT);
+            }
+
             debug("Returning type %s", token_type_to_string(type->type));
             return true;
 
-        }else if(can_be_identifier(type->type)){
-            lexer->result_symbol = IDENTIFIER;
-            debug("Returning type IDENTIFIER");
-            return true;
+        }else if(can_be_identifier(scanner, type->type)){
+            turn_into_identifier = true;
         }
         type = type->next;
+    }
+    if(valid_symbols[IDENTIFIER] && turn_into_identifier){
+        lexer->result_symbol = IDENTIFIER;
+        debug("Returning type IDENTIFIER");
+        return true;
     }
 
     debug("Returning false...");

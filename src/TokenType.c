@@ -16,7 +16,6 @@
             case RESERVED_ARRAY:                           return "RESERVED_ARRAY";
             case RESERVED_ASSERT:                          return "RESERVED_ASSERT";
             case RESERVED_ASSUME:                          return "RESERVED_ASSUME";
-            case RESERVED_ASSUME_GUARANTEE:                return "RESERVED_ASSUME_GUARANTEE";
             case RESERVED_ATTRIBUTE:                       return "RESERVED_ATTRIBUTE";
             case RESERVED_BEGIN:                           return "RESERVED_BEGIN";
             case RESERVED_BLOCK:                           return "RESERVED_BLOCK";
@@ -79,6 +78,7 @@
             case RESERVED_PROCESS:                         return "RESERVED_PROCESS";
             case RESERVED_PROPERTY:                        return "RESERVED_PROPERTY";
             case RESERVED_PROTECTED:                       return "RESERVED_PROTECTED";
+            case RESERVED_PRIVATE:                         return "RESERVED_PRIVATE";
             case RESERVED_PURE:                            return "RESERVED_PURE";
             case RESERVED_RANGE:                           return "RESERVED_RANGE";
             case RESERVED_RECORD:                          return "RESERVED_RECORD";
@@ -88,7 +88,6 @@
             case RESERVED_REM:                             return "RESERVED_REM";
             case RESERVED_REPORT:                          return "RESERVED_REPORT";
             case RESERVED_RESTRICT:                        return "RESERVED_RESTRICT";
-            case RESERVED_RESTRICT_GUARANTEE:              return "RESERVED_RESTRICT_GUARANTEE";
             case RESERVED_RETURN:                          return "RESERVED_RETURN";
             case RESERVED_ROL:                             return "RESERVED_ROL";
             case RESERVED_ROR:                             return "RESERVED_ROR";
@@ -112,6 +111,8 @@
             case RESERVED_UNTIL:                           return "RESERVED_UNTIL";
             case RESERVED_USE:                             return "RESERVED_USE";
             case RESERVED_VARIABLE:                        return "RESERVED_VARIABLE";
+            case RESERVED_VIEW:                            return "RESERVED_VIEW";
+            case RESERVED_VPKG:                            return "RESERVED_VPKG";
             case RESERVED_VMODE:                           return "RESERVED_VMODE";
             case RESERVED_VPROP:                           return "RESERVED_VPROP";
             case RESERVED_VUNIT:                           return "RESERVED_VUNIT";
@@ -123,6 +124,15 @@
             case RESERVED_XOR:                             return "RESERVED_XOR";
 
             case RESERVED_END_MARKER:                      return "RESERVED_END_MARKER";
+
+            case DIRECTIVE_BODY:                           return "DIRECTIVE_BODY";
+            case DIRECTIVE_CONSTANT_BUILTIN:               return "DIRECTIVE_CONSTANT_BUILTIN";
+            case DIRECTIVE_ERROR:                          return "DIRECTIVE_ERROR";
+            case DIRECTIVE_NEWLINE:                        return "DIRECTIVE_NEWLINE";
+            case DIRECTIVE_PROTECT:                        return "DIRECTIVE_PROTECT";
+            case DIRECTIVE_WARNING:                        return "DIRECTIVE_WARNING";
+
+            case DIRECTIVE_END_MARKER:                     return "DIRECTIVE_END_MARKER";
 
             case DELIMITER_AMPERSAND:                      return "DELIMITER_AMPERSAND";
             case DELIMITER_TICK:                           return "DELIMITER_TICK";
@@ -175,9 +185,6 @@
             case TOKEN_STRING_LITERAL:                     return "TOKEN_STRING_LITERAL";
             case TOKEN_BIT_STRING_LITERAL:                 return "TOKEN_BIT_STRING_LITERAL";
             case TOKEN_COMMENT:                            return "TOKEN_COMMENT";
-            case TOKEN_TOOL_DIRECTIVE:                     return "TOKEN_TOOL_DIRECTIVE";
-            case TOKEN_TOOL_DIRECTIVE_STANDARD:            return "TOKEN_TOOL_DIRECTIVE_STANDARD";
-            case TOKEN_TOOL_DIRECTIVE_COMMON:              return "TOKEN_TOOL_DIRECTIVE_COMMON";
 
             case TOKEN_END_MARKER:                         return "TOKEN_END_MARKER";
 
@@ -215,16 +222,21 @@
 #endif
 //------------------------------------------------------------------------------
 
-bool can_be_identifier(TokenType type)
+bool can_be_identifier(Scanner* scanner, TokenType type)
 {
-    return (type == IDENTIFIER) ||
-           (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL);
+    if(scanner->is_in_directive){
+        return can_start_identifier(type);
+    }else{
+        return (type == IDENTIFIER) ||
+               (type >  RESERVED_END_MARKER && type < DIRECTIVE_END_MARKER) ||
+               (type >  TOKEN_END_MARKER    && type < ERROR_SENTINEL);
+    }
 }
 //------------------------------------------------------------------------------
 
 bool can_start_identifier(TokenType type)
 {
-    return (type >= IDENTIFIER       && type < RESERVED_END_MARKER) ||
+    return (type >= IDENTIFIER       && type < DIRECTIVE_END_MARKER) ||
            (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL     ) ||
            (type == IDENTIFIER_EXPECTING_LETTER);
 }
