@@ -120,7 +120,76 @@
 ; @tag.delimiter               XML-style tag delimiters
 ; ------------------------------------------------------------------------------
 
-; (source_file) @keyword
-(keyword) @keyword
-(builtinFunc) @function.builtin
-(comment) @comment
+(comment) @comment @spell
+(identifier) @variable
+
+[
+    (ABS) (ACCESS) (AFTER) (ALIAS) (ALL) (AND) (ARCHITECTURE) (ARRAY) (ASSERT)
+    (ASSUME) (ATTRIBUTE) (BEGIN) (BLOCK) (BODY) (BUFFER) (BUS) (CASE)
+    (COMPONENT) (CONFIGURATION) (CONSTANT) (CONTEXT) (COVER) (DEFAULT)
+    (DISCONNECT) (DOWNTO) (ELSE) (ELSIF) (END) (ENTITY) (EXIT) (FAIRNESS) (FILE)
+    (FOR) (FORCE) (FUNCTION) (GENERATE) (GENERIC) (GROUP) (GUARDED) (IF)
+    (IMPURE) (IN) (INERTIAL) (INOUT) (IS) (LABEL) (LIBRARY) (LINKAGE) (LITERAL)
+    (LOOP) (MAP) (MOD) (NAND) (NEW) (NEXT) (NOR) (NOT) (NULL) (OF) (ON) (OPEN)
+    (OR) (OTHERS) (OUT) (PACKAGE) (PARAMETER) (PORT) (POSTPONED) (PROCEDURE)
+    (PROCESS) (PROPERTY) (PROTECTED) (PRIVATE) (PURE) (RANGE) (RECORD)
+    (REGISTER) (REJECT) (RELEASE) (REM) (REPORT) (RESTRICT) (RETURN) (ROL)
+    (ROR) (SELECT) (SEQUENCE) (SEVERITY) (SIGNAL) (SHARED) (SLA) (SLL) (SRA)
+    (SRL) (STRONG) (SUBTYPE) (THEN) (TO) (TRANSPORT) (TYPE) (UNAFFECTED) (UNITS)
+    (UNTIL) (USE) (VARIABLE) (VIEW) (VPKG) (VMODE) (VPROP) (VUNIT) (WAIT) (WHEN)
+    (WHILE) (WITH) (XNOR) (XOR)
+] @keyword
+
+(tool_directive) @keyword.directive
+(directive_body) @keyword.directive
+(directive_constant_builtin) @constant.macro
+(directive_error) @comment.error
+(directive_protect) @keyword.directive
+(directive_warning) @comment.warning
+
+[
+    (ampersand) (tick) (left_parenthesis) (right_parenthesis) (multiply)
+    (plus_sign) (comma) (minus_sign) (dot) (divide) (colon) (semicolon)
+    (less_than_sign) (equals_sign) (greater_than_sign) (grave_accent)
+    (vertical_bar) (left_square_bracket) (right_square_bracket)
+    (question_mark) (commercial_at)
+
+    (arrow) (circumflex) (exponentiate) (variable_assignment) (inequality)
+    (greater_than_or_equal) (less_than_or_equal) (signal_assignment) (box)
+    (condition_conversion) (matching_equality) (matching_inequality)
+    (matching_less_than) (matching_less_than_or_equal) (matching_greater_than)
+    (matching_greater_than_or_equal) (double_less_than) (double_greater_than)
+] @operator
+
+[
+    (decimal_literal)
+    (based_literal)
+    (bit_string_literal)
+] @number
+
+[
+    (decimal_literal_float)
+    (based_literal_float)
+] @number.float
+
+(string_literal) @string
+(character_literal) @character
+
+[
+    (attribute_function)
+    (attribute_pure_function)
+    (attribute_range)
+    (attribute_signal)
+    (attribute_subtype)
+    (attribute_type)
+    (attribute_value)
+] @attribute.builtin
+
+[
+    (library_attribute)
+    (library_constant)
+    (library_constant_boolean)
+    (library_function)
+    (library_type)
+] @function.builtin
+
