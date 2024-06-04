@@ -188,8 +188,12 @@
 [
     (library_attribute)
     (library_constant)
-    (library_constant_boolean)
     (library_function)
     (library_type)
 ] @function.builtin
+
+(library_constant_boolean) @boolean
+(library_constant_character) @character
+(library_constant_debug) @keyword.debug
+(library_constant_unit) @keyword.modifier
 

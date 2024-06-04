@@ -199,6 +199,9 @@
             case LIBRARY_ATTRIBUTE:                        return "LIBRARY_ATTRIBUTE";
             case LIBRARY_CONSTANT:                         return "LIBRARY_CONSTANT";
             case LIBRARY_CONSTANT_BOOLEAN:                 return "LIBRARY_CONSTANT_BOOLEAN";
+            case LIBRARY_CONSTANT_CHARACTER:               return "LIBRARY_CONSTANT_CHARACTER";
+            case LIBRARY_CONSTANT_DEBUG:                   return "LIBRARY_CONSTANT_DEBUG";
+            case LIBRARY_CONSTANT_UNIT:                    return "LIBRARY_CONSTANT_UNIT";
             case LIBRARY_FUNCTION:                         return "LIBRARY_FUNCTION";
             case LIBRARY_TYPE:                             return "LIBRARY_TYPE";
 

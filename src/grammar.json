@@ -2025,6 +2025,18 @@
     },
     {
       "type": "SYMBOL",
+      "name": "library_constant_character"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "library_constant_debug"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "library_constant_unit"
+    },
+    {
+      "type": "SYMBOL",
       "name": "library_function"
     },
     {

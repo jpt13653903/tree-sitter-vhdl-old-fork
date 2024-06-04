@@ -207,6 +207,9 @@ module.exports = grammar({
     $.library_attribute,
     $.library_constant,
     $.library_constant_boolean,
+    $.library_constant_character,
+    $.library_constant_debug,
+    $.library_constant_unit,
     $.library_function,
     $.library_type,
 
