@@ -1,5 +1,5 @@
 entity MyModule is port(
-  /*signal Clk   : in  std_logic;
+  signal Clk   : in  std_logic;
   signal Reset : in  std_logic;
 
   signal \extended identifier\       : out   std_logic;
@@ -31,7 +31,7 @@ entity MyModule is port(
   signal testing : in float   := 123.456;
   signal testing : in float   := 123.456e8;
   signal testing : in float   := 123e8;
-  signal testing : in std_logic := "UX01ZWLH-";*/
+  signal testing : in std_logic := "UX01ZWLH-";
   signal testing : in std_logic := x"UX01ZWLH-"
   `testing some stuff in my entity
   `entity in progress
