@@ -196,51 +196,52 @@ static void register_delimiters(TokenTree* token_tree)
 
 static void register_attributes(TokenTree* token_tree)
 {
-    // VHDL-2008 section 16.2.2
-    token_tree_insert(token_tree, "base",          ATTRIBUTE_TYPE);
-    token_tree_insert(token_tree, "left",          ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "right",         ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "high",          ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "low",           ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "ascending",     ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "image",         ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "value",         ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "pos",           ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "val",           ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "succ",          ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "pred",          ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "leftof",        ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "rightof",       ATTRIBUTE_PURE_FUNCTION);
-    token_tree_insert(token_tree, "subtype",       ATTRIBUTE_SUBTYPE);
-
-    // VHDL-2008 section 16.2.3
-    token_tree_insert(token_tree, "left",          ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "right",         ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "high",          ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "low",           ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "range",         ATTRIBUTE_RANGE);
-    token_tree_insert(token_tree, "reverse_range", ATTRIBUTE_RANGE);
-    token_tree_insert(token_tree, "length",        ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "ascending",     ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "element",       ATTRIBUTE_SUBTYPE);
-
-    // VHDL-2008 section 16.2.4
-    token_tree_insert(token_tree, "delayed",       ATTRIBUTE_SIGNAL);
-    token_tree_insert(token_tree, "stable",        ATTRIBUTE_SIGNAL);
-    token_tree_insert(token_tree, "quiet",         ATTRIBUTE_SIGNAL);
-    token_tree_insert(token_tree, "transaction",   ATTRIBUTE_SIGNAL);
-    token_tree_insert(token_tree, "event",         ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "active",        ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "last_event",    ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "last_active",   ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "last_value",    ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "driving",       ATTRIBUTE_FUNCTION);
-    token_tree_insert(token_tree, "driving_value", ATTRIBUTE_FUNCTION);
-
-    // VHDL-2008 section 16.2.5
-    token_tree_insert(token_tree, "simple_name",   ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "instance_name", ATTRIBUTE_VALUE);
-    token_tree_insert(token_tree, "path_name",     ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "base",               ATTRIBUTE_TYPE);
+    token_tree_insert(token_tree, "left",               ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "right",              ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "high",               ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "low",                ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "ascending",          ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "length",             ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "range",              ATTRIBUTE_RANGE);
+    token_tree_insert(token_tree, "reverse_range",      ATTRIBUTE_RANGE);
+    token_tree_insert(token_tree, "subtype",            ATTRIBUTE_SUBTYPE);
+    token_tree_insert(token_tree, "image",              ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "pos",                ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "succ",               ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "pred",               ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "leftof",             ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "rightof",            ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "value",              ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "val",                ATTRIBUTE_PURE_FUNCTION);
+    token_tree_insert(token_tree, "designated_subtype", ATTRIBUTE_SUBTYPE);
+    token_tree_insert(token_tree, "reflect",            ATTRIBUTE_IMPURE_FUNCTION);
+    token_tree_insert(token_tree, "left",               ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "right",              ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "high",               ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "low",                ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "length",             ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "ascending",          ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "index",              ATTRIBUTE_SUBTYPE);
+    token_tree_insert(token_tree, "element",            ATTRIBUTE_SUBTYPE);
+    token_tree_insert(token_tree, "delayed",            ATTRIBUTE_SIGNAL);
+    token_tree_insert(token_tree, "stable",             ATTRIBUTE_SIGNAL);
+    token_tree_insert(token_tree, "quiet",              ATTRIBUTE_SIGNAL);
+    token_tree_insert(token_tree, "transaction",        ATTRIBUTE_SIGNAL);
+    token_tree_insert(token_tree, "event",              ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "active",             ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "last_event",         ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "last_active",        ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "last_value",         ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "driving",            ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "driving_value",      ATTRIBUTE_FUNCTION);
+    token_tree_insert(token_tree, "simple_name",        ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "instance_name",      ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "path_name",          ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "record",             ATTRIBUTE_TYPE);
+    token_tree_insert(token_tree, "value",              ATTRIBUTE_VALUE);
+    token_tree_insert(token_tree, "signal",             ATTRIBUTE_SIGNAL);
+    token_tree_insert(token_tree, "converse",           ATTRIBUTE_MODE_VIEW);
 }
 //------------------------------------------------------------------------------
 

@@ -150,12 +150,11 @@
 [
     (ampersand) (multiply) (plus_sign) (minus_sign) (divide) (less_than_sign)
     (equals_sign) (greater_than_sign) (vertical_bar) (question_mark)
-    (commercial_at) (arrow) (circumflex) (exponentiate) (variable_assignment)
-    (inequality) (greater_than_or_equal) (less_than_or_equal)
-    (signal_assignment) (condition_conversion) (matching_equality)
-    (matching_inequality) (matching_less_than) (matching_less_than_or_equal)
-    (matching_greater_than) (matching_greater_than_or_equal)
-    (double_less_than) (double_greater_than)
+    (arrow) (circumflex) (exponentiate) (variable_assignment) (inequality)
+    (greater_than_or_equal) (less_than_or_equal) (signal_assignment)
+    (condition_conversion) (matching_equality) (matching_inequality)
+    (matching_less_than) (matching_less_than_or_equal) (matching_greater_than)
+    (matching_greater_than_or_equal)
 ] @operator
 
 [ (tick) (comma) (dot) (semicolon) ] @punctuation.delimiters
@@ -163,9 +162,12 @@
 [
     (left_parenthesis)    (right_parenthesis)
     (left_square_bracket) (right_square_bracket)
+    (double_less_than)    (double_greater_than)
 ] @punctuation.bracket
 
-(colon) @punctuation.special
+[
+    (colon) (commercial_at)
+] @punctuation.special
 
 [
     (decimal_literal)
@@ -183,6 +185,8 @@
 
 [
     (attribute_function)
+    (attribute_impure_function)
+    (attribute_mode_view)
     (attribute_pure_function)
     (attribute_range)
     (attribute_signal)
@@ -199,4 +203,6 @@
 (library_constant_character) @character
 (library_constant_debug)     @keyword.debug
 (library_constant_unit)      @keyword.modifier
+
+(label) @label
 

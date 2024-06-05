@@ -189,6 +189,8 @@
             case TOKEN_END_MARKER:                         return "TOKEN_END_MARKER";
 
             case ATTRIBUTE_FUNCTION:                       return "ATTRIBUTE_FUNCTION";
+            case ATTRIBUTE_IMPURE_FUNCTION:                return "ATTRIBUTE_IMPURE_FUNCTION";
+            case ATTRIBUTE_MODE_VIEW:                      return "ATTRIBUTE_MODE_VIEW";
             case ATTRIBUTE_PURE_FUNCTION:                  return "ATTRIBUTE_PURE_FUNCTION";
             case ATTRIBUTE_RANGE:                          return "ATTRIBUTE_RANGE";
             case ATTRIBUTE_SIGNAL:                         return "ATTRIBUTE_SIGNAL";
