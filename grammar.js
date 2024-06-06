@@ -451,8 +451,7 @@ module.exports = grammar({
 
         scalar_type_definition: $ => choice(
             $.enumeration_type_definition,
-            $.integer_type_definition,
-            $.floating_type_definition,
+            $.range_constraint,
             $.physical_type_definition
         ),
 
@@ -479,12 +478,10 @@ module.exports = grammar({
             $.left_parenthesis, $.enumeration_literal, repeat(seq($.comma, $.enumeration_literal)), $.right_parenthesis
         ),
 
-        enumeration_literal: $ => choice(
+        enumeration_literal: $ => prec(1, choice(
             $.identifier,
             $.character_literal
-        ),
-
-        integer_type_definition: $ => $.range_constraint,
+        )),
 
         physical_type_definition: $ => seq(
             $.range_constraint, $.UNITS, $.primary_unit_declaration, repeat($.secondary_unit_declaration), $.END, $.UNITS, optional($.identifier)
@@ -502,7 +499,6 @@ module.exports = grammar({
             optional($.abstract_literal), $.name
         ),
 
-        floating_type_definition: $ => $.range_constraint,
 
         composite_type_definition: $ => choice(
             $.array_type_definition,
@@ -744,10 +740,7 @@ module.exports = grammar({
             $.identifier, $.resolution_indication
         ),
 
-        type_mark: $ => choice(
-            $.name,
-            $.name
-        ),
+        type_mark: $ => $.name,
 
         constraint: $ => choice(
             $.range_constraint,
@@ -957,10 +950,8 @@ module.exports = grammar({
             seq($.type_mark, $.left_parenthesis, $.formal_designator, $.right_parenthesis)
         ),
 
-        formal_designator: $ => choice(
-            seq($.name, optional($.signature)),
-            $.name,
-            $.name
+        formal_designator: $ => seq(
+          $.name, optional($.signature),
         ),
 
         actual_part: $ => choice(
@@ -972,11 +963,7 @@ module.exports = grammar({
         actual_designator: $ => choice(
             seq(optional($.INERTIAL), $.conditional_expression),
             $.name,
-            $.name,
-            $.name,
             $.subtype_indication,
-            $.name,
-            $.name,
             $.OPEN
         ),
 
@@ -1138,19 +1125,16 @@ module.exports = grammar({
             $.operator_symbol,
             $.character_literal,
             $.selected_name,
-            $.indexed_name,
-            $.slice_name,
-            $.attribute_name,
+            $.indexed_slice_or_attribute_name,
             $.external_name
         ),
 
-        prefix: $ => choice(
-            $.name,
-            $.function_call
-        ),
+        name_or_function_call: $ => prec.left(seq(
+            $.name, optional($.generic_map_aspect), optional($.parameter_map_aspect)
+        )),
 
         selected_name: $ => seq(
-            $.prefix, $.dot, $.suffix
+            $.name_or_function_call, $.dot, $.suffix
         ),
 
         suffix: $ => choice(
@@ -1160,16 +1144,14 @@ module.exports = grammar({
             $.ALL
         ),
 
-        indexed_name: $ => seq(
-            $.prefix, $.left_parenthesis, $.expression, repeat(seq($.comma, $.expression)), $.right_parenthesis
-        ),
-
-        slice_name: $ => seq(
-            $.prefix, $.left_parenthesis, $.discrete_range, $.right_parenthesis
+        indexed_slice_or_attribute_name: $ => choice(
+            seq($.name_or_function_call, $.left_parenthesis, $.expression, repeat(seq($.comma, $.expression)), $.right_parenthesis),
+            seq($.name_or_function_call, $.left_parenthesis, $.discrete_range, $.right_parenthesis),
+            seq($.name_or_function_call, optional($.signature), $.tick, $.attribute_designator, optional(seq($.left_parenthesis, $.expression, $.right_parenthesis)))
         ),
 
         attribute_name: $ => seq(
-            $.prefix, optional($.signature), $.tick, $.attribute_designator, optional(seq($.left_parenthesis, $.expression, $.right_parenthesis))
+            $.name_or_function_call, optional($.signature), $.tick, $.attribute_designator, optional(seq($.left_parenthesis, $.expression, $.right_parenthesis))
         ),
 
         attribute_designator: $ => $.identifier,
@@ -1214,10 +1196,8 @@ module.exports = grammar({
             repeat(seq($.pathname_element, $.dot)), $.identifier
         ),
 
-        pathname_element: $ => choice(
-            $.identifier,
-            seq($.label, optional(seq($.left_parenthesis, $.expression, $.right_parenthesis))),
-            $.identifier
+        pathname_element: $ => seq(
+          $.identifier, optional(seq($.left_parenthesis, $.expression, $.right_parenthesis))
         ),
 
         conditional_or_unaffected_expression: $ => seq(
@@ -1277,10 +1257,9 @@ module.exports = grammar({
         unary_logical_operator: $ => $.logical_operator,
 
         primary: $ => choice(
-            $.name,
             $.literal,
             $.aggregate,
-            $.function_call,
+            $.name_or_function_call,
             $.qualified_expression,
             $.type_conversion,
             $.allocator,
@@ -1377,10 +1356,6 @@ module.exports = grammar({
             $.discrete_range,
             $.identifier,
             $.OTHERS
-        ),
-
-        function_call: $ => seq(
-            $.name, optional($.generic_map_aspect), optional($.parameter_map_aspect)
         ),
 
         parameter_map_aspect: $ => seq(
