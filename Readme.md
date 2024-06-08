@@ -2,6 +2,8 @@
 
 Tree-sitter-vhdl is a VHDL parser for syntax highlighting.
 
+**NOTE:**  This is a work in progress.  Use at own risk.
+
 ## References
 
 - [VHDL-2000](https://edg.uchicago.edu/~tang/VHDLref.pdf)
@@ -19,10 +21,13 @@ has very little in common with the original.
 
 ## Limitations
 
-This parser does not implement the full VHDL standard, simply because the
-language is highly ambiguous without compiling the entire code-base into a
-symbol table.  Simplifications to the grammar was applied for the purposes of
-syntax highlighting.
+This parser uses a simplified grammar, because the full formal grammar in the
+VHDL standard is highly ambiguous without compiling the entire code-base into
+a symbol table.  In many cases, invalid syntax will parse into a valid tree.
+
+For the same reason, there might be cases where valid syntax does not map
+to a valid tree.  In this case, please
+[log a bug report](https://github.com/jpt13653903/tree-sitter-vhdl/issues).
 
 In addition, the following features are not implemented at the moment:
 

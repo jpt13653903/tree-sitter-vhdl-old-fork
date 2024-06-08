@@ -194,6 +194,48 @@ static void register_delimiters(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+static void register_operator_symbols(TokenTree* token_tree)
+{
+    token_tree_insert(token_tree, "\"??\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"and\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"or\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"nand\"", TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"nor\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"xor\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"xnor\"", TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"=\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"/=\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"<\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"<=\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\">\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\">=\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?=\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?/=\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?<\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?<=\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?>\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"?>=\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"sll\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"srl\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"sla\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"sra\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"rol\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"ror\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"+\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"–\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"&\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"+\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"–\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"*\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"/\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"mod\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"rem\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"**\"",   TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"abs\"",  TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"not\"",  TOKEN_OPERATOR_SYMBOL);
+}
+//------------------------------------------------------------------------------
+
 static void register_attributes(TokenTree* token_tree)
 {
     token_tree_insert(token_tree, "base",               ATTRIBUTE_TYPE);

@@ -61,6 +61,7 @@ void* tree_sitter_vhdl_external_scanner_create()
         register_reserved                     (token_tree);
         register_directives                   (token_tree);
         register_delimiters                   (token_tree);
+        register_operator_symbols             (token_tree);
         register_attributes                   (token_tree);
         register_base_specifiers              (token_tree);
 
@@ -148,11 +149,8 @@ static void skip_whitespace(Scanner* scanner, TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
-static bool bounded_token(TSLexer* lexer)
+static bool bounded_token(TSLexer* lexer, int32_t bound)
 {
-    int32_t bound = lexer->lookahead;
-    lexer->advance(lexer, false);
-
     while(!lexer->eof(lexer)){
         if(lexer->lookahead == bound){
             lexer->advance(lexer, false);
@@ -519,15 +517,10 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
         return false;
 
     }else if(valid_symbols[IDENTIFIER] && lexer->lookahead == '\\'){
-        if(!bounded_token(lexer)) return false;
+        lexer->advance(lexer, false);
+        if(!bounded_token(lexer, '\\')) return false;
         lexer->result_symbol = IDENTIFIER;
         debug("Returning type IDENTIFIER");
-        return true;
-
-    }else if(valid_symbols[TOKEN_STRING_LITERAL] && lexer->lookahead == '"'){
-        if(!bounded_token(lexer)) return false;
-        lexer->result_symbol = TOKEN_STRING_LITERAL;
-        debug("Returning type TOKEN_STRING_LITERAL");
         return true;
 
     }else if(valid_symbols[TOKEN_CHARACTER_LITERAL] && lexer->lookahead == '\''){
@@ -555,6 +548,8 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
     bool first_char_is_letter = (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
                                 (lexer->lookahead >= 'A' && lexer->lookahead <= 'Z');
 
+    bool first_char_is_double_quote = (lexer->lookahead == '"');
+
     TypeNode* type = token_tree_match(token_tree, lexer);
 
     if(!type && first_char_is_letter){
@@ -567,7 +562,14 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
         finish_identifier(lexer, false);
         lexer->result_symbol = IDENTIFIER;
         debug("Returning type IDENTIFIER");
-        return true;
+        return valid_symbols[IDENTIFIER];
+    }
+
+    if(!type && first_char_is_double_quote){
+        if(!bounded_token(lexer, '"')) return false;
+        lexer->result_symbol = TOKEN_STRING_LITERAL;
+        debug("Returning type TOKEN_STRING_LITERAL");
+        return valid_symbols[TOKEN_STRING_LITERAL];
     }
 
     bool turn_into_identifier = false;
@@ -598,6 +600,31 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
                 debug("Returning type TOKEN_BIT_STRING_LITERAL");
                 return true;
             }
+
+        }else if(type == TOKEN_OPERATOR_SYMBOL){
+            if(lexer->lookahead == '"'){
+                lexer->advance(lexer, false);
+                if(!bounded_token(lexer, '"')) return false;
+                lexer->result_symbol = TOKEN_STRING_LITERAL;
+                if(valid_symbols[TOKEN_STRING_LITERAL]){
+                    debug("Returning type TOKEN_STRING_LITERAL");
+                    return true;
+                }else{
+                    debug("Returning false");
+                    return false;
+                }
+            }
+            if(valid_symbols[TOKEN_OPERATOR_SYMBOL]){
+                lexer->result_symbol = TOKEN_OPERATOR_SYMBOL;
+                debug("Returning type TOKEN_OPERATOR_SYMBOL");
+                return true;
+            }else if(valid_symbols[TOKEN_STRING_LITERAL]){
+                lexer->result_symbol = TOKEN_STRING_LITERAL;
+                debug("Returning type TOKEN_STRING_LITERAL");
+                return true;
+            }
+            debug("Returning false");
+            return false;
 
         }else if(valid_symbols[type->type]){
             lexer->result_symbol = type->type;

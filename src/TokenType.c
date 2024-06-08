@@ -184,6 +184,7 @@
             case TOKEN_CHARACTER_LITERAL:                  return "TOKEN_CHARACTER_LITERAL";
             case TOKEN_STRING_LITERAL:                     return "TOKEN_STRING_LITERAL";
             case TOKEN_BIT_STRING_LITERAL:                 return "TOKEN_BIT_STRING_LITERAL";
+            case TOKEN_OPERATOR_SYMBOL:                    return "TOKEN_OPERATOR_SYMBOL";
             case TOKEN_COMMENT:                            return "TOKEN_COMMENT";
 
             case TOKEN_END_MARKER:                         return "TOKEN_END_MARKER";
