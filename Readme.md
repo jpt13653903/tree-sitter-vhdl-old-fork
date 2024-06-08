@@ -2,10 +2,6 @@
 
 Tree-sitter-vhdl is a VHDL parser for syntax highlighting.
 
-This started off as a fork from [Alexandre Muller](https://github.com/alemuller/tree-sitter-vhdl)
-As such many of the contents might still be from that repository, so I don't
-claim authorship for everything.  The parser is largely rewritten, however.
-
 ## References
 
 - [VHDL-2000](https://edg.uchicago.edu/~tang/VHDLref.pdf)
@@ -14,9 +10,28 @@ claim authorship for everything.  The parser is largely rewritten, however.
 - [VHDL Library Files](https://standards.ieee.org/downloads/) (search for "1076")
 - [VSCode Modern VHDL](https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml)
 
+## History
+
+This version started off as a fork of
+[alemuller/tree-sitter-vhdl](https://github.com/alemuller/tree-sitter-vhdl),
+but ended up as a complete rewrite of the parser and highlighting scripts.  It
+has very little in common with the original.
+
+## Limitations
+
+This parser does not implement the full VHDL standard, simply because the
+language is highly ambiguous without compiling the entire code-base into a
+symbol table.  Simplifications to the grammar was applied for the purposes of
+syntax highlighting.
+
+In addition, the following features are not implemented at the moment:
+
+- IEEE Property Specification Language
+- VHDL Procedural Interface
+
 ## Setup Process
 
-This grammar has not been merged into the official tree-sitter yet, so you need
+This parser has not been merged into the official tree-sitter yet, so you need
 to perform a manual setup process.
 Configure your `treesitter.lua` (or equivalent) as follows:
 
@@ -27,7 +42,7 @@ parser_config.vhdl = {
   install_info = {
     url = "https://github.com/jpt13653903/tree-sitter-vhdl.git",
     files = { 'src/parser.c', 'src/scanner.c' },
-    branch = 'main',
+    branch = 'new_parser',
     generate_requires_npm = false,
     requires_generate_from_grammar = false,
   },
