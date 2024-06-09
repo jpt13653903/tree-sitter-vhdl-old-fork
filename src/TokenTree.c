@@ -33,7 +33,7 @@ static TypeNode* type_node_insert(TypeNode* head, TokenType type)
     TypeNode* temp = head;
     while(temp){
         if(temp->type == type){
-            warning("Duplicate entry for type %d", type);
+            warning("Duplicate entry for type %d (%s)", type, token_type_to_string(type));
             return head;
         }
         temp = temp->next;

@@ -508,8 +508,20 @@ static bool graphic_characters(TSLexer* lexer)
 }
 //------------------------------------------------------------------------------
 
+static void show_looking_for(const bool* valid_symbols)
+{
+    debug("Looking for:");
+    for(int n = 0; n < ERROR_SENTINEL; n++){
+        if(valid_symbols[n]) printf("    %s\n", token_type_to_string(n));
+    }
+    printf("\n");
+}
+//------------------------------------------------------------------------------
+
 bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols)
 {
+    show_looking_for(valid_symbols);
+
     skip_whitespace(scanner, lexer);
 
     if(valid_symbols[ERROR_SENTINEL]){
