@@ -19,7 +19,7 @@
     }
   },
   {
-    "type": "association",
+    "type": "association_element",
     "named": true,
     "fields": {},
     "children": {
@@ -27,11 +27,23 @@
       "required": true,
       "types": [
         {
+          "type": "INERTIAL",
+          "named": true
+        },
+        {
+          "type": "OPEN",
+          "named": true
+        },
+        {
           "type": "arrow",
           "named": true
         },
         {
           "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "name",
           "named": true
         }
       ]
@@ -46,7 +58,7 @@
       "required": true,
       "types": [
         {
-          "type": "association",
+          "type": "association_element",
           "named": true
         },
         {
@@ -120,7 +132,116 @@
     }
   },
   {
-    "type": "binary_expression",
+    "type": "choices",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "OTHERS",
+          "named": true
+        },
+        {
+          "type": "choices",
+          "named": true
+        },
+        {
+          "type": "range",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
+          "named": true
+        },
+        {
+          "type": "vertical_bar",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "condition_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "condition_conversion",
+          "named": true
+        },
+        {
+          "type": "condition_expression",
+          "named": true
+        },
+        {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
+          "type": "relational_expression",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "conditional_analysis_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ELSE",
+          "named": true
+        },
+        {
+          "type": "ELSIF",
+          "named": true
+        },
+        {
+          "type": "END",
+          "named": true
+        },
+        {
+          "type": "IF",
+          "named": true
+        },
+        {
+          "type": "THEN",
+          "named": true
+        },
+        {
+          "type": "conditional_analysis_expression",
+          "named": true
+        },
+        {
+          "type": "directive_error",
+          "named": true
+        },
+        {
+          "type": "directive_warning",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "conditional_analysis_expression",
     "named": true,
     "fields": {},
     "children": {
@@ -132,51 +253,7 @@
           "named": true
         },
         {
-          "type": "MOD",
-          "named": true
-        },
-        {
-          "type": "NAND",
-          "named": true
-        },
-        {
-          "type": "NOR",
-          "named": true
-        },
-        {
-          "type": "NULL",
-          "named": true
-        },
-        {
           "type": "OR",
-          "named": true
-        },
-        {
-          "type": "REM",
-          "named": true
-        },
-        {
-          "type": "ROL",
-          "named": true
-        },
-        {
-          "type": "ROR",
-          "named": true
-        },
-        {
-          "type": "SLA",
-          "named": true
-        },
-        {
-          "type": "SLL",
-          "named": true
-        },
-        {
-          "type": "SRA",
-          "named": true
-        },
-        {
-          "type": "SRL",
           "named": true
         },
         {
@@ -188,51 +265,41 @@
           "named": true
         },
         {
-          "type": "allocator",
+          "type": "conditional_analysis_relation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "conditional_analysis_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "directive_constant_builtin",
           "named": true
         },
         {
-          "type": "ampersand",
+          "type": "identifier",
           "named": true
-        },
-        {
-          "type": "based_literal",
-          "named": true
-        },
-        {
-          "type": "based_literal_float",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "bit_string_literal",
-          "named": true
-        },
-        {
-          "type": "character_literal",
-          "named": true
-        },
-        {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "decimal_literal_float",
-          "named": true
-        },
-        {
-          "type": "divide",
-          "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "conditional_analysis_operator",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
         {
           "type": "equals_sign",
-          "named": true
-        },
-        {
-          "type": "exponentiate",
           "named": true
         },
         {
@@ -254,88 +321,12 @@
         {
           "type": "less_than_sign",
           "named": true
-        },
-        {
-          "type": "library_constant",
-          "named": true
-        },
-        {
-          "type": "library_constant_boolean",
-          "named": true
-        },
-        {
-          "type": "library_constant_character",
-          "named": true
-        },
-        {
-          "type": "library_constant_debug",
-          "named": true
-        },
-        {
-          "type": "library_constant_unit",
-          "named": true
-        },
-        {
-          "type": "matching_equality",
-          "named": true
-        },
-        {
-          "type": "matching_greater_than",
-          "named": true
-        },
-        {
-          "type": "matching_greater_than_or_equal",
-          "named": true
-        },
-        {
-          "type": "matching_inequality",
-          "named": true
-        },
-        {
-          "type": "matching_less_than",
-          "named": true
-        },
-        {
-          "type": "matching_less_than_or_equal",
-          "named": true
-        },
-        {
-          "type": "minus_sign",
-          "named": true
-        },
-        {
-          "type": "multiply",
-          "named": true
-        },
-        {
-          "type": "name",
-          "named": true
-        },
-        {
-          "type": "parenthesis_expression",
-          "named": true
-        },
-        {
-          "type": "plus_sign",
-          "named": true
-        },
-        {
-          "type": "string_literal",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "unit",
-          "named": true
         }
       ]
     }
   },
   {
-    "type": "choices",
+    "type": "conditional_analysis_relation",
     "named": true,
     "fields": {},
     "children": {
@@ -343,15 +334,31 @@
       "required": true,
       "types": [
         {
-          "type": "OTHERS",
+          "type": "NOT",
           "named": true
         },
         {
-          "type": "simple_range",
+          "type": "conditional_analysis_expression",
           "named": true
         },
         {
-          "type": "vertical_bar",
+          "type": "conditional_analysis_identifier",
+          "named": true
+        },
+        {
+          "type": "conditional_analysis_operator",
+          "named": true
+        },
+        {
+          "type": "left_parenthesis",
+          "named": true
+        },
+        {
+          "type": "right_parenthesis",
+          "named": true
+        },
+        {
+          "type": "string_literal",
           "named": true
         }
       ]
@@ -370,83 +377,23 @@
           "named": true
         },
         {
-          "type": "NULL",
-          "named": true
-        },
-        {
           "type": "WHEN",
           "named": true
         },
         {
-          "type": "allocator",
+          "type": "condition_expression",
           "named": true
         },
         {
-          "type": "based_literal",
+          "type": "logical_expression",
           "named": true
         },
         {
-          "type": "based_literal_float",
+          "type": "relational_expression",
           "named": true
         },
         {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "bit_string_literal",
-          "named": true
-        },
-        {
-          "type": "character_literal",
-          "named": true
-        },
-        {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "decimal_literal_float",
-          "named": true
-        },
-        {
-          "type": "library_constant",
-          "named": true
-        },
-        {
-          "type": "library_constant_boolean",
-          "named": true
-        },
-        {
-          "type": "library_constant_character",
-          "named": true
-        },
-        {
-          "type": "library_constant_debug",
-          "named": true
-        },
-        {
-          "type": "library_constant_unit",
-          "named": true
-        },
-        {
-          "type": "name",
-          "named": true
-        },
-        {
-          "type": "parenthesis_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "unit",
+          "type": "simple_expression",
           "named": true
         }
       ]
@@ -480,6 +427,10 @@
       "required": true,
       "types": [
         {
+          "type": "OTHERS",
+          "named": true
+        },
+        {
           "type": "arrow",
           "named": true
         },
@@ -489,6 +440,84 @@
         },
         {
           "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "range",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "element_association_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "element_association",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "logical_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AND",
+          "named": true
+        },
+        {
+          "type": "NAND",
+          "named": true
+        },
+        {
+          "type": "NOR",
+          "named": true
+        },
+        {
+          "type": "OR",
+          "named": true
+        },
+        {
+          "type": "XNOR",
+          "named": true
+        },
+        {
+          "type": "XOR",
+          "named": true
+        },
+        {
+          "type": "condition_expression",
+          "named": true
+        },
+        {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
+          "type": "relational_expression",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
           "named": true
         }
       ]
@@ -542,11 +571,7 @@
       "required": true,
       "types": [
         {
-          "type": "comma",
-          "named": true
-        },
-        {
-          "type": "element_association",
+          "type": "element_association_list",
           "named": true
         },
         {
@@ -585,7 +610,116 @@
           "named": true
         },
         {
+          "type": "range",
+          "named": true
+        },
+        {
           "type": "right_parenthesis",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "protect_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "directive_body",
+          "named": true
+        },
+        {
+          "type": "directive_protect",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "range",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "DOWNTO",
+          "named": true
+        },
+        {
+          "type": "TO",
+          "named": true
+        },
+        {
+          "type": "condition_expression",
+          "named": true
+        },
+        {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
+          "type": "relational_expression",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "relational_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ROL",
+          "named": true
+        },
+        {
+          "type": "ROR",
+          "named": true
+        },
+        {
+          "type": "SLA",
+          "named": true
+        },
+        {
+          "type": "SLL",
+          "named": true
+        },
+        {
+          "type": "SRA",
+          "named": true
+        },
+        {
+          "type": "SRL",
+          "named": true
+        },
+        {
+          "type": "condition_expression",
+          "named": true
+        },
+        {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
+          "type": "relational_expression",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
           "named": true
         }
       ]
@@ -654,30 +788,7 @@
     }
   },
   {
-    "type": "simple_range",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "DOWNTO",
-          "named": true
-        },
-        {
-          "type": "TO",
-          "named": true
-        },
-        {
-          "type": "conditional_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unary_expression",
+    "type": "simple_expression",
     "named": true,
     "fields": {},
     "children": {
@@ -690,6 +801,10 @@
         },
         {
           "type": "AND",
+          "named": true
+        },
+        {
+          "type": "MOD",
           "named": true
         },
         {
@@ -713,6 +828,10 @@
           "named": true
         },
         {
+          "type": "REM",
+          "named": true
+        },
+        {
           "type": "XNOR",
           "named": true
         },
@@ -725,15 +844,15 @@
           "named": true
         },
         {
+          "type": "ampersand",
+          "named": true
+        },
+        {
           "type": "based_literal",
           "named": true
         },
         {
           "type": "based_literal_float",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
           "named": true
         },
         {
@@ -745,7 +864,7 @@
           "named": true
         },
         {
-          "type": "condition_conversion",
+          "type": "condition_expression",
           "named": true
         },
         {
@@ -754,6 +873,14 @@
         },
         {
           "type": "decimal_literal_float",
+          "named": true
+        },
+        {
+          "type": "divide",
+          "named": true
+        },
+        {
+          "type": "exponentiate",
           "named": true
         },
         {
@@ -777,7 +904,15 @@
           "named": true
         },
         {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
           "type": "minus_sign",
+          "named": true
+        },
+        {
+          "type": "multiply",
           "named": true
         },
         {
@@ -793,15 +928,65 @@
           "named": true
         },
         {
+          "type": "relational_expression",
+          "named": true
+        },
+        {
+          "type": "simple_expression",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
         {
-          "type": "unary_expression",
+          "type": "unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tool_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "conditional_analysis_directive",
           "named": true
         },
         {
-          "type": "unit",
+          "type": "grave_accent",
+          "named": true
+        },
+        {
+          "type": "protect_directive",
+          "named": true
+        },
+        {
+          "type": "user_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "user_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "directive_body",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -825,6 +1010,22 @@
   },
   {
     "type": "ELSE",
+    "named": true
+  },
+  {
+    "type": "ELSIF",
+    "named": true
+  },
+  {
+    "type": "END",
+    "named": true
+  },
+  {
+    "type": "IF",
+    "named": true
+  },
+  {
+    "type": "INERTIAL",
     "named": true
   },
   {
@@ -853,6 +1054,10 @@
   },
   {
     "type": "NULL",
+    "named": true
+  },
+  {
+    "type": "OPEN",
     "named": true
   },
   {
@@ -897,6 +1102,10 @@
   },
   {
     "type": "SRL",
+    "named": true
+  },
+  {
+    "type": "THEN",
     "named": true
   },
   {
@@ -996,6 +1205,26 @@
     "named": true
   },
   {
+    "type": "directive_body",
+    "named": true
+  },
+  {
+    "type": "directive_constant_builtin",
+    "named": true
+  },
+  {
+    "type": "directive_error",
+    "named": true
+  },
+  {
+    "type": "directive_protect",
+    "named": true
+  },
+  {
+    "type": "directive_warning",
+    "named": true
+  },
+  {
     "type": "divide",
     "named": true
   },
@@ -1009,6 +1238,10 @@
   },
   {
     "type": "exponentiate",
+    "named": true
+  },
+  {
+    "type": "grave_accent",
     "named": true
   },
   {

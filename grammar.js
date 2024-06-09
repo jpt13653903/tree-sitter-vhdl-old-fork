@@ -136,7 +136,7 @@ module.exports = grammar({
         $.directive_body,
         $.directive_constant_builtin,
         $.directive_error,
-        $.directive_newline,
+        $._directive_newline,
         $.directive_protect,
         $.directive_warning,
 
@@ -221,7 +221,7 @@ module.exports = grammar({
 
     extras: $ => [
         $.comment,
-        // $.tool_directive
+        $.tool_directive
     ],
 
     conflicts: $ => [
@@ -230,31 +230,42 @@ module.exports = grammar({
     rules: {
         design_file: $ => repeat1(seq($.conditional_expression, $.semicolon)),
 
-        conditional_expression: $ => seq(
+        conditional_expression: $ => prec(9, seq(
             $._expression, repeat(seq($.WHEN, $._expression, $.ELSE, $._expression))
-        ),
+        )),
 
-        _expression: $ => choice(
-            $._primary,
-            $.unary_expression,
-            $.binary_expression
-        ),
+        _expression: $ => prec(10, choice(
+            $.condition_expression,
+            $.logical_expression,
+            $.relational_expression,
+            $.simple_expression
+        )),
 
-        unary_expression: $ => choice(
-            prec(1, seq($.condition_conversion, $._expression)),
-            prec(6, seq($._sign, $._expression)),
-            prec(9, seq($.ABS, $._expression)),
-            prec(9, seq($.NOT, $._expression)),
-            prec(9, seq($._logical_operator, $._expression))
-        ),
+        condition_expression: $ => prec(11, seq(
+            $.condition_conversion, $._expression,
+        )),
 
-        binary_expression: $ => choice(
-            prec.left(2, seq($._expression, $._logical_operator,     $._expression)),
-            prec.left(3, seq($._expression, $._relational_operator,  $._expression)),
-            prec.left(4, seq($._expression, $._shift_operator,       $._expression)),
-            prec.left(5, seq($._expression, $._adding_operator,      $._expression)),
-            prec.left(7, seq($._expression, $._multiplying_operator, $._expression)),
-            prec.left(8, seq($._expression, $.exponentiate,          $._expression))
+        logical_expression: $ => prec.left(12, seq(
+            $._expression, $._logical_operator, $._expression,
+        )),
+
+        relational_expression: $ => prec.left(13, seq(
+            $._expression, $._relational_operator, $._expression,
+        )),
+
+        relational_expression: $ => prec.left(14, seq(
+            $._expression, $._shift_operator, $._expression,
+        )),
+
+        simple_expression: $ => choice(
+            prec.left(15, seq($._expression, $._adding_operator,      $._expression)),
+            prec     (16, seq(              $._sign,                 $._expression)),
+            prec.left(17, seq($._expression, $._multiplying_operator, $._expression)),
+            prec.left(18, seq($._expression, $.exponentiate,         $._expression)),
+            prec     (19, seq(              $.ABS,                  $._expression)),
+            prec     (19, seq(              $.NOT,                  $._expression)),
+            prec     (19, seq(              $._logical_operator,     $._expression)),
+            prec     (20, $._primary)
         ),
 
         _logical_operator: $ => choice(
@@ -315,23 +326,29 @@ module.exports = grammar({
             $.parenthesis_expression
         ),
 
-        name: $ => seq(
+        name: $ => prec(21, seq(
             seq(choice($.identifier, $.library_function, $.library_type), repeat(choice($.parenthesis_group, $.attribute, $.signature, $.selection))),
-        ),
+        )),
 
         parenthesis_group: $ => seq(
             optional(seq($.PARAMETER, $.MAP)),
             $.left_parenthesis,
-            optional($.association_list),
+            optional(choice($.association_list, $.range)),
             $.right_parenthesis,
         ),
 
         association_list: $ => seq(
-            $.association, repeat(seq($.comma, $.association))
+            $.association_element, repeat(seq($.comma, $.association_element))
         ),
 
-        association: $ => seq(
-            $.conditional_expression, optional(seq($.arrow, $.conditional_expression))
+        association_element: $ => choice(
+            $._actual_part,
+            prec.left(6, seq($.name, $.arrow, $._actual_part))
+        ),
+
+        _actual_part: $ => choice(
+            seq(optional($.INERTIAL), $.conditional_expression),
+            $.OPEN
         ),
 
         attribute: $ => seq(
@@ -384,10 +401,10 @@ module.exports = grammar({
         ),
 
         _abstract_literal: $ => choice(
-          $.decimal_literal,
-          $.decimal_literal_float,
-          $.based_literal,
-          $.based_literal_float
+            $.decimal_literal,
+            $.decimal_literal_float,
+            $.based_literal,
+            $.based_literal_float
         ),
 
         _unit: $ => choice(
@@ -400,32 +417,101 @@ module.exports = grammar({
         ),
 
         parenthesis_expression: $ => seq(
-            $.left_parenthesis,
-            $.element_association, repeat(seq($.comma, $.element_association)),
-            $.right_parenthesis,
+            $.left_parenthesis, $.element_association_list, $.right_parenthesis,
         ),
 
-        element_association: $ => seq(
-            $.choices, optional(seq($.arrow, $.conditional_expression))
+        element_association_list: $ => seq(
+            $.element_association, repeat(seq($.comma, $.element_association))
         ),
 
-        choices: $ => seq(
-            $._choice, repeat(seq($.vertical_bar, $._choice))
+        element_association: $ => choice(
+            $.conditional_expression,
+            prec(6, seq($._element, $.arrow, $.conditional_expression))
         ),
 
-        _choice: $ => choice(
-            $.simple_range,
-            $.OTHERS
+        _element: $ => choice(
+            $.simple_expression,
+            $._discrete_range,
+            $.OTHERS,
+            $.choices
         ),
 
-        simple_range: $ => seq(
-            $.conditional_expression, optional(seq($._direction, $.conditional_expression))
+        choices: $ => prec.left(7, seq(
+            $._element, $.vertical_bar, $._element
+        )),
+
+        _discrete_range: $ => choice(
+            // $.subtype_indication,
+            $.range
         ),
+
+        range: $ => choice(
+            $._expression,
+            $._simple_range
+        ),
+
+        _simple_range: $ => prec.left(8, seq(
+            $.simple_expression, $._direction, $.simple_expression
+        )),
 
         _direction: $ => choice(
             $.TO,
             $.DOWNTO
         ),
+
+        // subtype_indication: $ => seq(
+        //     optional($.resolution_indication), $.name, optional($.constraint)
+        // ),
+
+        // resolution_indication: $ => choice(
+        //     $.name,
+        //     seq($.left_parenthesis, $.element_resolution, $.right_parenthesis)
+        // ),
+
+        // element_resolution: $ => choice(
+        //     $.resolution_indication,
+        //     $.record_resolution
+        // ),
+
+        // record_resolution: $ => seq(
+        //     $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
+        // ),
+
+        // record_element_resolution: $ => seq(
+        //     $.identifier, $.resolution_indication
+        // ),
+
+        // constraint: $ => choice(
+        //     $.range_constraint,
+        //     $.array_constraint,
+        //     $.record_constraint
+        // ),
+
+        // range_constraint: $ => seq(
+        //     $.RANGE, $.range
+        // ),
+
+        // array_constraint: $ => choice(
+        //     seq($.index_constraint, optional($.element_constraint)),
+        //     seq($.left_parenthesis, $.OPEN, $.right_parenthesis, optional($.element_constraint))
+        // ),
+
+        // index_constraint: $ => seq(
+        //     $.left_parenthesis, $._discrete_range, repeat(seq($.comma, $._discrete_range)), $.right_parenthesis
+        // ),
+
+        // element_constraint: $ => choice(
+        //     $.array_constraint,
+        //     $.record_constraint
+        // ),
+
+        // record_constraint: $ => seq(
+        //     $.left_parenthesis, $.record_element_constraint, repeat(seq($.comma, $.record_element_constraint)), $.right_parenthesis
+        // ),
+
+        // record_element_constraint: $ => seq(
+        //     $.identifier, $.element_constraint
+        // ),
         //----------------------------------------------------------------------
 
         // design_file: $ => repeat1($.design_unit),
@@ -511,7 +597,7 @@ module.exports = grammar({
         // ),
         //
         // generate_specification: $ => choice(
-        //     $.discrete_range,
+        //     $._discrete_range,
         //     $._expression,
         //     $.label
         // ),
@@ -650,15 +736,6 @@ module.exports = grammar({
         //     $.physical_type_definition
         // ),
         //
-        // range_constraint: $ => seq(
-        //     $.RANGE, $.range
-        // ),
-        //
-        // range: $ => choice(
-        //     $.simple_range,
-        //     $._expression
-        // ),
-        //
         // enumeration_type_definition: $ => seq(
         //     $.left_parenthesis, $.enumeration_literal, repeat(seq($.comma, $.enumeration_literal)), $.right_parenthesis
         // ),
@@ -702,20 +779,6 @@ module.exports = grammar({
         //     $.name, $.RANGE, $.box
         // ),
         //
-        // array_constraint: $ => choice(
-        //     seq($.index_constraint, optional($.element_constraint)),
-        //     seq($.left_parenthesis, $.OPEN, $.right_parenthesis, optional($.element_constraint))
-        // ),
-        //
-        // index_constraint: $ => seq(
-        //     $.left_parenthesis, $.discrete_range, repeat(seq($.comma, $.discrete_range)), $.right_parenthesis
-        // ),
-        //
-        // discrete_range: $ => choice(
-        //     // $.subtype_indication,
-        //     $.range
-        // ),
-        //
         // record_type_definition: $ => seq(
         //     $.RECORD, repeat($.element_declaration), $.END, $.RECORD, optional($.identifier)
         // ),
@@ -726,14 +789,6 @@ module.exports = grammar({
         //
         // identifier_list: $ => seq(
         //     $.identifier, repeat(seq($.comma, $.identifier))
-        // ),
-        //
-        // record_constraint: $ => seq(
-        //     $.left_parenthesis, $.record_element_constraint, repeat(seq($.comma, $.record_element_constraint)), $.right_parenthesis
-        // ),
-        //
-        // record_element_constraint: $ => seq(
-        //     $.identifier, $.element_constraint
         // ),
         //
         // access_type_definition: $ => seq(
@@ -890,41 +945,6 @@ module.exports = grammar({
         //
         // subtype_declaration: $ => seq(
         //     $.SUBTYPE, $.identifier, $.IS, $.subtype_indication, $.semicolon
-        // ),
-        //
-        // subtype_indication: $ => seq(
-        //     optional($.resolution_indication), $.name, optional($.constraint)
-        // ),
-        //
-        // resolution_indication: $ => choice(
-        //     $.name,
-        //     seq($.left_parenthesis, $.element_resolution, $.right_parenthesis)
-        // ),
-        //
-        // element_resolution: $ => choice(
-        //     $.array_element_resolution,
-        //     $.record_resolution
-        // ),
-        //
-        // array_element_resolution: $ => $.resolution_indication,
-        //
-        // record_resolution: $ => seq(
-        //     $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
-        // ),
-        //
-        // record_element_resolution: $ => seq(
-        //     $.identifier, $.resolution_indication
-        // ),
-        //
-        // constraint: $ => choice(
-        //     $.range_constraint,
-        //     $.array_constraint,
-        //     $.record_constraint
-        // ),
-        //
-        // element_constraint: $ => choice(
-        //     $.array_constraint,
-        //     $.record_constraint
         // ),
         //
         // object_declaration: $ => choice(
@@ -1113,7 +1133,7 @@ module.exports = grammar({
         //   $.name
         // ),
         //
-        // actual_part: $ => choice(
+        // _actual_part: $ => choice(
         //     $.actual_designator,
         //     // seq($.name, $.left_parenthesis, $.actual_designator, $.right_parenthesis)
         // ),
@@ -1275,13 +1295,6 @@ module.exports = grammar({
         //     seq($.name, repeat(seq($.comma, $.name))),
         //     $.OTHERS,
         //     $.ALL
-        // ),
-        //
-        // name: $ => choice(
-        //     seq($.identifier, optional($.signature), optional($.generic_map_aspect), repeat(choice($.parenthesis_group, $.selection, $.attribute))),
-        //     $.operator_symbol,
-        //     // $.character_literal,
-        //     $.external_name
         // ),
         //
         // function_call: $ => seq(
@@ -1530,7 +1543,7 @@ module.exports = grammar({
         // ),
         //
         // parameter_specification: $ => seq(
-        //     $.identifier, $.IN, $.discrete_range
+        //     $.identifier, $.IN, $._discrete_range
         // ),
         //
         // next_statement: $ => seq(
@@ -1729,47 +1742,51 @@ module.exports = grammar({
         //     $.identifier, repeat(seq($.dot, $.identifier))
         // ),
         //
-        // tool_directive: $ => seq(
-        //     $.grave_accent, $.identifier, repeat($.graphic_character)
-        // ),
-        //
-        // tool_directive: $ => seq(
-        //     $.grave_accent, $.known_tool_directive, $.directive_newline
-        // ),
-        // known_tool_directive: $ => choice(
-        //     seq($.IF,    $.conditional_analysis_expression, $.THEN),
-        //     seq($.ELSIF, $.conditional_analysis_expression, $.THEN),
-        //     seq($.ELSE),
-        //     seq($.END, optional($.IF)),
-        //
-        //     seq($.directive_protect, repeat($.directive_body)),
-        //     seq($.directive_warning, $.string_literal),
-        //     seq($.directive_error,   $.string_literal),
-        //     seq($.identifier,        repeat($.directive_body))
-        // ),
-        //
-        // conditional_analysis_expression: $ => seq(
-        //     $.conditional_analysis_relation, repeat(seq(choice($.AND, $.OR, $.XOR, $.XNOR), $.conditional_analysis_relation))
-        // ),
-        //
-        // conditional_analysis_relation: $ => choice(
-        //     seq(optional($.NOT), $.left_parenthesis, $.conditional_analysis_expression, $.right_parenthesis),
-        //     seq($.conditional_analysis_identifier, $.conditional_analysis_operator, $.string_literal)
-        // ),
-        //
-        // conditional_analysis_operator: $ => choice(
-        //     $.equals_sign,
-        //     $.inequality,
-        //     $.less_than_sign,
-        //     $.less_than_or_equal,
-        //     $.greater_than_sign,
-        //     $.greater_than_or_equal
-        // ),
-        //
-        // conditional_analysis_identifier: $ => choice(
-        //     $.directive_constant_builtin,
-        //     $.identifier
-        // ),
+
+        tool_directive: $ => seq(
+            $.grave_accent, choice($.user_directive, $.protect_directive, $.conditional_analysis_directive), $._directive_newline
+        ),
+
+        user_directive: $ => seq(
+            seq($.identifier, repeat($.directive_body))
+        ),
+
+        protect_directive: $ => seq(
+            seq($.directive_protect, repeat($.directive_body)),
+        ),
+
+        conditional_analysis_directive: $ => choice(
+            seq($.IF,    $.conditional_analysis_expression, $.THEN),
+            seq($.ELSIF, $.conditional_analysis_expression, $.THEN),
+            seq($.ELSE),
+            seq($.END, optional($.IF)),
+
+            seq($.directive_warning, $.string_literal),
+            seq($.directive_error,   $.string_literal)
+        ),
+
+        conditional_analysis_expression: $ => seq(
+            $.conditional_analysis_relation, repeat(seq(choice($.AND, $.OR, $.XOR, $.XNOR), $.conditional_analysis_relation))
+        ),
+
+        conditional_analysis_relation: $ => choice(
+            seq(optional($.NOT), $.left_parenthesis, $.conditional_analysis_expression, $.right_parenthesis),
+            seq($.conditional_analysis_identifier, $.conditional_analysis_operator, $.string_literal)
+        ),
+
+        conditional_analysis_operator: $ => choice(
+            $.equals_sign,
+            $.inequality,
+            $.less_than_sign,
+            $.less_than_or_equal,
+            $.greater_than_sign,
+            $.greater_than_or_equal
+        ),
+
+        conditional_analysis_identifier: $ => choice(
+            $.directive_constant_builtin,
+            $.identifier
+        ),
     }
 });
 
