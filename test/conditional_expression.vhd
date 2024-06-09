@@ -108,11 +108,11 @@ null; */
 -- A(b, c, d);
 -- A(A => a, c, D => d);
 -- A(Whatnot)'length() [ ] .B;
--- (X | 7 downto 2 | Z'left() => 123, others => A when B else C);
+(X | 7 downto 2 | Z'left() => 123, others => A when B else C);
 --------------------------------------------------------------------------------
 
 -- expression
-A and B or C xor d;
+?? A + -B * C ** not D;
 --------------------------------------------------------------------------------
 
 
