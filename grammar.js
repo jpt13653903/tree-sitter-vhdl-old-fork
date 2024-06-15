@@ -259,12 +259,12 @@ module.exports = grammar({
 
         simple_expression: $ => choice(
             prec.left(15, seq($._expression, $._adding_operator,      $._expression)),
-            prec     (16, seq(              $._sign,                 $._expression)),
+            prec     (16, seq(               $._sign,                 $._expression)),
             prec.left(17, seq($._expression, $._multiplying_operator, $._expression)),
-            prec.left(18, seq($._expression, $.exponentiate,         $._expression)),
-            prec     (19, seq(              $.ABS,                  $._expression)),
-            prec     (19, seq(              $.NOT,                  $._expression)),
-            prec     (19, seq(              $._logical_operator,     $._expression)),
+            prec.left(18, seq($._expression, $.exponentiate,          $._expression)),
+            prec     (19, seq(               $.ABS,                   $._expression)),
+            prec     (19, seq(               $.NOT,                   $._expression)),
+            prec     (19, seq(               $._logical_operator,     $._expression)),
             prec     (20, $._primary)
         ),
 
@@ -355,12 +355,12 @@ module.exports = grammar({
             $.tick,
             choice(
                 $._attribute_designator,
-                $.parenthesis_expression
+                $.parenthesis_expression // qualified_expression
             ),
         ),
 
         _attribute_designator: $ => choice(
-            $.identifier,
+            alias($.identifier, $.attribute_identifier),
             $.attribute_function,
             $.attribute_impure_function,
             $.attribute_mode_view,
@@ -458,62 +458,62 @@ module.exports = grammar({
             $.TO,
             $.DOWNTO
         ),
+        //----------------------------------------------------------------------
 
         // subtype_indication: $ => seq(
         //     optional($.resolution_indication), $.name, optional($.constraint)
         // ),
-
+        //
         // resolution_indication: $ => choice(
         //     $.name,
         //     seq($.left_parenthesis, $.element_resolution, $.right_parenthesis)
         // ),
-
+        //
         // element_resolution: $ => choice(
         //     $.resolution_indication,
         //     $.record_resolution
         // ),
-
+        //
         // record_resolution: $ => seq(
         //     $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
         // ),
-
+        //
         // record_element_resolution: $ => seq(
         //     $.identifier, $.resolution_indication
         // ),
-
+        //
         // constraint: $ => choice(
         //     $.range_constraint,
         //     $.array_constraint,
         //     $.record_constraint
         // ),
-
+        //
         // range_constraint: $ => seq(
         //     $.RANGE, $.range
         // ),
-
+        //
         // array_constraint: $ => choice(
         //     seq($.index_constraint, optional($.element_constraint)),
         //     seq($.left_parenthesis, $.OPEN, $.right_parenthesis, optional($.element_constraint))
         // ),
-
+        //
         // index_constraint: $ => seq(
         //     $.left_parenthesis, $._discrete_range, repeat(seq($.comma, $._discrete_range)), $.right_parenthesis
         // ),
-
+        //
         // element_constraint: $ => choice(
         //     $.array_constraint,
         //     $.record_constraint
         // ),
-
+        //
         // record_constraint: $ => seq(
         //     $.left_parenthesis, $.record_element_constraint, repeat(seq($.comma, $.record_element_constraint)), $.right_parenthesis
         // ),
-
+        //
         // record_element_constraint: $ => seq(
         //     $.identifier, $.element_constraint
         // ),
-        //----------------------------------------------------------------------
-
+        //
         // design_file: $ => repeat1($.design_unit),
         //
         // entity_declaration: $ => seq(

@@ -33,16 +33,6 @@ typedef struct ScannerTag{
 #include "libraries/ieee/math_complex.h"
 //------------------------------------------------------------------------------
 
-/* I cannot figure out how to get the tree-sitter compiler to include more
- * source files into the compile chain, so I'm including them here manually.
- *
- * I've started a discussion on the topic in:
- * https://github.com/tree-sitter/tree-sitter/discussions/3398
- */
-#include "TokenType.c"
-#include "TokenTree.c"
-//------------------------------------------------------------------------------
-
 static TokenTree* token_tree     = 0;
 static int        instance_count = 0;
 //------------------------------------------------------------------------------
