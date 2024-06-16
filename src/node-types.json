@@ -50,7 +50,26 @@
     }
   },
   {
-    "type": "association_list",
+    "type": "association_or_range",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "association_element",
+          "named": true
+        },
+        {
+          "type": "range",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "association_or_range_list",
     "named": true,
     "fields": {},
     "children": {
@@ -58,7 +77,7 @@
       "required": true,
       "types": [
         {
-          "type": "association_element",
+          "type": "association_or_range",
           "named": true
         },
         {
@@ -78,6 +97,10 @@
       "types": [
         {
           "type": "attribute_function",
+          "named": true
+        },
+        {
+          "type": "attribute_identifier",
           "named": true
         },
         {
@@ -110,10 +133,6 @@
         },
         {
           "type": "attribute_value",
-          "named": true
-        },
-        {
-          "type": "identifier",
           "named": true
         },
         {
@@ -400,6 +419,71 @@
     }
   },
   {
+    "type": "constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "range_constraint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "context_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "context_reference",
+          "named": true
+        },
+        {
+          "type": "library_clause",
+          "named": true
+        },
+        {
+          "type": "use_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "context_reference",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "CONTEXT",
+          "named": true
+        },
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "selected_name",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "design_file",
     "named": true,
     "fields": {},
@@ -408,11 +492,26 @@
       "required": true,
       "types": [
         {
-          "type": "conditional_expression",
+          "type": "design_unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "design_unit",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "context_item",
           "named": true
         },
         {
-          "type": "semicolon",
+          "type": "library_unit",
           "named": true
         }
       ]
@@ -473,6 +572,269 @@
     }
   },
   {
+    "type": "element_resolution",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "record_resolution",
+          "named": true
+        },
+        {
+          "type": "resolution_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "entity_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BEGIN",
+          "named": true
+        },
+        {
+          "type": "END",
+          "named": true
+        },
+        {
+          "type": "ENTITY",
+          "named": true
+        },
+        {
+          "type": "IS",
+          "named": true
+        },
+        {
+          "type": "entity_declarative_item",
+          "named": true
+        },
+        {
+          "type": "entity_statement",
+          "named": true
+        },
+        {
+          "type": "generic_clause",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "port_clause",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "entity_declarative_item",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "entity_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "generic_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "GENERIC",
+          "named": true
+        },
+        {
+          "type": "interface_list",
+          "named": true
+        },
+        {
+          "type": "left_parenthesis",
+          "named": true
+        },
+        {
+          "type": "right_parenthesis",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "identifier_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_object_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_declaration",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_object_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_signal_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_signal_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SIGNAL",
+          "named": true
+        },
+        {
+          "type": "colon",
+          "named": true
+        },
+        {
+          "type": "identifier_list",
+          "named": true
+        },
+        {
+          "type": "mode_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_type_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "subtype_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "library_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "LIBRARY",
+          "named": true
+        },
+        {
+          "type": "logical_name_list",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "library_unit",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "primary_unit",
+          "named": true
+        },
+        {
+          "type": "secondary_unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "logical_expression",
     "named": true,
     "fields": {},
@@ -518,6 +880,71 @@
         },
         {
           "type": "simple_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "logical_name_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mode",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "BUFFER",
+          "named": true
+        },
+        {
+          "type": "IN",
+          "named": true
+        },
+        {
+          "type": "INOUT",
+          "named": true
+        },
+        {
+          "type": "LINKAGE",
+          "named": true
+        },
+        {
+          "type": "OUT",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mode_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "simple_mode_indication",
           "named": true
         }
       ]
@@ -602,7 +1029,7 @@
           "named": true
         },
         {
-          "type": "association_list",
+          "type": "association_or_range_list",
           "named": true
         },
         {
@@ -610,11 +1037,53 @@
           "named": true
         },
         {
-          "type": "range",
+          "type": "right_parenthesis",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "port_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "PORT",
+          "named": true
+        },
+        {
+          "type": "interface_list",
+          "named": true
+        },
+        {
+          "type": "left_parenthesis",
           "named": true
         },
         {
           "type": "right_parenthesis",
+          "named": true
+        },
+        {
+          "type": "semicolon",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "primary_unit",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "entity_declaration",
           "named": true
         }
       ]
@@ -675,6 +1144,63 @@
     }
   },
   {
+    "type": "range_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "RANGE",
+          "named": true
+        },
+        {
+          "type": "range",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_element_resolution",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "resolution_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_resolution",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "record_element_resolution",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "relational_expression",
     "named": true,
     "fields": {},
@@ -720,6 +1246,57 @@
         },
         {
           "type": "simple_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "resolution_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "element_resolution",
+          "named": true
+        },
+        {
+          "type": "left_parenthesis",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "right_parenthesis",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "secondary_unit",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "selected_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dot",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -947,6 +1524,60 @@
     }
   },
   {
+    "type": "simple_mode_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BUS",
+          "named": true
+        },
+        {
+          "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "interface_type_indication",
+          "named": true
+        },
+        {
+          "type": "mode",
+          "named": true
+        },
+        {
+          "type": "variable_assignment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subtype_indication",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraint",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "resolution_indication",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "tool_directive",
     "named": true,
     "fields": {},
@@ -968,6 +1599,33 @@
         },
         {
           "type": "user_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "use_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "USE",
+          "named": true
+        },
+        {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "selected_name",
+          "named": true
+        },
+        {
+          "type": "semicolon",
           "named": true
         }
       ]
@@ -1005,6 +1663,22 @@
     "named": true
   },
   {
+    "type": "BEGIN",
+    "named": true
+  },
+  {
+    "type": "BUFFER",
+    "named": true
+  },
+  {
+    "type": "BUS",
+    "named": true
+  },
+  {
+    "type": "CONTEXT",
+    "named": true
+  },
+  {
     "type": "DOWNTO",
     "named": true
   },
@@ -1021,11 +1695,39 @@
     "named": true
   },
   {
+    "type": "ENTITY",
+    "named": true
+  },
+  {
+    "type": "GENERIC",
+    "named": true
+  },
+  {
     "type": "IF",
     "named": true
   },
   {
+    "type": "IN",
+    "named": true
+  },
+  {
     "type": "INERTIAL",
+    "named": true
+  },
+  {
+    "type": "INOUT",
+    "named": true
+  },
+  {
+    "type": "IS",
+    "named": true
+  },
+  {
+    "type": "LIBRARY",
+    "named": true
+  },
+  {
+    "type": "LINKAGE",
     "named": true
   },
   {
@@ -1069,7 +1771,19 @@
     "named": true
   },
   {
+    "type": "OUT",
+    "named": true
+  },
+  {
     "type": "PARAMETER",
+    "named": true
+  },
+  {
+    "type": "PORT",
+    "named": true
+  },
+  {
+    "type": "RANGE",
     "named": true
   },
   {
@@ -1086,6 +1800,10 @@
   },
   {
     "type": "ROR",
+    "named": true
+  },
+  {
+    "type": "SIGNAL",
     "named": true
   },
   {
@@ -1113,6 +1831,10 @@
     "named": true
   },
   {
+    "type": "USE",
+    "named": true
+  },
+  {
     "type": "WHEN",
     "named": true
   },
@@ -1134,6 +1856,10 @@
   },
   {
     "type": "attribute_function",
+    "named": true
+  },
+  {
+    "type": "attribute_identifier",
     "named": true
   },
   {
@@ -1182,6 +1908,10 @@
   },
   {
     "type": "character_literal",
+    "named": true
+  },
+  {
+    "type": "colon",
     "named": true
   },
   {
@@ -1370,6 +2100,10 @@
   },
   {
     "type": "unit",
+    "named": true
+  },
+  {
+    "type": "variable_assignment",
     "named": true
   },
   {

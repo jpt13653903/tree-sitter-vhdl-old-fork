@@ -32,7 +32,7 @@ entity MyModule is port(
   signal testing : in float   := 123.456e8;
   signal testing : in float   := 123e8;
   signal testing : in std_logic := "UX01ZWLH-";
-  signal testing : in std_logic := x"UX01ZWLH-"
+  signal testing : in std_logic := x"UX01ZWLH-";
   `testing some stuff in my entity
   `entity in progress
   `if VHDL_VERSION > "2000" then
@@ -41,4 +41,7 @@ entity MyModule is port(
   `error "This version is bad"
   `end if
   `protect this code...
+  signal testing: in integer range 2 to 10;
+  signal testing: in std_logic_vector(5 downto 1, 7 downto 5);
+  signal testing: in resolved std_ulogic
 ); end entity MyModule;

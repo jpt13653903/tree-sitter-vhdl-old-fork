@@ -454,7 +454,7 @@ bool is_base_specifier   (TokenType type);
         }
     }
 #else
-    #define token_type_to_string(...) "DEBUG not defined for TokenType.c"
+    #define token_type_to_string(...) "DEBUG not defined for TokenType.h"
 #endif
 //------------------------------------------------------------------------------
 
@@ -473,7 +473,7 @@ bool can_be_identifier(Scanner* scanner, TokenType type)
 bool can_start_identifier(TokenType type)
 {
     return (type >= IDENTIFIER       && type < DIRECTIVE_END_MARKER) ||
-           (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL     ) ||
+           (type >  TOKEN_END_MARKER && type < ERROR_SENTINEL      ) ||
            (type == IDENTIFIER_EXPECTING_LETTER);
 }
 //------------------------------------------------------------------------------

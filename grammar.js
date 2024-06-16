@@ -225,10 +225,178 @@ module.exports = grammar({
     ],
 
     conflicts: $ => [
+        [$.resolution_indication, $._primary],
     ],
 
     rules: {
-        design_file: $ => repeat1(seq($.conditional_expression, $.semicolon)),
+        design_file: $ => repeat1($.design_unit),
+
+        design_unit: $ => seq(
+            repeat($.context_item), $.library_unit
+        ),
+
+        context_item: $ => choice(
+            $.library_clause,
+            $.use_clause,
+            $.context_reference
+        ),
+
+        library_clause: $ => seq(
+            $.LIBRARY, $.logical_name_list, $.semicolon
+        ),
+
+        logical_name_list: $ => seq(
+            $.identifier, repeat(seq($.comma, $.identifier))
+        ),
+
+        use_clause: $ => seq(
+            $.USE, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
+        ),
+
+        selected_name: $ => seq(
+            $.identifier, repeat(seq($.dot, $.identifier))
+        ),
+
+        context_reference: $ => seq(
+            $.CONTEXT, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
+        ),
+
+        library_unit: $ => choice(
+            $.primary_unit,
+            $.secondary_unit
+        ),
+
+        primary_unit: $ => choice(
+            $.entity_declaration,
+            // $.configuration_declaration,
+            // $.package_declaration,
+            // $.package_instantiation_declaration,
+            // $.context_declaration,
+            // $.PSL_verification_unit
+        ),
+
+        entity_declaration: $ => seq(
+            $.ENTITY, $.identifier, $.IS, optional($.generic_clause), optional($.port_clause), repeat($.entity_declarative_item), optional(seq($.BEGIN, repeat($.entity_statement))), $.END, optional($.ENTITY), optional($.identifier), $.semicolon
+        ),
+
+        generic_clause: $ => seq(
+            $.GENERIC, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
+        ),
+
+        port_clause: $ => seq(
+            $.PORT, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
+        ),
+
+        interface_list: $ => seq(
+            $.interface_declaration, repeat(seq($.semicolon, $.interface_declaration)), optional($.semicolon)
+        ),
+
+        interface_declaration: $ => choice(
+            $.interface_object_declaration,
+            // $.interface_type_declaration,
+            // $.interface_subprogram_declaration,
+            // $.interface_package_declaration,
+        ),
+
+        interface_object_declaration: $ => choice(
+            // $.interface_constant_declaration,
+            $.interface_signal_declaration,
+            // $.interface_variable_declaration,
+            // $.interface_file_declaration
+        ),
+
+        interface_signal_declaration: $ => seq(
+            optional($.SIGNAL), $.identifier_list, $.colon, $.mode_indication
+        ),
+
+        identifier_list: $ => seq(
+            $.identifier, repeat(seq($.comma, $.identifier))
+        ),
+
+        mode_indication: $ => choice(
+            $.simple_mode_indication,
+            // $.mode_view_indication
+        ),
+
+        simple_mode_indication: $ => seq(
+            optional($.mode), $.interface_type_indication, optional($.BUS), optional(seq($.variable_assignment, $.conditional_expression))
+        ),
+
+        mode: $ => choice(
+            $.IN,
+            $.OUT,
+            $.INOUT,
+            $.BUFFER,
+            $.LINKAGE
+        ),
+
+        interface_type_indication: $ => choice(
+            $.subtype_indication,
+            // $.unspecified_type_indication
+        ),
+
+        subtype_indication: $ => seq(
+            optional($.resolution_indication), $.name, optional($.constraint)
+        ),
+
+        resolution_indication: $ => choice(
+            $.name,
+            seq($.left_parenthesis, $.element_resolution, $.right_parenthesis)
+        ),
+
+        element_resolution: $ => choice(
+            $.resolution_indication,
+            $.record_resolution
+        ),
+
+        record_resolution: $ => seq(
+            $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
+        ),
+
+        record_element_resolution: $ => seq(
+            $.identifier, $.resolution_indication
+        ),
+
+        constraint: $ => choice(
+            $.range_constraint,
+        ),
+
+        range_constraint: $ => seq(
+            $.RANGE, $.range
+        ),
+
+        entity_declarative_item: $ => choice(
+            // $.subprogram_declaration,
+            // $.subprogram_body,
+            // $.subprogram_instantiation_declaration,
+            // $.package_declaration,
+            // $.package_body,
+            // $.package_instantiation_declaration,
+            // $.type_declaration,
+            // $.subtype_declaration,
+            // $.mode_view_declaration,
+            // $.constant_declaration,
+            // $.signal_declaration,
+            // $.variable_declaration,
+            // $.file_declaration,
+            // $.alias_declaration,
+            // $.attribute_declaration,
+            // $.attribute_specification,
+            // $.disconnection_specification,
+            // $.use_clause,
+            // $.group_template_declaration,
+            // $.group_declaration
+        ),
+
+        entity_statement: $ => choice(
+            // $.concurrent_procedure_call_statement,
+            // $.process_statement
+        ),
+
+        secondary_unit: $ => choice(
+            // $.architecture_body,
+            // $.package_body
+        ),
 
         conditional_expression: $ => prec(9, seq(
             $._expression, repeat(seq($.WHEN, $._expression, $.ELSE, $._expression))
@@ -333,12 +501,17 @@ module.exports = grammar({
         parenthesis_group: $ => seq(
             optional(seq($.PARAMETER, $.MAP)),
             $.left_parenthesis,
-            optional(choice($.association_list, $.range)),
+            optional($.association_or_range_list),
             $.right_parenthesis,
         ),
 
-        association_list: $ => seq(
-            $.association_element, repeat(seq($.comma, $.association_element))
+        association_or_range_list: $ => seq(
+            $.association_or_range, repeat(seq($.comma, $.association_or_range))
+        ),
+
+        association_or_range: $ => choice(
+            $.association_element,
+            $.range
         ),
 
         association_element: $ => choice(
@@ -459,94 +632,6 @@ module.exports = grammar({
             $.DOWNTO
         ),
         //----------------------------------------------------------------------
-
-        // subtype_indication: $ => seq(
-        //     optional($.resolution_indication), $.name, optional($.constraint)
-        // ),
-        //
-        // resolution_indication: $ => choice(
-        //     $.name,
-        //     seq($.left_parenthesis, $.element_resolution, $.right_parenthesis)
-        // ),
-        //
-        // element_resolution: $ => choice(
-        //     $.resolution_indication,
-        //     $.record_resolution
-        // ),
-        //
-        // record_resolution: $ => seq(
-        //     $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
-        // ),
-        //
-        // record_element_resolution: $ => seq(
-        //     $.identifier, $.resolution_indication
-        // ),
-        //
-        // constraint: $ => choice(
-        //     $.range_constraint,
-        //     $.array_constraint,
-        //     $.record_constraint
-        // ),
-        //
-        // range_constraint: $ => seq(
-        //     $.RANGE, $.range
-        // ),
-        //
-        // array_constraint: $ => choice(
-        //     seq($.index_constraint, optional($.element_constraint)),
-        //     seq($.left_parenthesis, $.OPEN, $.right_parenthesis, optional($.element_constraint))
-        // ),
-        //
-        // index_constraint: $ => seq(
-        //     $.left_parenthesis, $._discrete_range, repeat(seq($.comma, $._discrete_range)), $.right_parenthesis
-        // ),
-        //
-        // element_constraint: $ => choice(
-        //     $.array_constraint,
-        //     $.record_constraint
-        // ),
-        //
-        // record_constraint: $ => seq(
-        //     $.left_parenthesis, $.record_element_constraint, repeat(seq($.comma, $.record_element_constraint)), $.right_parenthesis
-        // ),
-        //
-        // record_element_constraint: $ => seq(
-        //     $.identifier, $.element_constraint
-        // ),
-        //
-        // design_file: $ => repeat1($.design_unit),
-        //
-        // entity_declaration: $ => seq(
-        //     $.ENTITY, $.identifier, $.IS, optional($.generic_clause), optional($.port_clause), repeat($.entity_declarative_item), /*optional(seq($.BEGIN, repeat($.entity_statement))),*/ $.END, optional($.ENTITY), optional($.identifier), $.semicolon
-        // ),
-        //
-        // entity_declarative_item: $ => choice(
-        //     $.subprogram_declaration,
-        //     $.subprogram_body,
-        //     $.subprogram_instantiation_declaration,
-        //     $.package_declaration,
-        //     $.package_body,
-        //     $.package_instantiation_declaration,
-        //     $.type_declaration,
-        //     $.subtype_declaration,
-        //     $.mode_view_declaration,
-        //     $.constant_declaration,
-        //     $.signal_declaration,
-        //     $.variable_declaration,
-        //     $.file_declaration,
-        //     $.alias_declaration,
-        //     $.attribute_declaration,
-        //     $.attribute_specification,
-        //     $.disconnection_specification,
-        //     $.use_clause,
-        //     $.group_template_declaration,
-        //     $.group_declaration
-        // ),
-        //
-        // entity_statement: $ => choice(
-        //     $.concurrent_procedure_call_statement,
-        //     $.process_statement
-        // ),
         //
         // architecture_body: $ => seq(
         //     $.ARCHITECTURE, $.identifier, $.OF, $.name, $.IS, repeat($.block_declarative_item), $.BEGIN, repeat($.concurrent_statement), $.END, optional($.ARCHITECTURE), optional($.identifier), $.semicolon
@@ -787,10 +872,6 @@ module.exports = grammar({
         //     $.identifier_list, $.colon, $.subtype_indication, $.semicolon
         // ),
         //
-        // identifier_list: $ => seq(
-        //     $.identifier, repeat(seq($.comma, $.identifier))
-        // ),
-        //
         // access_type_definition: $ => seq(
         //     $.ACCESS, $.subtype_indication, optional($.generic_map_aspect)
         // ),
@@ -981,26 +1062,8 @@ module.exports = grammar({
         //
         // file_logical_name: $ => $._expression,
         //
-        // interface_declaration: $ => choice(
-        //     $.interface_object_declaration,
-        //     $.interface_type_declaration,
-        //     $.interface_subprogram_declaration,
-        //     $.interface_package_declaration,
-        // ),
-        //
-        // interface_object_declaration: $ => choice(
-        //     $.interface_constant_declaration,
-        //     $.interface_signal_declaration,
-        //     $.interface_variable_declaration,
-        //     $.interface_file_declaration
-        // ),
-        //
         // interface_constant_declaration: $ => seq(
         //     optional($.CONSTANT), $.identifier_list, $.colon, optional($.IN), $.interface_type_indication, optional(seq($.variable_assignment, $.conditional_expression))
-        // ),
-        //
-        // interface_signal_declaration: $ => seq(
-        //     optional($.SIGNAL), $.identifier_list, $.colon, $.mode_indication
         // ),
         //
         // interface_variable_declaration: $ => seq(
@@ -1009,28 +1072,6 @@ module.exports = grammar({
         //
         // interface_file_declaration: $ => seq(
         //     $.FILE, $.identifier_list, $.colon, $.subtype_indication
-        // ),
-        //
-        // interface_type_indication: $ => choice(
-        //     $.subtype_indication,
-        //     $.unspecified_type_indication
-        // ),
-        //
-        // mode_indication: $ => choice(
-        //     $.simple_mode_indication,
-        //     $.mode_view_indication
-        // ),
-        //
-        // simple_mode_indication: $ => seq(
-        //     optional($.mode), $.interface_type_indication, optional($.BUS), optional(seq($.variable_assignment, $.conditional_expression))
-        // ),
-        //
-        // mode: $ => choice(
-        //     $.IN,
-        //     $.OUT,
-        //     $.INOUT,
-        //     $.BUFFER,
-        //     $.LINKAGE
         // ),
         //
         // mode_view_indication: $ => choice(
@@ -1111,19 +1152,7 @@ module.exports = grammar({
         //     seq($.GENERIC, $.MAP, $.left_parenthesis, $.box, $.right_parenthesis),
         //     seq($.GENERIC, $.MAP, $.left_parenthesis, $.DEFAULT, $.right_parenthesis)
         // ),
-        //
-        // interface_list: $ => seq(
-        //     $.interface_declaration, repeat(seq($.semicolon, $.interface_declaration)), optional($.semicolon)
-        // ),
-        //
-        // generic_clause: $ => seq(
-        //     $.GENERIC, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
-        // ),
-        //
-        // port_clause: $ => seq(
-        //     $.PORT, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
-        // ),
-        //
+       //
         // formal_part: $ => choice(
         //     $.formal_designator,
         //     // seq(choice($.name, $.library_function, $.library_type), $.left_parenthesis, $.formal_designator, $.right_parenthesis),
@@ -1690,56 +1719,8 @@ module.exports = grammar({
         //
         // label: $ => $.identifier,
         //
-        // use_clause: $ => seq(
-        //     $.USE, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
-        // ),
-        //
-        // design_unit: $ => seq(
-        //     repeat($.context_item), $.library_unit
-        // ),
-        //
-        // library_unit: $ => choice(
-        //     $.primary_unit,
-        //     $.secondary_unit
-        // ),
-        //
-        // primary_unit: $ => choice(
-        //     $.entity_declaration,
-        //     $.configuration_declaration,
-        //     $.package_declaration,
-        //     $.package_instantiation_declaration,
-        //     $.context_declaration
-        // ),
-        //
-        // secondary_unit: $ => choice(
-        //     $.architecture_body,
-        //     $.package_body
-        // ),
-        //
-        // library_clause: $ => seq(
-        //     $.LIBRARY, $.logical_name_list, $.semicolon
-        // ),
-        //
-        // logical_name_list: $ => seq(
-        //     $.identifier, repeat(seq($.comma, $.identifier))
-        // ),
-        //
         // context_declaration: $ => seq(
         //     $.CONTEXT, $.identifier, $.IS, repeat($.context_item), $.END, optional($.CONTEXT), optional($.identifier), $.semicolon
-        // ),
-        //
-        // context_item: $ => choice(
-        //     $.library_clause,
-        //     $.use_clause,
-        //     $.context_reference
-        // ),
-        //
-        // context_reference: $ => seq(
-        //     $.CONTEXT, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
-        // ),
-        //
-        // selected_name: $ => seq(
-        //     $.identifier, repeat(seq($.dot, $.identifier))
         // ),
         //
 
