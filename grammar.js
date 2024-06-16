@@ -293,7 +293,7 @@ module.exports = grammar({
 
         interface_declaration: $ => choice(
             $.interface_object_declaration,
-            // $.interface_type_declaration,
+            $.interface_type_declaration,
             // $.interface_subprogram_declaration,
             // $.interface_package_declaration,
         ),
@@ -303,6 +303,10 @@ module.exports = grammar({
             $.interface_signal_declaration,
             // $.interface_variable_declaration,
             // $.interface_file_declaration
+        ),
+
+        interface_type_declaration: $ => seq(
+            $.TYPE, $.identifier, optional(seq($.IS, $.incomplete_type_definition))
         ),
 
         interface_signal_declaration: $ => seq(
@@ -332,11 +336,88 @@ module.exports = grammar({
 
         interface_type_indication: $ => choice(
             $.subtype_indication,
-            // $.unspecified_type_indication
+            $.unspecified_type_indication
         ),
 
         subtype_indication: $ => seq(
             optional($.resolution_indication), $.name, optional($.constraint)
+        ),
+
+        unspecified_type_indication: $ => seq(
+            $.TYPE, $.IS, $.incomplete_type_definition
+        ),
+
+        incomplete_type_definition: $ => choice(
+            $.private_incomplete_type_definition,
+            $.scalar_incomplete_type_definition,
+            $.discrete_incomplete_type_definition,
+            $.integer_incomplete_type_definition,
+            $.physical_incomplete_type_definition,
+            $.floating_incomplete_type_definition,
+            $.array_type_definition,
+            $.access_incomplete_type_definition,
+            $.file_incomplete_type_definition
+        ),
+
+        private_incomplete_type_definition: $ => $.PRIVATE,
+
+        scalar_incomplete_type_definition: $ => $.box,
+
+        discrete_incomplete_type_definition: $ => seq(
+            $.left_parenthesis, $.box, $.right_parenthesis
+        ),
+
+        integer_incomplete_type_definition: $ => seq(
+            $.RANGE, $.box
+        ),
+
+        physical_incomplete_type_definition: $ => seq(
+            $.UNITS, $.box
+        ),
+
+        floating_incomplete_type_definition: $ => seq(
+            $.RANGE, $.box, $.dot, $.box
+        ),
+
+        array_type_definition: $ => choice(
+            seq($.ARRAY, $.left_parenthesis, $.array_index_incomplete_type_list, $.right_parenthesis, $.OF, $.incomplete_subtype_indication),
+            seq($.ARRAY, $.index_constraint, $.OF, $.subtype_indication)
+        ),
+
+        array_index_incomplete_type_list: $ => seq(
+            $.array_index_incomplete_type, repeat(seq($.comma, $.array_index_incomplete_type))
+        ),
+
+        array_index_incomplete_type: $ => choice(
+            $.index_subtype_definition,
+            $.index_constraint,
+            $.unspecified_type_indication
+        ),
+
+        index_constraint: $ => prec.left(seq(
+            $._discrete_range, repeat(seq($.comma, $._discrete_range))
+        )),
+
+        index_subtype_definition: $ => seq(
+            $.name, $.RANGE, $.box
+        ),
+
+        access_incomplete_type_definition: $ => seq(
+            $.ACCESS, $.incomplete_subtype_indication
+        ),
+
+        incomplete_subtype_indication: $ => choice(
+            $.subtype_indication,
+            $.unspecified_type_indication
+        ),
+
+        file_incomplete_type_definition: $ => seq(
+            $.FILE, $.OF, $.incomplete_type_mark
+        ),
+
+        incomplete_type_mark: $ => choice(
+            $.name,
+            $.unspecified_type_indication
         ),
 
         resolution_indication: $ => choice(
@@ -372,7 +453,7 @@ module.exports = grammar({
             // $.package_declaration,
             // $.package_body,
             // $.package_instantiation_declaration,
-            // $.type_declaration,
+            $.type_declaration,
             // $.subtype_declaration,
             // $.mode_view_declaration,
             // $.constant_declaration,
@@ -386,6 +467,47 @@ module.exports = grammar({
             // $.use_clause,
             // $.group_template_declaration,
             // $.group_declaration
+        ),
+
+        type_declaration: $ => seq(
+            $.TYPE, $.identifier, optional(seq($.IS, $.type_definition)), $.semicolon
+        ),
+
+        type_definition: $ => choice(
+            $.scalar_type_definition,
+            $.composite_type_definition,
+            // $.access_type_definition,
+            // $.file_type_definition,
+            // $.protected_type_definition,
+            // $.protected_type_instantiation_definition
+        ),
+
+        scalar_type_definition: $ => choice(
+            $.enumeration_type_definition,
+            // $.range_constraint,
+            // $.physical_type_definition
+        ),
+
+        enumeration_type_definition: $ => seq(
+            $.left_parenthesis, $.enumeration_literal, repeat(seq($.comma, $.enumeration_literal)), $.right_parenthesis
+        ),
+
+        enumeration_literal: $ => choice(
+            $.identifier,
+            $.character_literal
+        ),
+
+        composite_type_definition: $ => choice(
+            $.array_type_definition,
+            $.record_type_definition
+        ),
+
+        record_type_definition: $ => seq(
+            $.RECORD, repeat($.element_declaration), $.END, $.RECORD, optional($.identifier)
+        ),
+
+        element_declaration: $ => seq(
+            $.identifier_list, $.colon, $.subtype_indication, $.semicolon
         ),
 
         entity_statement: $ => choice(
@@ -815,21 +937,6 @@ module.exports = grammar({
         //     $.PACKAGE, $.identifier, $.IS, $.NEW, $.name, optional($.generic_map_aspect), $.semicolon
         // ),
         //
-        // scalar_type_definition: $ => choice(
-        //     $.enumeration_type_definition,
-        //     $.range_constraint,
-        //     $.physical_type_definition
-        // ),
-        //
-        // enumeration_type_definition: $ => seq(
-        //     $.left_parenthesis, $.enumeration_literal, repeat(seq($.comma, $.enumeration_literal)), $.right_parenthesis
-        // ),
-        //
-        // enumeration_literal: $ => choice(
-        //     $.identifier,
-        //     $.character_literal
-        // ),
-        //
         // physical_type_definition: $ => seq(
         //     $.range_constraint, $.UNITS, $.primary_unit_declaration, repeat($.secondary_unit_declaration), $.END, $.UNITS, optional($.identifier)
         // ),
@@ -842,42 +949,8 @@ module.exports = grammar({
         //     $.identifier, $.equals_sign, seq(optional($._abstract_literal), choice($.name, $.library_constant_unit)), $.semicolon
         // ),
         //
-        // composite_type_definition: $ => choice(
-        //     $.array_type_definition,
-        //     $.record_type_definition
-        // ),
-        //
-        // array_type_definition: $ => choice(
-        //     $.unbounded_array_definition,
-        //     $.constrained_array_definition
-        // ),
-        //
-        // unbounded_array_definition: $ => seq(
-        //     $.ARRAY, $.left_parenthesis, $.index_subtype_definition, repeat(seq($.comma, $.index_subtype_definition)), $.right_parenthesis, $.OF, $.subtype_indication
-        // ),
-        //
-        // constrained_array_definition: $ => seq(
-        //     $.ARRAY, $.index_constraint, $.OF, $.subtype_indication
-        // ),
-        //
-        // index_subtype_definition: $ => seq(
-        //     $.name, $.RANGE, $.box
-        // ),
-        //
-        // record_type_definition: $ => seq(
-        //     $.RECORD, repeat($.element_declaration), $.END, $.RECORD, optional($.identifier)
-        // ),
-        //
-        // element_declaration: $ => seq(
-        //     $.identifier_list, $.colon, $.subtype_indication, $.semicolon
-        // ),
-        //
         // access_type_definition: $ => seq(
         //     $.ACCESS, $.subtype_indication, optional($.generic_map_aspect)
-        // ),
-        //
-        // incomplete_type_declaration: $ => seq(
-        //     $.TYPE, $.identifier, $.semicolon
         // ),
         //
         // file_type_definition: $ => seq(
@@ -936,92 +1009,6 @@ module.exports = grammar({
         //
         // protected_type_instantiation_definition: $ => seq(
         //     $.NEW, $.subtype_indication, optional($.generic_map_aspect)
-        // ),
-        //
-        // unspecified_type_indication: $ => seq(
-        //     $.TYPE, $.IS, $.incomplete_type_definition
-        // ),
-        //
-        // incomplete_type_definition: $ => choice(
-        //     $.private_incomplete_type_definition,
-        //     $.scalar_incomplete_type_definition,
-        //     $.discrete_incomplete_type_definition,
-        //     $.integer_incomplete_type_definition,
-        //     $.physical_incomplete_type_definition,
-        //     $.floating_incomplete_type_definition,
-        //     $.array_incomplete_type_definition,
-        //     $.access_incomplete_type_definition,
-        //     $.file_incomplete_type_definition
-        // ),
-        //
-        // incomplete_subtype_indication: $ => choice(
-        //     $.subtype_indication,
-        //     $.unspecified_type_indication
-        // ),
-        //
-        // incomplete_type_mark: $ => choice(
-        //     $.name,
-        //     $.unspecified_type_indication
-        // ),
-        //
-        // private_incomplete_type_definition: $ => $.PRIVATE,
-        //
-        // scalar_incomplete_type_definition: $ => $.box,
-        //
-        // discrete_incomplete_type_definition: $ => seq(
-        //     $.left_parenthesis, $.box, $.right_parenthesis
-        // ),
-        //
-        // integer_incomplete_type_definition: $ => seq(
-        //     $.RANGE, $.box
-        // ),
-        //
-        // physical_incomplete_type_definition: $ => seq(
-        //     $.UNITS, $.box
-        // ),
-        //
-        // floating_incomplete_type_definition: $ => seq(
-        //     $.RANGE, $.box, $.dot, $.box
-        // ),
-        //
-        // array_incomplete_type_definition: $ => seq(
-        //     $.ARRAY, $.left_parenthesis, $.array_index_incomplete_type_list, $.right_parenthesis, $.OF, $.incomplete_subtype_indication
-        // ),
-        //
-        // array_index_incomplete_type_list: $ => seq(
-        //     $.array_index_incomplete_type, repeat(seq($.comma, $.array_index_incomplete_type))
-        // ),
-        //
-        // array_index_incomplete_type: $ => choice(
-        //     $.index_subtype_definition,
-        //     $.index_constraint,
-        //     $.unspecified_type_indication
-        // ),
-        //
-        // access_incomplete_type_definition: $ => seq(
-        //     $.ACCESS, $.incomplete_subtype_indication
-        // ),
-        //
-        // file_incomplete_type_definition: $ => seq(
-        //     $.FILE, $.OF, $.incomplete_type_mark
-        // ),
-        //
-        // type_declaration: $ => choice(
-        //     $.full_type_declaration,
-        //     $.incomplete_type_declaration
-        // ),
-        //
-        // full_type_declaration: $ => seq(
-        //     $.TYPE, $.identifier, $.IS, $.type_definition, $.semicolon
-        // ),
-        //
-        // type_definition: $ => choice(
-        //     $.scalar_type_definition,
-        //     $.composite_type_definition,
-        //     $.access_type_definition,
-        //     $.file_type_definition,
-        //     $.protected_type_definition,
-        //     $.protected_type_instantiation_definition
         // ),
         //
         // subtype_declaration: $ => seq(
@@ -1115,10 +1102,6 @@ module.exports = grammar({
         //
         // element_array_mode_view_indication: $ => seq(
         //     $.VIEW, $.left_parenthesis, $.name, $.right_parenthesis
-        // ),
-        //
-        // interface_type_declaration: $ => seq(
-        //     $.TYPE, $.identifier, optional(seq($.IS, $.incomplete_type_definition))
         // ),
         //
         // interface_subprogram_declaration: $ => seq(
