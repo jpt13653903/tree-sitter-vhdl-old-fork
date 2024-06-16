@@ -113,8 +113,8 @@ static void register_reserved(TokenTree* token_tree)
     token_tree_insert(token_tree, "use",           RESERVED_USE);
     token_tree_insert(token_tree, "variable",      RESERVED_VARIABLE);
     token_tree_insert(token_tree, "view",          RESERVED_VIEW);
-    token_tree_insert(token_tree, "vpkg",          RESERVED_VPKG);
     token_tree_insert(token_tree, "vmode",         RESERVED_VMODE);
+    token_tree_insert(token_tree, "vpkg",          RESERVED_VPKG);
     token_tree_insert(token_tree, "vprop",         RESERVED_VPROP);
     token_tree_insert(token_tree, "vunit",         RESERVED_VUNIT);
     token_tree_insert(token_tree, "wait",          RESERVED_WAIT);

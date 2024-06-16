@@ -111,8 +111,8 @@ typedef enum TokenTypeTag{
     RESERVED_USE,
     RESERVED_VARIABLE,
     RESERVED_VIEW,
-    RESERVED_VPKG,
     RESERVED_VMODE,
+    RESERVED_VPKG,
     RESERVED_VPROP,
     RESERVED_VUNIT,
     RESERVED_WAIT,
@@ -342,8 +342,8 @@ bool is_base_specifier   (TokenType type);
             case RESERVED_USE:                             return "RESERVED_USE";
             case RESERVED_VARIABLE:                        return "RESERVED_VARIABLE";
             case RESERVED_VIEW:                            return "RESERVED_VIEW";
-            case RESERVED_VPKG:                            return "RESERVED_VPKG";
             case RESERVED_VMODE:                           return "RESERVED_VMODE";
+            case RESERVED_VPKG:                            return "RESERVED_VPKG";
             case RESERVED_VPROP:                           return "RESERVED_VPROP";
             case RESERVED_VUNIT:                           return "RESERVED_VUNIT";
             case RESERVED_WAIT:                            return "RESERVED_WAIT";

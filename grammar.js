@@ -23,7 +23,7 @@ module.exports = grammar({
         $.ARCHITECTURE,
         $.ARRAY,
         $.ASSERT,
-        $.ASSUME,
+        $.ASSUME, // Not used -- PSL keyword
         $.ATTRIBUTE,
         $.BEGIN,
         $.BLOCK,
@@ -35,7 +35,7 @@ module.exports = grammar({
         $.CONFIGURATION,
         $.CONSTANT,
         $.CONTEXT,
-        $.COVER,
+        $.COVER, // Not used -- PSL keyword
         $.DEFAULT,
         $.DISCONNECT,
         $.DOWNTO,
@@ -44,7 +44,7 @@ module.exports = grammar({
         $.END,
         $.ENTITY,
         $.EXIT,
-        $.FAIRNESS,
+        $.FAIRNESS, // Not used -- PSL keyword
         $.FILE,
         $.FOR,
         $.FORCE,
@@ -95,7 +95,7 @@ module.exports = grammar({
         $.RELEASE,
         $.REM,
         $.REPORT,
-        $.RESTRICT,
+        $.RESTRICT, // Not used -- PSL keyword
         $.RETURN,
         $.ROL,
         $.ROR,
@@ -108,7 +108,7 @@ module.exports = grammar({
         $.SLL,
         $.SRA,
         $.SRL,
-        $.STRONG,
+        $.STRONG, // Not used -- PSL keyword
         $.SUBTYPE,
         $.THEN,
         $.TO,
@@ -120,9 +120,9 @@ module.exports = grammar({
         $.USE,
         $.VARIABLE,
         $.VIEW,
-        $.VPKG,
-        $.VMODE,
-        $.VPROP,
+        $.VMODE, // Not used -- PSL keyword
+        $.VPKG,  // Not used -- PSL keyword
+        $.VPROP, // Not used -- PSL keyword
         $.VUNIT,
         $.WAIT,
         $.WHEN,
