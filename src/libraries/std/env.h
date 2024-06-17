@@ -5,7 +5,7 @@
 #include "../../TokenType.h"
 //------------------------------------------------------------------------------
 
-static void register_std_env_functions(TokenTree* token_tree)
+void register_std_env(TokenTree* token_tree)
 {
     // Sourced from "https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml"
     token_tree_insert(token_tree, "stop",             LIBRARY_FUNCTION);

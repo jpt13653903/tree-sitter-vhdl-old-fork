@@ -36,6 +36,14 @@ static void register_ieee_math_complex_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_math_complex(TokenTree* token_tree)
+{
+    register_ieee_math_complex_types    (token_tree);
+    register_ieee_math_complex_constants(token_tree);
+    register_ieee_math_complex_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

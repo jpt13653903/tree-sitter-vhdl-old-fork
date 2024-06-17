@@ -53,6 +53,14 @@ static void register_std_textio_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_std_textio(TokenTree* token_tree)
+{
+    register_std_textio_types    (token_tree);
+    register_std_textio_constants(token_tree);
+    register_std_textio_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

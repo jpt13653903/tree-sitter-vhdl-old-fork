@@ -47,6 +47,14 @@ static void register_ieee_fixed_pkg_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_fixed_pkg(TokenTree* token_tree)
+{
+    register_ieee_fixed_pkg_types    (token_tree);
+    register_ieee_fixed_pkg_constants(token_tree);
+    register_ieee_fixed_pkg_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

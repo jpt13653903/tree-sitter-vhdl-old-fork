@@ -99,6 +99,14 @@ static void register_ieee_float_pkg_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_float_pkg(TokenTree* token_tree)
+{
+    register_ieee_float_pkg_types    (token_tree);
+    register_ieee_float_pkg_constants(token_tree);
+    register_ieee_float_pkg_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

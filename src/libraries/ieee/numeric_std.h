@@ -36,6 +36,13 @@ static void register_ieee_numeric_std_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_numeric_std(TokenTree* token_tree)
+{
+    register_ieee_numeric_std_types    (token_tree);
+    register_ieee_numeric_std_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

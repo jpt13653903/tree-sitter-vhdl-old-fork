@@ -48,43 +48,16 @@ void* tree_sitter_vhdl_external_scanner_create()
 
         debug("Building the token tree...");
 
-        register_reserved                     (token_tree);
-        register_directives                   (token_tree);
-        register_delimiters                   (token_tree);
-        register_operator_symbols             (token_tree);
-        register_attributes                   (token_tree);
-        register_base_specifiers              (token_tree);
-
-        register_std_env_functions            (token_tree);
-
-        register_std_standard_types           (token_tree);
-        register_std_standard_constants       (token_tree);
-        register_std_standard_functions       (token_tree);
-
-        register_std_textio_types             (token_tree);
-        register_std_textio_constants         (token_tree);
-        register_std_textio_functions         (token_tree);
-
-        register_ieee_std_logic_1164_types    (token_tree);
-        register_ieee_std_logic_1164_functions(token_tree);
-
-        register_ieee_numeric_std_types       (token_tree);
-        register_ieee_numeric_std_functions   (token_tree);
-
-        register_ieee_fixed_pkg_types         (token_tree);
-        register_ieee_fixed_pkg_constants     (token_tree);
-        register_ieee_fixed_pkg_functions     (token_tree);
-
-        register_ieee_float_pkg_types         (token_tree);
-        register_ieee_float_pkg_constants     (token_tree);
-        register_ieee_float_pkg_functions     (token_tree);
-
-        register_ieee_math_real_constants     (token_tree);
-        register_ieee_math_real_functions     (token_tree);
-
-        register_ieee_math_complex_types      (token_tree);
-        register_ieee_math_complex_constants  (token_tree);
-        register_ieee_math_complex_functions  (token_tree);
+        register_core               (token_tree);
+        register_std_env            (token_tree);
+        register_std_standard       (token_tree);
+        register_std_textio         (token_tree);
+        register_ieee_std_logic_1164(token_tree);
+        register_ieee_numeric_std   (token_tree);
+        register_ieee_fixed_pkg     (token_tree);
+        register_ieee_float_pkg     (token_tree);
+        register_ieee_math_real     (token_tree);
+        register_ieee_math_complex  (token_tree);
 
         debug("Balancing the token tree");
         token_tree_balance(token_tree);

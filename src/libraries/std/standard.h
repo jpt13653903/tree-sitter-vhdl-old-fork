@@ -105,6 +105,14 @@ static void register_std_standard_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_std_standard(TokenTree* token_tree)
+{
+    register_std_standard_types    (token_tree);
+    register_std_standard_constants(token_tree);
+    register_std_standard_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

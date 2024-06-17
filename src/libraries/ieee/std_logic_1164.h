@@ -53,6 +53,13 @@ static void register_ieee_std_logic_1164_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_std_logic_1164(TokenTree* token_tree)
+{
+    register_ieee_std_logic_1164_types    (token_tree);
+    register_ieee_std_logic_1164_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

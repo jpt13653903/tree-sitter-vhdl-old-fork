@@ -300,6 +300,17 @@ static void register_base_specifiers(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_core(TokenTree* token_tree)
+{
+    register_reserved        (token_tree);
+    register_directives      (token_tree);
+    register_delimiters      (token_tree);
+    register_operator_symbols(token_tree);
+    register_attributes      (token_tree);
+    register_base_specifiers (token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 

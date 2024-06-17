@@ -61,6 +61,13 @@ static void register_ieee_math_real_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+void register_ieee_math_real(TokenTree* token_tree)
+{
+    register_ieee_math_real_constants(token_tree);
+    register_ieee_math_real_functions(token_tree);
+}
+//------------------------------------------------------------------------------
+
 #endif
 //------------------------------------------------------------------------------
 
