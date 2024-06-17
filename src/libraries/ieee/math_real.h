@@ -7,7 +7,6 @@
 
 static void register_ieee_math_real_constants(TokenTree* token_tree)
 {
-    // Sourced from "https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml"
     token_tree_insert(token_tree, "math_e",             LIBRARY_CONSTANT);
     token_tree_insert(token_tree, "math_1_over_e",      LIBRARY_CONSTANT);
     token_tree_insert(token_tree, "math_pi",            LIBRARY_CONSTANT);
@@ -31,12 +30,12 @@ static void register_ieee_math_real_constants(TokenTree* token_tree)
 
 static void register_ieee_math_real_functions(TokenTree* token_tree)
 {
-    // Sourced from "https://github.com/richjyoung/vscode-modern-vhdl/blob/master/syntaxes/vhdl.tmLanguage.yml"
     token_tree_insert(token_tree, "sign",    LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "ceil",    LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "floor",   LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "round",   LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "trunc",   LIBRARY_FUNCTION);
+    token_tree_insert(token_tree, "mod",     LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "realmax", LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "realmin", LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "uniform", LIBRARY_FUNCTION);
@@ -49,12 +48,12 @@ static void register_ieee_math_real_functions(TokenTree* token_tree)
     token_tree_insert(token_tree, "sin",     LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "cos",     LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "tan",     LIBRARY_FUNCTION);
-    token_tree_insert(token_tree, "sinh",    LIBRARY_FUNCTION);
-    token_tree_insert(token_tree, "cosh",    LIBRARY_FUNCTION);
-    token_tree_insert(token_tree, "tanh",    LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arcsin",  LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arccos",  LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arctan",  LIBRARY_FUNCTION);
+    token_tree_insert(token_tree, "sinh",    LIBRARY_FUNCTION);
+    token_tree_insert(token_tree, "cosh",    LIBRARY_FUNCTION);
+    token_tree_insert(token_tree, "tanh",    LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arcsinh", LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arccosh", LIBRARY_FUNCTION);
     token_tree_insert(token_tree, "arctanh", LIBRARY_FUNCTION);
