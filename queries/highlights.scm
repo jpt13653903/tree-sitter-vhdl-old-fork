@@ -207,3 +207,7 @@
 
 (label) @label
 
+(subtype_indication
+  (name
+    (identifier))) @type
+
