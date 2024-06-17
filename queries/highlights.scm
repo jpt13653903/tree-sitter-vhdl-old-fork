@@ -124,20 +124,19 @@
 (identifier) @variable
 
 [
-    (ABS) (ACCESS) (AFTER) (ALIAS) (ALL) (AND) (ARCHITECTURE) (ARRAY) (ASSERT)
-    (ASSUME) (ATTRIBUTE) (BEGIN) (BLOCK) (BODY) (BUFFER) (BUS) (CASE)
-    (COMPONENT) (CONFIGURATION) (CONSTANT) (CONTEXT) (COVER) (DEFAULT)
-    (DISCONNECT) (DOWNTO) (ELSE) (ELSIF) (END) (ENTITY) (EXIT) (FAIRNESS) (FILE)
-    (FOR) (FORCE) (FUNCTION) (GENERATE) (GENERIC) (GROUP) (GUARDED) (IF)
-    (IMPURE) (IN) (INERTIAL) (INOUT) (IS) (LABEL) (LIBRARY) (LINKAGE) (LITERAL)
-    (LOOP) (MAP) (MOD) (NAND) (NEW) (NEXT) (NOR) (NOT) (NULL) (OF) (ON) (OPEN)
-    (OR) (OTHERS) (OUT) (PACKAGE) (PARAMETER) (PORT) (POSTPONED) (PROCEDURE)
-    (PROCESS) (PROPERTY) (PROTECTED) (PRIVATE) (PURE) (RANGE) (RECORD)
-    (REGISTER) (REJECT) (RELEASE) (REM) (REPORT) (RESTRICT) (RETURN) (ROL)
-    (ROR) (SELECT) (SEQUENCE) (SEVERITY) (SIGNAL) (SHARED) (SLA) (SLL) (SRA)
-    (SRL) (STRONG) (SUBTYPE) (THEN) (TO) (TRANSPORT) (TYPE) (UNAFFECTED) (UNITS)
-    (UNTIL) (USE) (VARIABLE) (VIEW) (VPKG) (VMODE) (VPROP) (VUNIT) (WAIT) (WHEN)
-    (WHILE) (WITH) (XNOR) (XOR) (box)
+    (ACCESS) (AFTER) (ALIAS) (ALL) (ARCHITECTURE) (ARRAY) (ASSERT) (ASSUME)
+    (ATTRIBUTE) (BEGIN) (BLOCK) (BODY) (BUFFER) (BUS) (CASE) (COMPONENT)
+    (CONFIGURATION) (CONSTANT) (CONTEXT) (COVER) (DEFAULT) (DISCONNECT)
+    (DOWNTO) (ELSE) (ELSIF) (END) (ENTITY) (EXIT) (FAIRNESS) (FILE) (FOR)
+    (FORCE) (FUNCTION) (GENERATE) (GENERIC) (GROUP) (GUARDED) (IF) (IMPURE)
+    (IN) (INERTIAL) (INOUT) (IS) (LABEL) (LIBRARY) (LINKAGE) (LITERAL) (LOOP)
+    (MAP) (NEW) (NEXT) (NULL) (OF) (ON) (OPEN) (OTHERS) (OUT) (PACKAGE)
+    (PARAMETER) (PORT) (POSTPONED) (PROCEDURE) (PROCESS) (PROPERTY)
+    (PROTECTED) (PRIVATE) (PURE) (RANGE) (RECORD) (REGISTER) (REJECT)
+    (RELEASE) (REPORT) (RESTRICT) (RETURN) (SELECT) (SEQUENCE) (SEVERITY)
+    (SIGNAL) (SHARED) (STRONG) (SUBTYPE) (THEN) (TO) (TRANSPORT) (TYPE)
+    (UNAFFECTED) (UNITS) (UNTIL) (USE) (VARIABLE) (VIEW) (VPKG) (VMODE)
+    (VPROP) (VUNIT) (WAIT) (WHEN) (WHILE) (WITH) (box)
 ] @keyword
 
 (tool_directive) @keyword.directive
@@ -148,13 +147,17 @@
 (directive_warning) @comment.warning
 
 [
-    (ampersand) (multiply) (plus_sign) (minus_sign) (divide) (less_than_sign)
-    (equals_sign) (greater_than_sign) (vertical_bar) (question_mark)
-    (arrow) (circumflex) (exponentiate) (variable_assignment) (inequality)
-    (greater_than_or_equal) (less_than_or_equal) (signal_assignment)
-    (condition_conversion) (matching_equality) (matching_inequality)
-    (matching_less_than) (matching_less_than_or_equal) (matching_greater_than)
-    (matching_greater_than_or_equal)
+    (condition_conversion)
+    (unary_operator)
+    (logical_operator)
+    (relational_operator)
+    (shift_operator)
+    (sign)
+    (adding_operator)
+    (multiplying_operator)
+    (exponentiate)
+    (variable_assignment)
+    (signal_assignment)
 ] @operator
 
 [ (tick) (comma) (dot) (semicolon) ] @punctuation.delimiters
@@ -165,9 +168,7 @@
     (double_less_than)    (double_greater_than)
 ] @punctuation.bracket
 
-[
-    (colon) (commercial_at)
-] @punctuation.special
+[ (colon) (commercial_at) ] @punctuation.special
 
 [
     (decimal_literal)

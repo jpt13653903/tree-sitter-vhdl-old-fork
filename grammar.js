@@ -14,12 +14,12 @@ module.exports = grammar({
     externals: $ => [
         $.identifier,
 
-        $.ABS,
+        $._ABS,
         $.ACCESS,
         $.AFTER,
         $.ALIAS,
         $.ALL,
-        $.AND,
+        $._AND,
         $.ARCHITECTURE,
         $.ARRAY,
         $.ASSERT,
@@ -65,17 +65,17 @@ module.exports = grammar({
         $.LITERAL,
         $.LOOP,
         $.MAP,
-        $.MOD,
-        $.NAND,
+        $._MOD,
+        $._NAND,
         $.NEW,
         $.NEXT,
-        $.NOR,
-        $.NOT,
+        $._NOR,
+        $._NOT,
         $.NULL,
         $.OF,
         $.ON,
         $.OPEN,
-        $.OR,
+        $._OR,
         $.OTHERS,
         $.OUT,
         $.PACKAGE,
@@ -93,21 +93,21 @@ module.exports = grammar({
         $.REGISTER,
         $.REJECT,
         $.RELEASE,
-        $.REM,
+        $._REM,
         $.REPORT,
         $.RESTRICT, // Not used -- PSL keyword
         $.RETURN,
-        $.ROL,
-        $.ROR,
+        $._ROL,
+        $._ROR,
         $.SELECT,
         $.SEQUENCE,
         $.SEVERITY,
         $.SIGNAL,
         $.SHARED,
-        $.SLA,
-        $.SLL,
-        $.SRA,
-        $.SRL,
+        $._SLA,
+        $._SLL,
+        $._SRA,
+        $._SRL,
         $.STRONG, // Not used -- PSL keyword
         $.SUBTYPE,
         $.THEN,
@@ -128,8 +128,8 @@ module.exports = grammar({
         $.WHEN,
         $.WHILE,
         $.WITH,
-        $.XNOR,
-        $.XOR,
+        $._XNOR,
+        $._XOR,
 
         $.reserved_end_marker, // Scanner internal use only
 
@@ -143,45 +143,45 @@ module.exports = grammar({
         $.directive_end_marker, // Scanner internal use only
 
         $._ampersand,
-        $._tick,
-        $._left_parenthesis,
-        $._right_parenthesis,
+        $.tick,
+        $.left_parenthesis,
+        $.right_parenthesis,
         $._multiply,
         $._plus_sign,
-        $._comma,
+        $.comma,
         $._minus_sign,
-        $._dot,
+        $.dot,
         $._divide,
-        $._colon,
-        $._semicolon,
+        $.colon,
+        $.semicolon,
         $._less_than_sign,
         $._equals_sign,
         $._greater_than_sign,
         $._grave_accent,
         $._vertical_bar,
-        $._left_square_bracket,
-        $._right_square_bracket,
+        $.left_square_bracket,
+        $.right_square_bracket,
         $._question_mark,
-        $._commercial_at,
+        $.commercial_at,
 
         $._arrow,
         $._circumflex,
-        $._exponentiate,
-        $._variable_assignment,
+        $.exponentiate,
+        $.variable_assignment,
         $._inequality,
         $._greater_than_or_equal,
         $._less_than_or_equal,
-        $._signal_assignment,
+        $.signal_assignment,
         $.box,
-        $._condition_conversion,
+        $.condition_conversion,
         $._matching_equality,
         $._matching_inequality,
         $._matching_less_than,
         $._matching_less_than_or_equal,
         $._matching_greater_than,
         $._matching_greater_than_or_equal,
-        $._double_less_than,
-        $._double_greater_than,
+        $.double_less_than,
+        $.double_greater_than,
 
         $.delimiter_end_marker, // Scanner internal use only
 
@@ -243,23 +243,23 @@ module.exports = grammar({
         ),
 
         library_clause: $ => seq(
-            $.LIBRARY, $.logical_name_list, $._semicolon
+            $.LIBRARY, $.logical_name_list, $.semicolon
         ),
 
         logical_name_list: $ => seq(
-            $.identifier, repeat(seq($._comma, $.identifier))
+            $.identifier, repeat(seq($.comma, $.identifier))
         ),
 
         use_clause: $ => seq(
-            $.USE, $.selected_name, repeat(seq($._comma, $.selected_name)), $._semicolon
+            $.USE, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
         ),
 
         selected_name: $ => seq(
-            $.identifier, repeat(seq($._dot, choice($.identifier, $.ALL)))
+            $.identifier, repeat(seq($.dot, choice($.identifier, $.ALL)))
         ),
 
         context_reference: $ => seq(
-            $.CONTEXT, $.selected_name, repeat(seq($._comma, $.selected_name)), $._semicolon
+            $.CONTEXT, $.selected_name, repeat(seq($.comma, $.selected_name)), $.semicolon
         ),
 
         _library_unit: $ => choice(
@@ -276,11 +276,11 @@ module.exports = grammar({
         ),
 
         context_declaration: $ => seq(
-            $.CONTEXT, $.identifier, $.IS, repeat($._context_item), $.END, optional($.CONTEXT), optional($.identifier), $._semicolon
+            $.CONTEXT, $.identifier, $.IS, repeat($._context_item), $.END, optional($.CONTEXT), optional($.identifier), $.semicolon
         ),
 
         configuration_declaration: $ => seq(
-            $.CONFIGURATION, $.identifier, $.OF, $.name, $.IS, repeat($._configuration_declarative_item), repeat(seq($.verification_unit_binding_indication, $._semicolon)), $.block_configuration, $.END, optional($.CONFIGURATION), optional($.identifier), $._semicolon
+            $.CONFIGURATION, $.identifier, $.OF, $.name, $.IS, repeat($._configuration_declarative_item), repeat(seq($.verification_unit_binding_indication, $.semicolon)), $.block_configuration, $.END, optional($.CONFIGURATION), optional($.identifier), $.semicolon
         ),
 
         _configuration_declarative_item: $ => choice(
@@ -290,7 +290,7 @@ module.exports = grammar({
         ),
 
         block_configuration: $ => seq(
-            $.FOR, $.name, repeat($.use_clause), repeat($._configuration_item), $.END, $.FOR, $._semicolon
+            $.FOR, $.name, repeat($.use_clause), repeat($._configuration_item), $.END, $.FOR, $.semicolon
         ),
 
         _configuration_item: $ => choice(
@@ -299,23 +299,23 @@ module.exports = grammar({
         ),
 
         component_configuration: $ => seq(
-            $.FOR, $.component_specification, optional($.binding_indication), repeat(seq($.verification_unit_binding_indication, $._semicolon)), optional($.block_configuration), $.END, $.FOR, $._semicolon
+            $.FOR, $.component_specification, optional($.binding_indication), repeat(seq($.verification_unit_binding_indication, $.semicolon)), optional($.block_configuration), $.END, $.FOR, $.semicolon
         ),
 
         entity_declaration: $ => seq(
-            $.ENTITY, $.identifier, $.IS, optional($.generic_clause), optional($.port_clause), repeat($._entity_declarative_item), optional(seq($.BEGIN, repeat($._entity_statement))), $.END, optional($.ENTITY), optional($.identifier), $._semicolon
+            $.ENTITY, $.identifier, $.IS, optional($.generic_clause), optional($.port_clause), repeat($._entity_declarative_item), optional(seq($.BEGIN, repeat($._entity_statement))), $.END, optional($.ENTITY), optional($.identifier), $.semicolon
         ),
 
         generic_clause: $ => seq(
-            $.GENERIC, $._left_parenthesis, $.interface_list, $._right_parenthesis, $._semicolon
+            $.GENERIC, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
         ),
 
         port_clause: $ => seq(
-            $.PORT, $._left_parenthesis, $.interface_list, $._right_parenthesis, $._semicolon
+            $.PORT, $.left_parenthesis, $.interface_list, $.right_parenthesis, $.semicolon
         ),
 
         interface_list: $ => seq(
-            $._interface_declaration, repeat(seq($._semicolon, $._interface_declaration)), optional($._semicolon)
+            $._interface_declaration, repeat(seq($.semicolon, $._interface_declaration)), optional($.semicolon)
         ),
 
         _interface_declaration: $ => choice(
@@ -344,20 +344,20 @@ module.exports = grammar({
 
         _interface_package_generic_map_aspect: $ => choice(
             $.generic_map_aspect,
-            seq($.GENERIC, $.MAP, $._left_parenthesis, $.box,     $._right_parenthesis),
-            seq($.GENERIC, $.MAP, $._left_parenthesis, $.DEFAULT, $._right_parenthesis)
+            seq($.GENERIC, $.MAP, $.left_parenthesis, $.box,     $.right_parenthesis),
+            seq($.GENERIC, $.MAP, $.left_parenthesis, $.DEFAULT, $.right_parenthesis)
         ),
 
         generic_map_aspect: $ => seq(
-            $.GENERIC, $.MAP, $._left_parenthesis, $.association_list, $._right_parenthesis
+            $.GENERIC, $.MAP, $.left_parenthesis, $.association_list, $.right_parenthesis
         ),
 
         port_map_aspect: $ => seq(
-            $.PORT, $.MAP, $._left_parenthesis, $.association_list, $._right_parenthesis
+            $.PORT, $.MAP, $.left_parenthesis, $.association_list, $.right_parenthesis
         ),
 
         association_list: $ => seq(
-            $.association_element, repeat(seq($._comma, $.association_element))
+            $.association_element, repeat(seq($.comma, $.association_element))
         ),
 
         _interface_subprogram_default: $ => choice(
@@ -371,11 +371,11 @@ module.exports = grammar({
         ),
 
         interface_procedure_specification: $ => seq(
-            $.PROCEDURE, $._designator, optional(seq(optional($.PARAMETER), $._left_parenthesis, $.formal_parameter_list, $._right_parenthesis))
+            $.PROCEDURE, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis))
         ),
 
         interface_function_specification: $ => seq(
-            optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional(seq(optional($.PARAMETER), $._left_parenthesis, $.formal_parameter_list, $._right_parenthesis)), $.RETURN, $.name
+            optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis)), $.RETURN, $.name
         ),
 
         _designator: $ => choice(
@@ -386,15 +386,15 @@ module.exports = grammar({
         formal_parameter_list: $ => $.interface_list,
 
         interface_constant_signal_or_variable_declaration: $ => seq(
-            optional(choice($.CONSTANT, $.SIGNAL, $.VARIABLE)), $.identifier_list, $._colon, $._mode_indication
+            optional(choice($.CONSTANT, $.SIGNAL, $.VARIABLE)), $.identifier_list, $.colon, $._mode_indication
         ),
 
         interface_file_declaration: $ => seq(
-            $.FILE, $.identifier_list, $._colon, $.subtype_indication
+            $.FILE, $.identifier_list, $.colon, $.subtype_indication
         ),
 
         identifier_list: $ => seq(
-            $.identifier, repeat(seq($._comma, $.identifier))
+            $.identifier, repeat(seq($.comma, $.identifier))
         ),
 
         _mode_indication: $ => choice(
@@ -403,7 +403,7 @@ module.exports = grammar({
         ),
 
         simple_mode_indication: $ => seq(
-            optional($.mode), $._interface_type_indication, optional($.BUS), optional(seq($._variable_assignment, $.conditional_expression))
+            optional($.mode), $._interface_type_indication, optional($.BUS), optional(seq($.variable_assignment, $.conditional_expression))
         ),
 
         _mode_view_indication: $ => choice(
@@ -416,19 +416,19 @@ module.exports = grammar({
         ),
 
         array_mode_view_indication: $ => seq(
-            $.VIEW, $._left_parenthesis, $.name, $._right_parenthesis, optional(seq($.OF, $.subtype_indication))
+            $.VIEW, $.left_parenthesis, $.name, $.right_parenthesis, optional(seq($.OF, $.subtype_indication))
         ),
 
         mode_view_declaration: $ => seq(
-            $.VIEW, $.identifier, $.OF, $.subtype_indication, $.IS, repeat($.mode_view_element_definition), $.END, $.VIEW, optional($.identifier), $._semicolon
+            $.VIEW, $.identifier, $.OF, $.subtype_indication, $.IS, repeat($.mode_view_element_definition), $.END, $.VIEW, optional($.identifier), $.semicolon
         ),
 
         mode_view_element_definition: $ => seq(
-            $.record_element_list, $._colon, $._element_mode_indication, $._semicolon
+            $.record_element_list, $.colon, $._element_mode_indication, $.semicolon
         ),
 
         record_element_list: $ => seq(
-            $.identifier, repeat(seq($._comma, $.identifier))
+            $.identifier, repeat(seq($.comma, $.identifier))
         ),
 
         _element_mode_indication: $ => choice(
@@ -446,7 +446,7 @@ module.exports = grammar({
         ),
 
         element_array_mode_view_indication: $ => seq(
-            $.VIEW, $._left_parenthesis, $.name, $._right_parenthesis
+            $.VIEW, $.left_parenthesis, $.name, $.right_parenthesis
         ),
 
         mode: $ => choice(
@@ -487,7 +487,7 @@ module.exports = grammar({
         scalar_incomplete_type_definition: $ => $.box,
 
         discrete_incomplete_type_definition: $ => seq(
-            $._left_parenthesis, $.box, $._right_parenthesis
+            $.left_parenthesis, $.box, $.right_parenthesis
         ),
 
         integer_incomplete_type_definition: $ => seq(
@@ -499,16 +499,16 @@ module.exports = grammar({
         ),
 
         floating_incomplete_type_definition: $ => seq(
-            $.RANGE, $.box, $._dot, $.box
+            $.RANGE, $.box, $.dot, $.box
         ),
 
         array_type_definition: $ => choice(
-            seq($.ARRAY, $._left_parenthesis, $.array_index_incomplete_type_list, $._right_parenthesis, $.OF, $._incomplete_subtype_indication),
+            seq($.ARRAY, $.left_parenthesis, $.array_index_incomplete_type_list, $.right_parenthesis, $.OF, $._incomplete_subtype_indication),
             seq($.ARRAY, $.index_constraint, $.OF, $.subtype_indication)
         ),
 
         array_index_incomplete_type_list: $ => seq(
-            $._array_index_incomplete_type, repeat(seq($._comma, $._array_index_incomplete_type))
+            $._array_index_incomplete_type, repeat(seq($.comma, $._array_index_incomplete_type))
         ),
 
         _array_index_incomplete_type: $ => choice(
@@ -518,7 +518,7 @@ module.exports = grammar({
         ),
 
         index_constraint: $ => prec.left(seq(
-            $._discrete_range, repeat(seq($._comma, $._discrete_range))
+            $._discrete_range, repeat(seq($.comma, $._discrete_range))
         )),
 
         index_subtype_definition: $ => seq(
@@ -545,7 +545,7 @@ module.exports = grammar({
 
         resolution_indication: $ => choice(
             $.name,
-            seq($._left_parenthesis, $._element_resolution, $._right_parenthesis)
+            seq($.left_parenthesis, $._element_resolution, $.right_parenthesis)
         ),
 
         _element_resolution: $ => choice(
@@ -554,7 +554,7 @@ module.exports = grammar({
         ),
 
         record_resolution: $ => seq(
-            $.record_element_resolution, repeat(seq($._comma, $.record_element_resolution))
+            $.record_element_resolution, repeat(seq($.comma, $.record_element_resolution))
         ),
 
         record_element_resolution: $ => seq(
@@ -589,11 +589,11 @@ module.exports = grammar({
         ),
 
         group_declaration: $ => seq(
-            $.GROUP, $.identifier, $._colon, $.name, $._left_parenthesis, $.group_constituent_list, $._right_parenthesis, $._semicolon
+            $.GROUP, $.identifier, $.colon, $.name, $.left_parenthesis, $.group_constituent_list, $.right_parenthesis, $.semicolon
         ),
 
         group_constituent_list: $ => seq(
-            $._group_constituent, repeat(seq($._comma, $._group_constituent))
+            $._group_constituent, repeat(seq($.comma, $._group_constituent))
         ),
 
         _group_constituent: $ => choice(
@@ -602,11 +602,11 @@ module.exports = grammar({
         ),
 
         group_template_declaration: $ => seq(
-            $.GROUP, $.identifier, $.IS, $._left_parenthesis, $.entity_class_entry_list, $._right_parenthesis, $._semicolon
+            $.GROUP, $.identifier, $.IS, $.left_parenthesis, $.entity_class_entry_list, $.right_parenthesis, $.semicolon
         ),
 
         entity_class_entry_list: $ => seq(
-            $.entity_class_entry, repeat(seq($._comma, $.entity_class_entry))
+            $.entity_class_entry, repeat(seq($.comma, $.entity_class_entry))
         ),
 
         entity_class_entry: $ => seq(
@@ -614,25 +614,25 @@ module.exports = grammar({
         ),
 
         disconnection_specification: $ => seq(
-            $.DISCONNECT, $.guarded_signal_specification, $.AFTER, $._expression, $._semicolon
+            $.DISCONNECT, $.guarded_signal_specification, $.AFTER, $._expression, $.semicolon
         ),
 
         guarded_signal_specification: $ => seq(
-            $.signal_list, $._colon, $.name
+            $.signal_list, $.colon, $.name
         ),
 
         signal_list: $ => choice(
-            seq($.name, repeat(seq($._comma, $.name))),
+            seq($.name, repeat(seq($.comma, $.name))),
             $.OTHERS,
             $.ALL
         ),
 
         attribute_specification: $ => seq(
-            $.ATTRIBUTE, $._attribute_designator, $.OF, $.entity_specification, $.IS, $.conditional_expression, $._semicolon
+            $.ATTRIBUTE, $._attribute_designator, $.OF, $.entity_specification, $.IS, $.conditional_expression, $.semicolon
         ),
 
         entity_specification: $ => seq(
-            $.entity_name_list, $._colon, $._entity_class
+            $.entity_name_list, $.colon, $._entity_class
         ),
 
         _entity_class: $ => choice(
@@ -659,7 +659,7 @@ module.exports = grammar({
         ),
 
         entity_name_list: $ => choice(
-            seq($.entity_designator, repeat(seq($._comma, $.entity_designator))),
+            seq($.entity_designator, repeat(seq($.comma, $.entity_designator))),
             $.OTHERS,
             $.ALL
         ),
@@ -675,11 +675,11 @@ module.exports = grammar({
         ),
 
         attribute_declaration: $ => seq(
-            $.ATTRIBUTE, $.identifier, $._colon, $.name, $._semicolon
+            $.ATTRIBUTE, $.identifier, $.colon, $.name, $.semicolon
         ),
 
         alias_declaration: $ => seq(
-            $.ALIAS, $._alias_designator, optional(seq($._colon, $.subtype_indication)), $.IS, $.name, $._semicolon
+            $.ALIAS, $._alias_designator, optional(seq($.colon, $.subtype_indication)), $.IS, $.name, $.semicolon
         ),
 
         _alias_designator: $ => choice(
@@ -689,11 +689,11 @@ module.exports = grammar({
         ),
 
         constant_declaration: $ => seq(
-            $.CONSTANT, $.identifier_list, $._colon, $.subtype_indication, optional(seq($._variable_assignment, $.conditional_expression)), $._semicolon
+            $.CONSTANT, $.identifier_list, $.colon, $.subtype_indication, optional(seq($.variable_assignment, $.conditional_expression)), $.semicolon
         ),
 
         signal_declaration: $ => seq(
-            $.SIGNAL, $.identifier_list, $._colon, $.subtype_indication, optional($.signal_kind), optional(seq($._variable_assignment, $.conditional_expression)), $._semicolon
+            $.SIGNAL, $.identifier_list, $.colon, $.subtype_indication, optional($.signal_kind), optional(seq($.variable_assignment, $.conditional_expression)), $.semicolon
         ),
 
         signal_kind: $ => choice(
@@ -702,7 +702,7 @@ module.exports = grammar({
         ),
 
         file_declaration: $ => seq(
-            $.FILE, $.identifier_list, $._colon, $.subtype_indication, optional($.file_open_information), $._semicolon
+            $.FILE, $.identifier_list, $.colon, $.subtype_indication, optional($.file_open_information), $.semicolon
         ),
 
         file_open_information: $ => seq(
@@ -712,15 +712,15 @@ module.exports = grammar({
         file_logical_name: $ => $._expression,
 
         subtype_declaration: $ => seq(
-            $.SUBTYPE, $.identifier, $.IS, $.subtype_indication, $._semicolon
+            $.SUBTYPE, $.identifier, $.IS, $.subtype_indication, $.semicolon
         ),
 
         package_instantiation_declaration: $ => seq(
-            $.PACKAGE, $.identifier, $.IS, $.NEW, $.name, optional($.generic_map_aspect), $._semicolon
+            $.PACKAGE, $.identifier, $.IS, $.NEW, $.name, optional($.generic_map_aspect), $.semicolon
         ),
 
         package_body: $ => seq(
-            $.PACKAGE, $.BODY, $.identifier, $.IS, repeat($._package_body_declarative_item), $.END, optional(seq($.PACKAGE, $.BODY)), optional($.identifier), $._semicolon
+            $.PACKAGE, $.BODY, $.identifier, $.IS, repeat($._package_body_declarative_item), $.END, optional(seq($.PACKAGE, $.BODY)), optional($.identifier), $.semicolon
         ),
 
         _package_body_declarative_item: $ => choice(
@@ -744,11 +744,11 @@ module.exports = grammar({
         ),
 
         package_declaration: $ => seq(
-            $.PACKAGE, $.identifier, $.IS, optional($.package_header), repeat($._package_declarative_item), $.END, optional($.PACKAGE), optional($.identifier), $._semicolon
+            $.PACKAGE, $.identifier, $.IS, optional($.package_header), repeat($._package_declarative_item), $.END, optional($.PACKAGE), optional($.identifier), $.semicolon
         ),
 
         package_header: $ => seq(
-            $.generic_clause, optional(seq($.generic_map_aspect, $._semicolon))
+            $.generic_clause, optional(seq($.generic_map_aspect, $.semicolon))
         ),
 
         _package_declarative_item: $ => choice(
@@ -774,11 +774,11 @@ module.exports = grammar({
         ),
 
         component_declaration: $ => seq(
-            $.COMPONENT, $.identifier, optional($.IS), optional($.generic_clause), optional($.port_clause), $.END, optional($.COMPONENT), optional($.identifier), $._semicolon
+            $.COMPONENT, $.identifier, optional($.IS), optional($.generic_clause), optional($.port_clause), $.END, optional($.COMPONENT), optional($.identifier), $.semicolon
         ),
 
         subprogram_declaration: $ => seq(
-            $._subprogram_specification, $._semicolon
+            $._subprogram_specification, $.semicolon
         ),
 
         _subprogram_specification: $ => choice(
@@ -787,19 +787,19 @@ module.exports = grammar({
         ),
 
         procedure_specification: $ => seq(
-            $.PROCEDURE, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $._left_parenthesis, $.formal_parameter_list, $._right_parenthesis))
+            $.PROCEDURE, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis))
         ),
 
         function_specification: $ => seq(
-            optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $._left_parenthesis, $.formal_parameter_list, $._right_parenthesis)), $.RETURN, optional(seq($.identifier, $.OF)), $.name
+            optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis)), $.RETURN, optional(seq($.identifier, $.OF)), $.name
         ),
 
         subprogram_header: $ => seq(
-            $.GENERIC, $._left_parenthesis, $.interface_list, $._right_parenthesis, optional($.generic_map_aspect)
+            $.GENERIC, $.left_parenthesis, $.interface_list, $.right_parenthesis, optional($.generic_map_aspect)
         ),
 
         type_declaration: $ => seq(
-            $.TYPE, $.identifier, optional(seq($.IS, $._type_definition)), $._semicolon
+            $.TYPE, $.identifier, optional(seq($.IS, $._type_definition)), $.semicolon
         ),
 
         _type_definition: $ => choice(
@@ -825,7 +825,7 @@ module.exports = grammar({
         ),
 
         protected_type_header: $ => seq(
-            $.generic_clause, optional(seq($.generic_map_aspect, $._semicolon))
+            $.generic_clause, optional(seq($.generic_map_aspect, $.semicolon))
         ),
 
         _protected_type_declarative_item: $ => choice(
@@ -842,7 +842,7 @@ module.exports = grammar({
         ),
 
         variable_declaration: $ => seq(
-            optional($.SHARED), $.VARIABLE, $.identifier_list, $._colon, $.subtype_indication, optional($.generic_map_aspect), optional(seq($._variable_assignment, $.conditional_expression)), $._semicolon
+            optional($.SHARED), $.VARIABLE, $.identifier_list, $.colon, $.subtype_indication, optional($.generic_map_aspect), optional(seq($.variable_assignment, $.conditional_expression)), $.semicolon
         ),
 
         protected_type_body: $ => seq(
@@ -870,11 +870,11 @@ module.exports = grammar({
         ),
 
         subprogram_instantiation_declaration: $ => seq(
-            choice($.PROCEDURE, $.FUNCTION), $._designator, $.IS, $.NEW, $.name, optional($.signature), optional($.generic_map_aspect), $._semicolon
+            choice($.PROCEDURE, $.FUNCTION), $._designator, $.IS, $.NEW, $.name, optional($.signature), optional($.generic_map_aspect), $.semicolon
         ),
 
         subprogram_body: $ => seq(
-            $._subprogram_specification, $.IS, repeat($._subprogram_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional(choice($.PROCEDURE, $.FUNCTION)), optional($._designator), $._semicolon
+            $._subprogram_specification, $.IS, repeat($._subprogram_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional(choice($.PROCEDURE, $.FUNCTION)), optional($._designator), $.semicolon
         ),
 
         _sequential_statement: $ => choice(
@@ -895,7 +895,7 @@ module.exports = grammar({
         ),
 
         sequential_block_statement: $ => seq(
-            optional($.label_declaration), $.BLOCK, optional($.IS), repeat($._process_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional($.BLOCK), optional(alias($.identifier, $.label)), $._semicolon
+            optional($.label_declaration), $.BLOCK, optional($.IS), repeat($._process_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional($.BLOCK), optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         _process_declarative_item: $ => choice(
@@ -919,7 +919,7 @@ module.exports = grammar({
         ),
 
         null_statement: $ => seq(
-            optional($.label_declaration), $.NULL, $._semicolon
+            optional($.label_declaration), $.NULL, $.semicolon
         ),
 
         _return_statement: $ => choice(
@@ -928,23 +928,23 @@ module.exports = grammar({
         ),
 
         plain_return_statement: $ => seq(
-            optional($.label_declaration), $.RETURN, optional(seq($.WHEN, $._expression)), $._semicolon
+            optional($.label_declaration), $.RETURN, optional(seq($.WHEN, $._expression)), $.semicolon
         ),
 
         value_return_statement: $ => seq(
-            optional($.label_declaration), $.RETURN, $.conditional_or_unaffected_expression, $._semicolon
+            optional($.label_declaration), $.RETURN, $.conditional_or_unaffected_expression, $.semicolon
         ),
 
         exit_statement: $ => seq(
-            optional($.label_declaration), $.EXIT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $._semicolon
+            optional($.label_declaration), $.EXIT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
         ),
 
         next_statement: $ => seq(
-            optional($.label_declaration), $.NEXT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $._semicolon
+            optional($.label_declaration), $.NEXT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
         ),
 
         loop_statement: $ => seq(
-            optional($.label_declaration), optional($.iteration_scheme), $.LOOP, repeat($._sequential_statement), $.END, $.LOOP, optional(alias($.identifier, $.label)), $._semicolon
+            optional($.label_declaration), optional($.iteration_scheme), $.LOOP, repeat($._sequential_statement), $.END, $.LOOP, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         iteration_scheme: $ => choice(
@@ -957,7 +957,7 @@ module.exports = grammar({
         ),
 
         case_statement: $ => seq(
-            optional($.label_declaration), $.CASE, optional($._question_mark), $._expression, $.IS, $.case_statement_alternative, repeat($.case_statement_alternative), $.END, $.CASE, optional($._question_mark), optional(alias($.identifier, $.label)), $._semicolon
+            optional($.label_declaration), $.CASE, optional($._question_mark), $._expression, $.IS, $.case_statement_alternative, repeat($.case_statement_alternative), $.END, $.CASE, optional($._question_mark), optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         case_statement_alternative: $ => seq(
@@ -965,11 +965,11 @@ module.exports = grammar({
         ),
 
         if_statement: $ => seq(
-            optional($.label_declaration), $.IF, $._expression, $.THEN, repeat($._sequential_statement), repeat(seq($.ELSIF, $._expression, $.THEN, repeat($._sequential_statement))), optional(seq($.ELSE, repeat($._sequential_statement))), $.END, $.IF, optional(alias($.identifier, $.label)), $._semicolon
+            optional($.label_declaration), $.IF, $._expression, $.THEN, repeat($._sequential_statement), repeat(seq($.ELSIF, $._expression, $.THEN, repeat($._sequential_statement))), optional(seq($.ELSE, repeat($._sequential_statement))), $.END, $.IF, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         procedure_call_statement: $ => seq(
-            optional($.label_declaration), $.name, $._semicolon
+            optional($.label_declaration), $.name, $.semicolon
         ),
 
         _variable_assignment_statement: $ => choice(
@@ -978,11 +978,11 @@ module.exports = grammar({
         ),
 
         simple_variable_assignment: $ => seq(
-            $._target, $._variable_assignment, $.conditional_or_unaffected_expression, $._semicolon
+            $._target, $.variable_assignment, $.conditional_or_unaffected_expression, $.semicolon
         ),
 
         selected_variable_assignment: $ => seq(
-            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $._variable_assignment, $.selected_expressions, $._semicolon
+            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.variable_assignment, $.selected_expressions, $.semicolon
         ),
 
         _signal_assignment_statement: $ => choice(
@@ -997,19 +997,19 @@ module.exports = grammar({
         ),
 
         selected_force_assignment: $ => seq(
-            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $._signal_assignment, $.FORCE, optional($.force_mode), $.selected_expressions, $._semicolon
+            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.selected_expressions, $.semicolon
         ),
 
         selected_waveform_assignment: $ => seq(
-            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $._signal_assignment, optional($.delay_mechanism), $.selected_waveforms, $._semicolon
+            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.delay_mechanism), $.selected_waveforms, $.semicolon
         ),
 
         selected_waveforms: $ => seq(
-            repeat(seq($.waveform, $.WHEN, $.choices, $._comma)), $.waveform, $.WHEN, $.choices
+            repeat(seq($.waveform, $.WHEN, $.choices, $.comma)), $.waveform, $.WHEN, $.choices
         ),
 
         waveform: $ => choice(
-            seq($.waveform_element, repeat(seq($._comma, $.waveform_element))),
+            seq($.waveform_element, repeat(seq($.comma, $.waveform_element))),
             $.UNAFFECTED
         ),
 
@@ -1023,11 +1023,11 @@ module.exports = grammar({
         ),
 
         selected_expressions: $ => seq(
-            repeat(seq($._expression, $.WHEN, $.choices, $._comma)), $._expression, $.WHEN, $.choices
+            repeat(seq($._expression, $.WHEN, $.choices, $.comma)), $._expression, $.WHEN, $.choices
         ),
 
         conditional_signal_assignment: $ => seq(
-            $._target, $._signal_assignment, optional($.delay_mechanism), $.conditional_waveforms, $._semicolon
+            $._target, $.signal_assignment, optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
         ),
 
         conditional_waveforms: $ => seq(
@@ -1045,9 +1045,9 @@ module.exports = grammar({
         ),
 
         aggregate: $ => seq(
-            $._left_parenthesis,
-            $.element_association, repeat(seq($._comma, choice($.element_association))),
-            $._right_parenthesis
+            $.left_parenthesis,
+            $.element_association, repeat(seq($.comma, choice($.element_association))),
+            $.right_parenthesis
         ),
 
         _simple_signal_assignment: $ => choice(
@@ -1057,11 +1057,11 @@ module.exports = grammar({
         ),
 
         simple_waveform_assignment: $ => seq(
-            $._target, $._signal_assignment, optional($.delay_mechanism), $.waveform, $._semicolon
+            $._target, $.signal_assignment, optional($.delay_mechanism), $.waveform, $.semicolon
         ),
 
         simple_force_assignment: $ => seq(
-            $._target, $._signal_assignment, $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, $._semicolon
+            $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, $.semicolon
         ),
 
         conditional_or_unaffected_expression: $ => seq(
@@ -1074,11 +1074,11 @@ module.exports = grammar({
         ),
 
         simple_release_assignment: $ => seq(
-            $._target, $._signal_assignment, $.RELEASE, optional($.force_mode), $._semicolon
+            $._target, $.signal_assignment, $.RELEASE, optional($.force_mode), $.semicolon
         ),
 
         assertion_statement: $ => seq(
-            optional($.label_declaration), $.assertion, $._semicolon
+            optional($.label_declaration), $.assertion, $.semicolon
         ),
 
         assertion: $ => seq(
@@ -1086,15 +1086,15 @@ module.exports = grammar({
         ),
 
         report_statement: $ => seq(
-            optional($.label_declaration), $.REPORT, $._expression, optional(seq($.SEVERITY, $._expression)), $._semicolon
+            optional($.label_declaration), $.REPORT, $._expression, optional(seq($.SEVERITY, $._expression)), $.semicolon
         ),
 
         label_declaration: $ => seq(
-            alias($.identifier, $.label), $._colon
+            alias($.identifier, $.label), $.colon
         ),
 
         wait_statement: $ => seq(
-            optional($.label_declaration), $.WAIT, optional($.sensitivity_clause), optional($.condition_clause), optional($.timeout_clause), $._semicolon
+            optional($.label_declaration), $.WAIT, optional($.sensitivity_clause), optional($.condition_clause), optional($.timeout_clause), $.semicolon
         ),
 
         sensitivity_clause: $ => seq(
@@ -1102,7 +1102,7 @@ module.exports = grammar({
         ),
 
         sensitivity_list: $ => seq(
-            $.name, repeat(seq($._comma, $.name))
+            $.name, repeat(seq($.comma, $.name))
         ),
 
         condition_clause: $ => seq(
@@ -1152,15 +1152,15 @@ module.exports = grammar({
         ),
 
         primary_unit_declaration: $ => seq(
-            $.identifier, $._semicolon
+            $.identifier, $.semicolon
         ),
 
         secondary_unit_declaration: $ => seq(
-            $.identifier, $._equals_sign, seq(optional($._abstract_literal), choice($.name, $.library_constant_unit)), $._semicolon
+            $.identifier, $._equals_sign, seq(optional($._abstract_literal), choice($.name, $.library_constant_unit)), $.semicolon
         ),
 
         enumeration_type_definition: $ => seq(
-            $._left_parenthesis, $.enumeration_literal, repeat(seq($._comma, $.enumeration_literal)), $._right_parenthesis
+            $.left_parenthesis, $.enumeration_literal, repeat(seq($.comma, $.enumeration_literal)), $.right_parenthesis
         ),
 
         enumeration_literal: $ => choice(
@@ -1178,7 +1178,7 @@ module.exports = grammar({
         ),
 
         element_declaration: $ => seq(
-            $.identifier_list, $._colon, $.subtype_indication, $._semicolon
+            $.identifier_list, $.colon, $.subtype_indication, $.semicolon
         ),
 
         _entity_statement: $ => choice(
@@ -1188,7 +1188,7 @@ module.exports = grammar({
         ),
 
         process_statement: $ => seq(
-            optional($.label_declaration), optional($.POSTPONED), $.PROCESS, optional(seq($._left_parenthesis, $._process_sensitivity_list, $._right_parenthesis)), optional($.IS), repeat($._process_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional($.POSTPONED), $.PROCESS, optional(alias($.identifier, $.label)), $._semicolon
+            optional($.label_declaration), optional($.POSTPONED), $.PROCESS, optional(seq($.left_parenthesis, $._process_sensitivity_list, $.right_parenthesis)), optional($.IS), repeat($._process_declarative_item), $.BEGIN, repeat($._sequential_statement), $.END, optional($.POSTPONED), $.PROCESS, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         _process_sensitivity_list: $ => choice(
@@ -1197,7 +1197,7 @@ module.exports = grammar({
         ),
 
         concurrent_procedure_call_statement: $ => seq(
-            optional($.label_declaration), optional($.POSTPONED), $.name, $._semicolon
+            optional($.label_declaration), optional($.POSTPONED), $.name, $.semicolon
         ),
 
         _secondary_unit: $ => choice(
@@ -1206,7 +1206,7 @@ module.exports = grammar({
         ),
 
         architecture_body: $ => seq(
-            $.ARCHITECTURE, $.identifier, $.OF, $.name, $.IS, repeat($._block_declarative_item), $.BEGIN, repeat($._concurrent_statement), $.END, optional($.ARCHITECTURE), optional($.identifier), $._semicolon
+            $.ARCHITECTURE, $.identifier, $.OF, $.name, $.IS, repeat($._block_declarative_item), $.BEGIN, repeat($._concurrent_statement), $.END, optional($.ARCHITECTURE), optional($.identifier), $.semicolon
         ),
 
         _block_declarative_item: $ => choice(
@@ -1235,8 +1235,8 @@ module.exports = grammar({
         ),
 
         configuration_specification: $ => prec.left(choice(
-            seq($.FOR, $.component_specification, $.binding_indication, optional(seq($.END, $.FOR, $._semicolon))),
-            seq($.FOR, $.component_specification, $.binding_indication, $.verification_unit_binding_indication, $._semicolon, repeat(seq($.verification_unit_binding_indication, $._semicolon)), $.END, $.FOR, $._semicolon)
+            seq($.FOR, $.component_specification, $.binding_indication, optional(seq($.END, $.FOR, $.semicolon))),
+            seq($.FOR, $.component_specification, $.binding_indication, $.verification_unit_binding_indication, $.semicolon, repeat(seq($.verification_unit_binding_indication, $.semicolon)), $.END, $.FOR, $.semicolon)
         )),
 
         verification_unit_binding_indication: $ => seq(
@@ -1244,25 +1244,25 @@ module.exports = grammar({
         ),
 
         verification_unit_list: $ => seq(
-            $.name, repeat(seq($._comma, $.name))
+            $.name, repeat(seq($.comma, $.name))
         ),
 
         component_specification: $ => seq(
-            $.instantiation_list, $._colon, $.name
+            $.instantiation_list, $.colon, $.name
         ),
 
         instantiation_list: $ => choice(
-            seq(alias($.identifier, $.label), repeat(seq($._comma, alias($.identifier, $.label)))),
+            seq(alias($.identifier, $.label), repeat(seq($.comma, alias($.identifier, $.label)))),
             $.OTHERS,
             $.ALL
         ),
 
         binding_indication: $ => seq(
-            optional(seq($.USE, $.entity_aspect)), optional($.generic_map_aspect), optional($.port_map_aspect), $._semicolon
+            optional(seq($.USE, $.entity_aspect)), optional($.generic_map_aspect), optional($.port_map_aspect), $.semicolon
         ),
 
         entity_aspect: $ => choice(
-            seq($.ENTITY, $.name, optional(seq($._left_parenthesis, $.identifier, $._right_parenthesis))),
+            seq($.ENTITY, $.name, optional(seq($.left_parenthesis, $.identifier, $.right_parenthesis))),
             seq($.CONFIGURATION, $.name),
             $.OPEN
         ),
@@ -1284,15 +1284,15 @@ module.exports = grammar({
         ),
 
         for_generate_statement: $ => seq(
-            $.label_declaration, $.FOR, $.parameter_specification, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $._semicolon
+            $.label_declaration, $.FOR, $.parameter_specification, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         if_generate_statement: $ => seq(
-            $.label_declaration, $.IF, optional($.label_declaration), $._expression, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end), repeat(seq($.ELSIF, optional($.label_declaration), $._expression, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end))), optional(seq($.ELSE, optional($.label_declaration), $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end))), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $._semicolon
+            $.label_declaration, $.IF, optional($.label_declaration), $._expression, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end), repeat(seq($.ELSIF, optional($.label_declaration), $._expression, $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end))), optional(seq($.ELSE, optional($.label_declaration), $.GENERATE, optional($.generate_statement_body_begin), repeat($._concurrent_statement), optional($.generate_statement_body_end))), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         case_generate_statement: $ => seq(
-            $.label_declaration, $.CASE, $._expression, $.GENERATE, $.case_generate_alternative, repeat($.case_generate_alternative), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $._semicolon
+            $.label_declaration, $.CASE, $._expression, $.GENERATE, $.case_generate_alternative, repeat($.case_generate_alternative), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         case_generate_alternative: $ => prec.left(seq(
@@ -1304,17 +1304,17 @@ module.exports = grammar({
         ),
 
         generate_statement_body_end: $ => seq(
-            $.END, optional(alias($.identifier, $.label)), $._semicolon
+            $.END, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         component_instantiation_statement: $ => choice(
-            seq($.label_declaration, $.instantiated_unit, optional($.generic_map_aspect), optional($.port_map_aspect), $._semicolon),
-            seq($.label_declaration, $.name, optional($.generic_map_aspect), $.port_map_aspect, $._semicolon)
+            seq($.label_declaration, $.instantiated_unit, optional($.generic_map_aspect), optional($.port_map_aspect), $.semicolon),
+            seq($.label_declaration, $.name, optional($.generic_map_aspect), $.port_map_aspect, $.semicolon)
         ),
 
         instantiated_unit: $ => choice(
             seq($.COMPONENT, $.name), // Optional "component" covered by procedure call
-            seq($.ENTITY, $.name, optional(seq($._left_parenthesis, $.identifier, $._right_parenthesis))),
+            seq($.ENTITY, $.name, optional(seq($.left_parenthesis, $.identifier, $.right_parenthesis))),
             seq($.CONFIGURATION, $.name)
         ),
 
@@ -1325,23 +1325,23 @@ module.exports = grammar({
         ),
 
         concurrent_simple_signal_assignment: $ => seq(
-            $._target, $._signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.waveform, $._semicolon
+            $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.waveform, $.semicolon
         ),
 
         concurrent_conditional_signal_assignment: $ => seq(
-            $._target, $._signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, $._semicolon
+            $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
         ),
 
         concurrent_selected_signal_assignment: $ => seq(
-            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $._signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, $._semicolon
+            $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, $.semicolon
         ),
 
         concurrent_assertion_statement: $ => seq(
-            optional($.label_declaration), optional($.POSTPONED), $.assertion, $._semicolon
+            optional($.label_declaration), optional($.POSTPONED), $.assertion, $.semicolon
         ),
 
         block_statement: $ => seq(
-            $.label_declaration, $.BLOCK, optional(seq($._left_parenthesis, $._expression, $._right_parenthesis)), optional($.IS), optional(seq($.generic_clause, optional(seq($.generic_map_aspect, $._semicolon)))), optional(seq($.port_clause, optional(seq($.port_map_aspect, $._semicolon)))), repeat($._block_declarative_item), $.BEGIN, repeat($._concurrent_statement), $.END, $.BLOCK, optional(alias($.identifier, $.label)), $._semicolon
+            $.label_declaration, $.BLOCK, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis)), optional($.IS), optional(seq($.generic_clause, optional(seq($.generic_map_aspect, $.semicolon)))), optional(seq($.port_clause, optional(seq($.port_map_aspect, $.semicolon)))), repeat($._block_declarative_item), $.BEGIN, repeat($._concurrent_statement), $.END, $.BLOCK, optional(alias($.identifier, $.label)), $.semicolon
         ),
 
         conditional_expression: $ => prec(9, seq(
@@ -1357,42 +1357,51 @@ module.exports = grammar({
         )),
 
         condition_expression: $ => prec(11, seq(
-            $._condition_conversion, $._expression,
+            $.condition_conversion, $._expression,
         )),
 
         logical_expression: $ => prec.left(12, seq(
-            $._expression, $._logical_operator, $._expression,
+            $._expression, $.logical_operator, $._expression,
         )),
 
         relational_expression: $ => prec.left(13, seq(
-            $._expression, $._relational_operator, $._expression,
+            $._expression, $.relational_operator, $._expression,
         )),
 
         shift_expression: $ => prec.left(14, seq(
-            $._expression, $._shift_operator, $._expression,
+            $._expression, $.shift_operator, $._expression,
         )),
 
         simple_expression: $ => choice(
-            prec.left(15, seq($._expression, $._adding_operator,      $._expression)),
-            prec     (16, seq(               $._sign,                 $._expression)),
-            prec.left(17, seq($._expression, $._multiplying_operator, $._expression)),
-            prec.left(18, seq($._expression, $._exponentiate,          $._expression)),
-            prec     (19, seq(               $.ABS,                   $._expression)),
-            prec     (19, seq(               $.NOT,                   $._expression)),
-            prec     (19, seq(               $._logical_operator,     $._expression)),
+            prec.left(15, seq($._expression, $.adding_operator,      $._expression)),
+            prec     (16, seq(               $.sign,                 $._expression)),
+            prec.left(17, seq($._expression, $.multiplying_operator, $._expression)),
+            prec.left(18, seq($._expression, $.exponentiate,         $._expression)),
+            prec     (19, seq(               $.unary_operator,       $._expression)),
             prec     (20, $._primary)
         ),
 
-        _logical_operator: $ => choice(
-            $.AND,
-            $.OR,
-            $.NAND,
-            $.NOR,
-            $.XOR,
-            $.XNOR
+        unary_operator: $ => choice(
+            $._ABS,
+            $._NOT,
+            $._AND,
+            $._OR,
+            $._NAND,
+            $._NOR,
+            $._XOR,
+            $._XNOR
         ),
 
-        _relational_operator: $ => choice(
+        logical_operator: $ => choice(
+            $._AND,
+            $._OR,
+            $._NAND,
+            $._NOR,
+            $._XOR,
+            $._XNOR
+        ),
+
+        relational_operator: $ => choice(
             $._equals_sign,
             $._inequality,
             $._less_than_sign,
@@ -1407,31 +1416,31 @@ module.exports = grammar({
             $._matching_greater_than_or_equal
         ),
 
-        _shift_operator: $ => choice(
-            $.SLL,
-            $.SRL,
-            $.SLA,
-            $.SRA,
-            $.ROL,
-            $.ROR
+        shift_operator: $ => choice(
+            $._SLL,
+            $._SRL,
+            $._SLA,
+            $._SRA,
+            $._ROL,
+            $._ROR
         ),
 
-        _sign: $ => choice(
+        sign: $ => choice(
             $._plus_sign,
             $._minus_sign
         ),
 
-        _adding_operator: $ => choice(
+        adding_operator: $ => choice(
             $._plus_sign,
             $._minus_sign,
             $._ampersand
         ),
 
-        _multiplying_operator: $ => choice(
+        multiplying_operator: $ => choice(
             $._multiply,
             $._divide,
-            $.MOD,
-            $.REM
+            $._MOD,
+            $._REM
         ),
 
         _primary: $ => choice(
@@ -1452,15 +1461,15 @@ module.exports = grammar({
         ),
 
         external_constant_name: $ => seq(
-            $._double_less_than, $.CONSTANT, $._external_pathname, $._colon, $._interface_type_indication, $._double_greater_than
+            $.double_less_than, $.CONSTANT, $._external_pathname, $.colon, $._interface_type_indication, $.double_greater_than
         ),
 
         external_signal_name: $ => seq(
-            $._double_less_than, $.SIGNAL, $._external_pathname, $._colon, $._interface_type_indication, $._double_greater_than
+            $.double_less_than, $.SIGNAL, $._external_pathname, $.colon, $._interface_type_indication, $.double_greater_than
         ),
 
         external_variable_name: $ => seq(
-            $._double_less_than, $.VARIABLE, $._external_pathname, $._colon, $._interface_type_indication, $._double_greater_than
+            $.double_less_than, $.VARIABLE, $._external_pathname, $.colon, $._interface_type_indication, $.double_greater_than
         ),
 
         _external_pathname: $ => choice(
@@ -1470,34 +1479,34 @@ module.exports = grammar({
         ),
 
         package_pathname: $ => seq(
-            $._commercial_at, $.identifier, $._dot, $.identifier, $._dot, repeat(seq($.identifier, $._dot)), $.identifier
+            $.commercial_at, $.identifier, $.dot, $.identifier, $.dot, repeat(seq($.identifier, $.dot)), $.identifier
         ),
 
         absolute_pathname: $ => seq(
-            $._dot, $.partial_pathname
+            $.dot, $.partial_pathname
         ),
 
         relative_pathname: $ => seq(
-            repeat(seq($._circumflex, $._dot)), $.partial_pathname
+            repeat(seq($._circumflex, $.dot)), $.partial_pathname
         ),
 
         partial_pathname: $ => seq(
-            repeat(seq($.pathname_element, $._dot)), $.identifier
+            repeat(seq($.pathname_element, $.dot)), $.identifier
         ),
 
         pathname_element: $ => seq(
-          $.identifier, optional(seq($._left_parenthesis, $._expression, $._right_parenthesis))
+          $.identifier, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis))
         ),
 
         parenthesis_group: $ => seq(
             optional(seq($.PARAMETER, $.MAP)),
-            $._left_parenthesis,
+            $.left_parenthesis,
             optional($.association_or_range_list),
-            $._right_parenthesis,
+            $.right_parenthesis,
         ),
 
         association_or_range_list: $ => seq(
-            $._association_or_range, repeat(seq($._comma, $._association_or_range))
+            $._association_or_range, repeat(seq($.comma, $._association_or_range))
         ),
 
         _association_or_range: $ => choice(
@@ -1516,7 +1525,7 @@ module.exports = grammar({
         ),
 
         attribute: $ => seq(
-            $._tick,
+            $.tick,
             choice(
                 $._attribute_designator,
                 $.parenthesis_expression // qualified_expression
@@ -1538,11 +1547,11 @@ module.exports = grammar({
         ),
 
         signature: $ => seq(
-            $._left_square_bracket, optional(seq($.name, repeat(seq($._comma, $.name)))), optional(seq($.RETURN, $.name)), $._right_square_bracket
+            $.left_square_bracket, optional(seq($.name, repeat(seq($.comma, $.name)))), optional(seq($.RETURN, $.name)), $.right_square_bracket
         ),
 
         selection: $ => seq(
-            $._dot, $._suffix
+            $.dot, $._suffix
         ),
 
         _suffix: $ => choice(
@@ -1581,11 +1590,11 @@ module.exports = grammar({
         ),
 
         parenthesis_expression: $ => seq(
-            $._left_parenthesis, $.element_association_list, $._right_parenthesis,
+            $.left_parenthesis, $.element_association_list, $.right_parenthesis,
         ),
 
         element_association_list: $ => seq(
-            $.element_association, repeat(seq($._comma, $.element_association))
+            $.element_association, repeat(seq($.comma, $.element_association))
         ),
 
         element_association: $ => choice(
@@ -1645,11 +1654,11 @@ module.exports = grammar({
         ),
 
         conditional_analysis_expression: $ => seq(
-            $.conditional_analysis_relation, repeat(seq(choice($.AND, $.OR, $.XOR, $.XNOR), $.conditional_analysis_relation))
+            $.conditional_analysis_relation, repeat(seq($.logical_operator, $.conditional_analysis_relation))
         ),
 
         conditional_analysis_relation: $ => choice(
-            seq(optional($.NOT), $._left_parenthesis, $.conditional_analysis_expression, $._right_parenthesis),
+            seq(optional(alias($._NOT, $.unary_operator)), $.left_parenthesis, $.conditional_analysis_expression, $.right_parenthesis),
             seq($._conditional_analysis_identifier, $._conditional_analysis_operator, $.string_literal)
         ),
 
