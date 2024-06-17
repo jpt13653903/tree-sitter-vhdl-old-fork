@@ -255,7 +255,7 @@ module.exports = grammar({
         ),
 
         selected_name: $ => seq(
-            $.identifier, repeat(seq($.dot, $.identifier))
+            $.identifier, repeat(seq($.dot, choice($.identifier, $.ALL)))
         ),
 
         context_reference: $ => seq(
@@ -1186,6 +1186,7 @@ module.exports = grammar({
         ),
 
         entity_statement: $ => choice(
+            $.concurrent_assertion_statement,
             $.concurrent_procedure_call_statement,
             $.process_statement
         ),
@@ -1355,6 +1356,7 @@ module.exports = grammar({
             $.condition_expression,
             $.logical_expression,
             $.relational_expression,
+            $.shift_expression,
             $.simple_expression
         )),
 
@@ -1370,7 +1372,7 @@ module.exports = grammar({
             $._expression, $._relational_operator, $._expression,
         )),
 
-        relational_expression: $ => prec.left(14, seq(
+        shift_expression: $ => prec.left(14, seq(
             $._expression, $._shift_operator, $._expression,
         )),
 
