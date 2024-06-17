@@ -43,3 +43,8 @@ dist/
 *.wasm
 *.obj
 *.o
+
+# Temporarily ignore the auto-gen output
+src/grammar.json
+src/parser.c
+
