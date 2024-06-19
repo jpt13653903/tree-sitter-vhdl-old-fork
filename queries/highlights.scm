@@ -168,7 +168,7 @@
     (double_less_than)    (double_greater_than)
 ] @punctuation.bracket
 
-[ (colon) (commercial_at) ] @punctuation.special
+[ (colon) (commercial_at) (association_element) ] @punctuation.special
 
 [
     (decimal_literal)
@@ -210,4 +210,19 @@
 (subtype_indication
   (name
     (identifier))) @type
+
+(selection
+  (identifier) @variable.member )
+
+(attribute_identifier) @attribute
+
+(library_clause
+  (logical_name_list
+    (identifier) @module ))
+(use_clause
+  (selected_name
+    . (identifier) @module ))
+(instantiated_unit
+  (name
+    . (identifier) @module ))
 
