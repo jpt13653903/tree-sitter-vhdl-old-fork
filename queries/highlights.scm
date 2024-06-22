@@ -160,7 +160,7 @@
     (signal_assignment)
 ] @operator
 
-[ (tick) (comma) (dot) (semicolon) ] @punctuation.delimiters
+[ (tick) "," "." ";" ] @punctuation.delimiters
 
 [
     (left_parenthesis)    (right_parenthesis)
@@ -169,7 +169,7 @@
 ] @punctuation.bracket
 
 [
-    (colon)
+    ":"
     (commercial_at)
     (association_element)
     (case_statement_alternative)

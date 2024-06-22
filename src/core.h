@@ -156,10 +156,10 @@ static void register_delimiters(TokenTree* token_tree)
     token_tree_insert(token_tree, "+",   DELIMITER_PLUS_SIGN);
     token_tree_insert(token_tree, ",",   DELIMITER_COMMA);
     token_tree_insert(token_tree, "-",   DELIMITER_MINUS_SIGN);
-    token_tree_insert(token_tree, ".",   DELIMITER_DOT);
+    // token_tree_insert(token_tree, ".",   DELIMITER_DOT);
     token_tree_insert(token_tree, "/",   DELIMITER_DIVIDE);
-    token_tree_insert(token_tree, ":",   DELIMITER_COLON);
-    token_tree_insert(token_tree, ";",   DELIMITER_SEMICOLON);
+    // token_tree_insert(token_tree, ":",   DELIMITER_COLON);
+    // token_tree_insert(token_tree, ";",   DELIMITER_SEMICOLON);
     token_tree_insert(token_tree, "<",   DELIMITER_LESS_THAN_SIGN);
     token_tree_insert(token_tree, "=",   DELIMITER_EQUALS_SIGN);
     token_tree_insert(token_tree, ">",   DELIMITER_GREATER_THAN_SIGN);

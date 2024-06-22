@@ -483,12 +483,12 @@ static void show_looking_for(const bool* valid_symbols)
 
 bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols)
 {
-    skip_whitespace(scanner, lexer);
-
     if(valid_symbols[ERROR_SENTINEL]){
         debug("Error correction mode");
         return false;
     }
+
+    skip_whitespace(scanner, lexer);
 
     show_looking_for(valid_symbols);
 
