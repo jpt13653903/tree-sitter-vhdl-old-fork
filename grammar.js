@@ -228,8 +228,8 @@ module.exports = grammar({
     conflicts: $ => [ ],
 
     rules: {
-        // Design File
-            design_file: $ => repeat1($.design_unit),
+        // Design File (the all-permissive reg-ex makes it continue after errors)
+            design_file: $ => repeat1(choice($.design_unit, /.+/)),
 
             design_unit: $ => seq(
                 repeat($._context_item), $._library_unit
@@ -357,7 +357,8 @@ module.exports = grammar({
             _entity_statement: $ => choice(
                 $.concurrent_assertion_statement,
                 $.concurrent_procedure_call_statement,
-                $.process_statement
+                $.process_statement,
+                /.+/
             ),
 
             _concurrent_statement: $ => choice(
@@ -374,7 +375,8 @@ module.exports = grammar({
                 $.concurrent_selected_signal_assignment,
 
                 $.block_statement,
-                $.process_statement
+                $.process_statement,
+                /.+/
             ),
 
             _sequential_statement: $ => choice(
@@ -397,7 +399,8 @@ module.exports = grammar({
                 $.selected_force_assignment,
                 $.simple_variable_assignment,
                 $.selected_variable_assignment,
-                $.wait_statement
+                $.wait_statement,
+                /.+/
             ),
 
             block_statement: $ => seq(
@@ -894,7 +897,8 @@ module.exports = grammar({
             _configuration_declarative_item: $ => choice(
                 $.use_clause,
                 $.attribute_specification,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             block_configuration: $ => seq(
@@ -1176,7 +1180,8 @@ module.exports = grammar({
                 $.disconnection_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             group_declaration: $ => seq(
@@ -1318,7 +1323,8 @@ module.exports = grammar({
                 $.attribute_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             package_header: $ => seq(
@@ -1344,7 +1350,8 @@ module.exports = grammar({
                 $.disconnection_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             component_declaration: $ => seq(
@@ -1429,7 +1436,8 @@ module.exports = grammar({
                 $.attribute_specification,
                 $.use_clause,
                 $.private_variable_declaration,
-                $.alias_declaration
+                $.alias_declaration,
+                /.+/
             ),
 
             private_variable_declaration: $ => seq(
@@ -1461,7 +1469,8 @@ module.exports = grammar({
                 $.attribute_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             _process_declarative_item: $ => choice(
@@ -1481,7 +1490,8 @@ module.exports = grammar({
                 $.attribute_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             iteration_scheme: $ => choice(
@@ -1585,7 +1595,8 @@ module.exports = grammar({
                 $.attribute_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
+                $.group_declaration,
+                /.+/
             ),
 
             file_type_definition: $ => seq(
