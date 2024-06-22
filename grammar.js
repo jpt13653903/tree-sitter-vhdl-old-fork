@@ -740,7 +740,8 @@ module.exports = grammar({
 
             association_element: $ => choice(
                 $._actual_part,
-                prec.left(6, seq($.name, $._arrow, $._actual_part))
+                prec.left(6, seq($.name, $._arrow, $._actual_part)),
+                /.+/
             ),
 
             _actual_part: $ => prec(21, choice(
