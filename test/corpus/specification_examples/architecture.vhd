@@ -1,10 +1,4 @@
-architecture EXAMPLE of STRUCTURE is
-  subtype DIGIT is integer range 0 to 9;
-begin
-  DIGIT_A <= 3;
-end EXAMPLE;
-
-/* library work;
+library work;
     use work.whatnot.all;
 
 library std;
@@ -44,6 +38,5 @@ begin
     end loop;
   end process;
   opHBW_SEL_N <= not(opHBW_SEL);
-end architecture DataFlow; */
-
+end architecture DataFlow;
 

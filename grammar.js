@@ -225,10 +225,7 @@ module.exports = grammar({
         $.tool_directive
     ],
 
-    conflicts: $ => [
-        [$.resolution_indication, $._primary],
-        [$.procedure_specification, $.subprogram_instantiation_declaration],
-    ],
+    conflicts: $ => [ ],
 
     rules: {
         // Design File
@@ -308,6 +305,20 @@ module.exports = grammar({
                 $.CONTEXT, $.identifier, $.IS, repeat($._context_item), $.END, optional($.CONTEXT), optional($.identifier), $.semicolon
             ),
 
+        // Secondary Units
+            _secondary_unit: $ => choice(
+                $.architecture_body,
+                $.package_body
+            ),
+
+            architecture_body: $ => seq(
+                $.ARCHITECTURE, $.identifier, $.OF, $.name, $.IS, repeat($._block_declarative_item), $.concurrent_begin_block, $.END, optional($.ARCHITECTURE), optional($.identifier), $.semicolon
+            ),
+
+            package_body: $ => seq(
+                $.PACKAGE, $.BODY, $.identifier, $.IS, repeat($._package_body_declarative_item), $.END, optional(seq($.PACKAGE, $.BODY)), optional($.identifier), $.semicolon
+            ),
+
         // Statement Blocks
             entity_begin_block: $ => seq(
                 $.BEGIN,
@@ -350,44 +361,183 @@ module.exports = grammar({
             ),
 
             _concurrent_statement: $ => choice(
-                $.block_statement,
-                $.process_statement,
-                $.concurrent_procedure_call_statement,
-                $.concurrent_assertion_statement,
-                $.concurrent_signal_assignment_statement,
                 $.component_instantiation_statement,
-                $._generate_statement
+
+                $.for_generate_statement,
+                $.if_generate_statement,
+                $.case_generate_statement,
+
+                $.concurrent_assertion_statement,
+                $.concurrent_procedure_call_statement,
+                $.concurrent_simple_signal_assignment,
+                $.concurrent_conditional_signal_assignment,
+                $.concurrent_selected_signal_assignment,
+
+                $.block_statement,
+                $.process_statement
             ),
 
             _sequential_statement: $ => choice(
-                $.wait_statement,
                 $.assertion_statement,
-                $.report_statement,
-                $._signal_assignment_statement,
-                $._variable_assignment_statement,
-                $.procedure_call_statement,
-                $.if_statement,
                 $.case_statement,
+                $.exit_statement,
+                $.if_statement,
                 $.loop_statement,
                 $.next_statement,
-                $.exit_statement,
-                $._return_statement,
                 $.null_statement,
-                $.sequential_block_statement
+                $.procedure_call_statement,
+                $.report_statement,
+                $.return_statement,
+                $.sequential_block_statement,
+                $.simple_waveform_assignment,
+                $.simple_force_assignment,
+                $.simple_release_assignment,
+                $.conditional_signal_assignment,
+                $.selected_waveform_assignment,
+                $.selected_force_assignment,
+                $.simple_variable_assignment,
+                $.selected_variable_assignment,
+                $.wait_statement
             ),
 
-        // Secondary Units
-            _secondary_unit: $ => choice(
-                $.architecture_body,
-                $.package_body
+            block_statement: $ => seq(
+                $.label_declaration, $.BLOCK, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis)), optional($.IS), optional(seq($.generic_clause, optional(seq($.generic_map_aspect, $.semicolon)))), optional(seq($.port_clause, optional(seq($.port_map_aspect, $.semicolon)))), repeat($._block_declarative_item), $.concurrent_begin_block, $.END, $.BLOCK, optional(alias($.identifier, $.label)), $.semicolon
             ),
 
-            architecture_body: $ => seq(
-                $.ARCHITECTURE, $.identifier, $.OF, $.name, $.IS, repeat($._block_declarative_item), $.concurrent_begin_block, $.END, optional($.ARCHITECTURE), optional($.identifier), $.semicolon
+            sequential_block_statement: $ => seq(
+                optional($.label_declaration), $.BLOCK, optional($.IS), repeat($._process_declarative_item), $.sequential_begin_block, $.END, optional($.BLOCK), optional(alias($.identifier, $.label)), $.semicolon
             ),
 
-            package_body: $ => seq(
-                $.PACKAGE, $.BODY, $.identifier, $.IS, repeat($._package_body_declarative_item), $.END, optional(seq($.PACKAGE, $.BODY)), optional($.identifier), $.semicolon
+            component_instantiation_statement: $ => choice(
+                seq($.label_declaration, $.instantiated_unit, optional($.generic_map_aspect), optional($.port_map_aspect), $.semicolon),
+                seq($.label_declaration, $.name,              optional($.generic_map_aspect),          $.port_map_aspect,  $.semicolon)
+            ),
+
+            instantiated_unit: $ => choice(
+                seq($.COMPONENT, $.name), // Optional "component" covered by procedure call
+                seq($.ENTITY, optional(seq($.library_namespace, $.dot)), $.name, optional($.architecture_identifier)),
+                seq($.CONFIGURATION, $.name)
+            ),
+
+            architecture_identifier: $ => seq(
+                $.left_parenthesis, $.identifier, $.right_parenthesis
+            ),
+
+            process_statement: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $.PROCESS, optional(seq($.left_parenthesis, $._process_sensitivity_list, $.right_parenthesis)), optional($.IS), repeat($._process_declarative_item), $.sequential_begin_block, $.END, optional($.POSTPONED), $.PROCESS, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            case_generate_statement: $ => seq(
+                $.label_declaration, $.CASE, $._expression, $.GENERATE, $.case_generate_alternative, repeat($.case_generate_alternative), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            for_generate_statement: $ => seq(
+                $.label_declaration, $.FOR, $.parameter_specification, $.generate_body, $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            if_generate_statement: $ => seq(
+                $.label_declaration, $.IF, optional($.label_declaration), $._expression, $.generate_body, repeat(seq($.ELSIF, optional($.label_declaration), $._expression, $.generate_body)), optional(seq($.ELSE, optional($.label_declaration), $.generate_body)), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            assertion_statement: $ => seq(
+                optional($.label_declaration), $.assertion, $.semicolon
+            ),
+
+            concurrent_assertion_statement: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $.assertion, $.semicolon
+            ),
+
+            assertion: $ => seq(
+                $.ASSERT, $._expression, optional(seq($.REPORT, $._expression)), optional(seq($.SEVERITY, $._expression))
+            ),
+
+            case_statement: $ => seq(
+                optional($.label_declaration), $.CASE, optional($._question_mark), $._expression, $.IS, $.case_statement_alternative, repeat($.case_statement_alternative), $.END, $.CASE, optional($._question_mark), optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            exit_statement: $ => seq(
+                optional($.label_declaration), $.EXIT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
+            ),
+
+            if_statement: $ => seq(
+                optional($.label_declaration), $.IF, $._expression, $.THEN, repeat($._sequential_statement), repeat(seq($.ELSIF, $._expression, $.THEN, repeat($._sequential_statement))), optional(seq($.ELSE, repeat($._sequential_statement))), $.END, $.IF, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            loop_statement: $ => seq(
+                optional($.label_declaration), optional($.iteration_scheme), $.LOOP, repeat($._sequential_statement), $.END, $.LOOP, optional(alias($.identifier, $.label)), $.semicolon
+            ),
+
+            next_statement: $ => seq(
+                optional($.label_declaration), $.NEXT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
+            ),
+
+            null_statement: $ => seq(
+                optional($.label_declaration), $.NULL, $.semicolon
+            ),
+
+            procedure_call_statement: $ => seq(
+                optional($.label_declaration), $.name, $.semicolon
+            ),
+
+            concurrent_procedure_call_statement: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $.name, $.semicolon
+            ),
+
+            report_statement: $ => seq(
+                optional($.label_declaration), $.REPORT, $._expression, optional(seq($.SEVERITY, $._expression)), $.semicolon
+            ),
+
+            return_statement: $ => choice(
+                seq(optional($.label_declaration), $.RETURN, optional(seq($.WHEN, $._expression)), $.semicolon),
+                seq(optional($.label_declaration), $.RETURN, $.conditional_or_unaffected_expression, $.semicolon)
+            ),
+
+            simple_waveform_assignment: $ => seq(
+                optional($.label_declaration), $._target, $.signal_assignment, optional($.delay_mechanism), $.waveform, $.semicolon
+            ),
+
+            simple_variable_assignment: $ => seq(
+                optional($.label_declaration), $._target, $.variable_assignment, $.conditional_or_unaffected_expression, $.semicolon
+            ),
+
+            concurrent_simple_signal_assignment: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.waveform, $.semicolon
+            ),
+
+            simple_force_assignment: $ => seq(
+                optional($.label_declaration), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, $.semicolon
+            ),
+
+            simple_release_assignment: $ => seq(
+                optional($.label_declaration), $._target, $.signal_assignment, $.RELEASE, optional($.force_mode), $.semicolon
+            ),
+
+            conditional_signal_assignment: $ => seq(
+                optional($.label_declaration), $._target, $.signal_assignment, optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
+            ),
+
+            concurrent_conditional_signal_assignment: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
+            ),
+
+            selected_waveform_assignment: $ => seq(
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.delay_mechanism), $.selected_waveforms, $.semicolon
+            ),
+
+            concurrent_selected_signal_assignment: $ => seq(
+                optional($.label_declaration), optional($.POSTPONED), $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, $.semicolon
+            ),
+
+            selected_force_assignment: $ => seq(
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.selected_expressions, $.semicolon
+            ),
+
+            selected_variable_assignment: $ => seq(
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.variable_assignment, $.selected_expressions, $.semicolon
+            ),
+
+            wait_statement: $ => seq(
+                optional($.label_declaration), $.WAIT, optional($.sensitivity_clause), optional($.condition_clause), optional($.timeout_clause), $.semicolon
             ),
 
         // Expressions
@@ -498,8 +648,25 @@ module.exports = grammar({
             ),
 
             name: $ => prec.left(21, seq(
-                seq(choice($.identifier, $.library_function, $.library_type, $._external_name), optional($.generic_map_aspect), repeat(choice($.parenthesis_group, $.attribute, $.signature, $.selection))),
+                seq($._direct_name, repeat($.name_selector)),
             )),
+
+            _direct_name: $ => prec.left(choice(
+                $.identifier,
+                $.operator_symbol,
+                $.character_literal,
+                $.library_function,
+                $.library_type,
+                $._external_name,
+            )),
+
+            name_selector: $ => choice(
+                $.function_call,
+                $.parenthesis_group,
+                $.attribute,
+                $.signature,
+                $.selection
+            ),
 
             _external_name: $ => choice(
                 $.external_constant_name,
@@ -545,8 +712,12 @@ module.exports = grammar({
               $.identifier, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis))
             ),
 
+            function_call: $ => choice(
+                seq(optional($.generic_map_aspect), $.PARAMETER, $.MAP, $.parenthesis_group),
+                seq($.generic_map_aspect, optional(seq($.PARAMETER, $.MAP)), $.parenthesis_group)
+            ),
+
             parenthesis_group: $ => seq(
-                optional(seq($.PARAMETER, $.MAP)),
                 $.left_parenthesis,
                 optional($.association_or_range_list),
                 $.right_parenthesis,
@@ -566,10 +737,10 @@ module.exports = grammar({
                 prec.left(6, seq($.name, $._arrow, $._actual_part))
             ),
 
-            _actual_part: $ => choice(
+            _actual_part: $ => prec(21, choice(
                 seq(optional($.INERTIAL), $.conditional_expression),
                 $.OPEN
-            ),
+            )),
 
             attribute: $ => seq(
                 $.tick,
@@ -610,9 +781,8 @@ module.exports = grammar({
 
             _literal: $ => choice(
                 seq($._abstract_literal, optional($._unit)),
-                $.character_literal,
-                $.string_literal,
                 $.bit_string_literal,
+                $.string_literal,
                 $.library_constant,
                 $.library_constant_boolean,
                 $.library_constant_character,
@@ -777,13 +947,13 @@ module.exports = grammar({
             ),
 
             interface_package_declaration: $ => seq(
-                $.PACKAGE, $.identifier, $.IS, $.NEW, $.name, $._interface_package_generic_map_aspect
+                $.PACKAGE, $.identifier, $.IS, $.NEW, $.name, $.interface_package_generic_map_aspect
             ),
 
-            _interface_package_generic_map_aspect: $ => choice(
-                $.generic_map_aspect,
-                seq($.GENERIC, $.MAP, $.left_parenthesis, $.box,     $.right_parenthesis),
-                seq($.GENERIC, $.MAP, $.left_parenthesis, $.DEFAULT, $.right_parenthesis)
+            interface_package_generic_map_aspect: $ => choice(
+                seq($.GENERIC, $.MAP, $.left_parenthesis, $.box,              $.right_parenthesis),
+                seq($.GENERIC, $.MAP, $.left_parenthesis, $.DEFAULT,          $.right_parenthesis),
+                seq($.GENERIC, $.MAP, $.left_parenthesis, $.association_list, $.right_parenthesis)
             ),
 
             generic_map_aspect: $ => seq(
@@ -801,19 +971,6 @@ module.exports = grammar({
             _interface_subprogram_default: $ => choice(
                 $.name,
                 $.box
-            ),
-
-            _interface_subprogram_specification: $ => choice(
-                $.interface_procedure_specification,
-                $.interface_function_specification
-            ),
-
-            interface_procedure_specification: $ => seq(
-                $.PROCEDURE, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis))
-            ),
-
-            interface_function_specification: $ => seq(
-                optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis)), $.RETURN, $.name
             ),
 
             _designator: $ => choice(
@@ -1031,12 +1188,7 @@ module.exports = grammar({
             ),
 
             group_constituent_list: $ => seq(
-                $._group_constituent, repeat(seq($.comma, $._group_constituent))
-            ),
-
-            _group_constituent: $ => choice(
-                $.name,
-                $.character_literal
+                $.name, repeat(seq($.comma, $.name))
             ),
 
             group_template_declaration: $ => seq(
@@ -1207,17 +1359,38 @@ module.exports = grammar({
                 $._subprogram_specification, $.semicolon
             ),
 
+            subprogram_body: $ => seq(
+                $._subprogram_specification, $.IS, repeat($._subprogram_declarative_item), $.sequential_begin_block, $.END, optional(choice($.PROCEDURE, $.FUNCTION)), optional($._designator), $.semicolon
+            ),
+
             _subprogram_specification: $ => choice(
                 $.procedure_specification,
                 $.function_specification
             ),
 
-            procedure_specification: $ => seq(
+            _interface_subprogram_specification: $ => choice(
+                $.interface_procedure_specification,
+                $.interface_function_specification
+            ),
+
+            procedure_specification: $ => prec.left(seq(
                 $.PROCEDURE, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis))
+            )),
+
+            interface_procedure_specification: $ => seq(
+                $.PROCEDURE, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis))
             ),
 
             function_specification: $ => seq(
                 optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional($.subprogram_header), optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis)), $.RETURN, optional(seq($.identifier, $.OF)), $.name
+            ),
+
+            interface_function_specification: $ => seq(
+                optional(choice($.PURE, $.IMPURE)), $.FUNCTION, $._designator, optional(seq(optional($.PARAMETER), $.left_parenthesis, $.formal_parameter_list, $.right_parenthesis)), $.RETURN, $.name
+            ),
+
+            subprogram_instantiation_declaration: $ => seq(
+                choice($.PROCEDURE, $.FUNCTION), $._designator, $.IS, $.NEW, $.name, optional($.signature), optional($.generic_map_aspect), $.semicolon
             ),
 
             subprogram_header: $ => seq(
@@ -1295,18 +1468,6 @@ module.exports = grammar({
                 $.group_declaration
             ),
 
-            subprogram_instantiation_declaration: $ => seq(
-                choice($.PROCEDURE, $.FUNCTION), $._designator, $.IS, $.NEW, $.name, optional($.signature), optional($.generic_map_aspect), $.semicolon
-            ),
-
-            subprogram_body: $ => seq(
-                $._subprogram_specification, $.IS, repeat($._subprogram_declarative_item), $.sequential_begin_block, $.END, optional(choice($.PROCEDURE, $.FUNCTION)), optional($._designator), $.semicolon
-            ),
-
-            sequential_block_statement: $ => seq(
-                optional($.label_declaration), $.BLOCK, optional($.IS), repeat($._process_declarative_item), $.sequential_begin_block, $.END, optional($.BLOCK), optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
             _process_declarative_item: $ => choice(
                 $.subprogram_declaration,
                 $.subprogram_body,
@@ -1327,35 +1488,6 @@ module.exports = grammar({
                 $.group_declaration
             ),
 
-            null_statement: $ => seq(
-                optional($.label_declaration), $.NULL, $.semicolon
-            ),
-
-            _return_statement: $ => choice(
-                $.plain_return_statement,
-                $.value_return_statement
-            ),
-
-            plain_return_statement: $ => seq(
-                optional($.label_declaration), $.RETURN, optional(seq($.WHEN, $._expression)), $.semicolon
-            ),
-
-            value_return_statement: $ => seq(
-                optional($.label_declaration), $.RETURN, $.conditional_or_unaffected_expression, $.semicolon
-            ),
-
-            exit_statement: $ => seq(
-                optional($.label_declaration), $.EXIT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
-            ),
-
-            next_statement: $ => seq(
-                optional($.label_declaration), $.NEXT, optional(alias($.identifier, $.label)), optional(seq($.WHEN, $._expression)), $.semicolon
-            ),
-
-            loop_statement: $ => seq(
-                optional($.label_declaration), optional($.iteration_scheme), $.LOOP, repeat($._sequential_statement), $.END, $.LOOP, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
             iteration_scheme: $ => choice(
                 seq($.WHILE, $._expression),
                 seq($.FOR, $.parameter_specification)
@@ -1365,52 +1497,8 @@ module.exports = grammar({
                 $.identifier, $.IN, $._discrete_range
             ),
 
-            case_statement: $ => seq(
-                optional($.label_declaration), $.CASE, optional($._question_mark), $._expression, $.IS, $.case_statement_alternative, repeat($.case_statement_alternative), $.END, $.CASE, optional($._question_mark), optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
             case_statement_alternative: $ => seq(
                 $.WHEN, $.choices, $._arrow, repeat($._sequential_statement)
-            ),
-
-            if_statement: $ => seq(
-                optional($.label_declaration), $.IF, $._expression, $.THEN, repeat($._sequential_statement), repeat(seq($.ELSIF, $._expression, $.THEN, repeat($._sequential_statement))), optional(seq($.ELSE, repeat($._sequential_statement))), $.END, $.IF, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
-            procedure_call_statement: $ => seq(
-                optional($.label_declaration), $.name, $.semicolon
-            ),
-
-            _variable_assignment_statement: $ => choice(
-                seq(optional($.label_declaration), $.simple_variable_assignment),
-                seq(optional($.label_declaration), $.selected_variable_assignment)
-            ),
-
-            simple_variable_assignment: $ => seq(
-                $._target, $.variable_assignment, $.conditional_or_unaffected_expression, $.semicolon
-            ),
-
-            selected_variable_assignment: $ => seq(
-                $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.variable_assignment, $.selected_expressions, $.semicolon
-            ),
-
-            _signal_assignment_statement: $ => choice(
-                seq(optional($.label_declaration), $._simple_signal_assignment),
-                seq(optional($.label_declaration), $.conditional_signal_assignment),
-                seq(optional($.label_declaration), $._selected_signal_assignment)
-            ),
-
-            _selected_signal_assignment: $ => choice(
-                $.selected_waveform_assignment,
-                $.selected_force_assignment
-            ),
-
-            selected_force_assignment: $ => seq(
-                $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.selected_expressions, $.semicolon
-            ),
-
-            selected_waveform_assignment: $ => seq(
-                $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.delay_mechanism), $.selected_waveforms, $.semicolon
             ),
 
             selected_waveforms: $ => seq(
@@ -1435,10 +1523,6 @@ module.exports = grammar({
                 repeat(seq($._expression, $.WHEN, $.choices, $.comma)), $._expression, $.WHEN, $.choices
             ),
 
-            conditional_signal_assignment: $ => seq(
-                $._target, $.signal_assignment, optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
-            ),
-
             conditional_waveforms: $ => seq(
                 $.waveform, $.WHEN, $._expression, repeat(seq($.ELSE, $.waveform, $.WHEN, $._expression)), optional(seq($.ELSE, $.waveform))
             ),
@@ -1459,20 +1543,6 @@ module.exports = grammar({
                 $.right_parenthesis
             ),
 
-            _simple_signal_assignment: $ => choice(
-                $.simple_waveform_assignment,
-                $.simple_force_assignment,
-                $.simple_release_assignment
-            ),
-
-            simple_waveform_assignment: $ => seq(
-                $._target, $.signal_assignment, optional($.delay_mechanism), $.waveform, $.semicolon
-            ),
-
-            simple_force_assignment: $ => seq(
-                $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, $.semicolon
-            ),
-
             conditional_or_unaffected_expression: $ => seq(
                 $._expression_or_unaffected, repeat(seq($.WHEN, $._expression, $.ELSE, $._expression_or_unaffected)), optional(seq($.WHEN, $._expression))
             ),
@@ -1482,28 +1552,8 @@ module.exports = grammar({
                 $.UNAFFECTED
             ),
 
-            simple_release_assignment: $ => seq(
-                $._target, $.signal_assignment, $.RELEASE, optional($.force_mode), $.semicolon
-            ),
-
-            assertion_statement: $ => seq(
-                optional($.label_declaration), $.assertion, $.semicolon
-            ),
-
-            assertion: $ => seq(
-                $.ASSERT, $._expression, optional(seq($.REPORT, $._expression)), optional(seq($.SEVERITY, $._expression))
-            ),
-
-            report_statement: $ => seq(
-                optional($.label_declaration), $.REPORT, $._expression, optional(seq($.SEVERITY, $._expression)), $.semicolon
-            ),
-
             label_declaration: $ => seq(
                 alias($.identifier, $.label), $.colon
-            ),
-
-            wait_statement: $ => seq(
-                optional($.label_declaration), $.WAIT, optional($.sensitivity_clause), optional($.condition_clause), optional($.timeout_clause), $.semicolon
             ),
 
             sensitivity_clause: $ => seq(
@@ -1590,17 +1640,9 @@ module.exports = grammar({
                 $.identifier_list, $.colon, $.subtype_indication, $.semicolon
             ),
 
-            process_statement: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $.PROCESS, optional(seq($.left_parenthesis, $._process_sensitivity_list, $.right_parenthesis)), optional($.IS), repeat($._process_declarative_item), $.sequential_begin_block, $.END, optional($.POSTPONED), $.PROCESS, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
             _process_sensitivity_list: $ => choice(
                 $.ALL,
                 $.sensitivity_list
-            ),
-
-            concurrent_procedure_call_statement: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $.name, $.semicolon
             ),
 
             _block_declarative_item: $ => choice(
@@ -1661,64 +1703,9 @@ module.exports = grammar({
                 $.OPEN
             ),
 
-            _generate_statement: $ => choice(
-                $.for_generate_statement,
-                $.if_generate_statement,
-                $.case_generate_statement
-            ),
-
-            for_generate_statement: $ => seq(
-                $.label_declaration, $.FOR, $.parameter_specification, $.generate_body, $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
-            if_generate_statement: $ => seq(
-                $.label_declaration, $.IF, optional($.label_declaration), $._expression, $.generate_body, repeat(seq($.ELSIF, optional($.label_declaration), $._expression, $.generate_body)), optional(seq($.ELSE, optional($.label_declaration), $.generate_body)), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
-            case_generate_statement: $ => seq(
-                $.label_declaration, $.CASE, $._expression, $.GENERATE, $.case_generate_alternative, repeat($.case_generate_alternative), $.END, $.GENERATE, optional(alias($.identifier, $.label)), $.semicolon
-            ),
-
             case_generate_alternative: $ => prec.left(seq(
                 $.WHEN, optional($.label_declaration), $.choices, $.case_generate_body
             )),
-
-            component_instantiation_statement: $ => choice(
-                seq($.label_declaration, $.instantiated_unit, optional($.generic_map_aspect), optional($.port_map_aspect), $.semicolon),
-                seq($.label_declaration, $.name, optional($.generic_map_aspect), $.port_map_aspect, $.semicolon)
-            ),
-
-            instantiated_unit: $ => choice(
-                seq($.COMPONENT, $.name), // Optional "component" covered by procedure call
-                seq($.ENTITY, optional(seq($.library_namespace, $.dot)), $.name, optional(seq($.left_parenthesis, $.identifier, $.right_parenthesis))),
-                seq($.CONFIGURATION, $.name)
-            ),
-
-            concurrent_signal_assignment_statement: $ => choice(
-                seq(optional($.label_declaration), optional($.POSTPONED), $.concurrent_simple_signal_assignment),
-                seq(optional($.label_declaration), optional($.POSTPONED), $.concurrent_conditional_signal_assignment),
-                seq(optional($.label_declaration), optional($.POSTPONED), $.concurrent_selected_signal_assignment)
-            ),
-
-            concurrent_simple_signal_assignment: $ => seq(
-                $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.waveform, $.semicolon
-            ),
-
-            concurrent_conditional_signal_assignment: $ => seq(
-                $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, $.semicolon
-            ),
-
-            concurrent_selected_signal_assignment: $ => seq(
-                $.WITH, $._expression, $.SELECT, optional($._question_mark), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, $.semicolon
-            ),
-
-            concurrent_assertion_statement: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $.assertion, $.semicolon
-            ),
-
-            block_statement: $ => seq(
-                $.label_declaration, $.BLOCK, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis)), optional($.IS), optional(seq($.generic_clause, optional(seq($.generic_map_aspect, $.semicolon)))), optional(seq($.port_clause, optional(seq($.port_map_aspect, $.semicolon)))), repeat($._block_declarative_item), $.concurrent_begin_block, $.END, $.BLOCK, optional(alias($.identifier, $.label)), $.semicolon
-            ),
     }
 });
 
