@@ -483,15 +483,16 @@ static void show_looking_for(const bool* valid_symbols)
 
 bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols)
 {
-    show_looking_for(valid_symbols);
-
     skip_whitespace(scanner, lexer);
 
     if(valid_symbols[ERROR_SENTINEL]){
         debug("Error correction mode");
         return false;
+    }
 
-    }else if(valid_symbols[END_OF_FILE] && lexer->eof(lexer)){
+    show_looking_for(valid_symbols);
+
+    if(valid_symbols[END_OF_FILE] && lexer->eof(lexer)){
         lexer->result_symbol = END_OF_FILE;
         debug("Returning type END_OF_FILE");
         return true;
@@ -539,6 +540,7 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
          *
          * The underscore corner cases are handled by IDENTIFIER_EXPECTING_LETTER
          */
+        lexer->mark_end(lexer);
         finish_identifier(lexer, false);
         lexer->result_symbol = IDENTIFIER;
         debug("Returning type IDENTIFIER");
@@ -607,7 +609,7 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
             debug("Returning false");
             return false;
 
-        }else if(valid_symbols[type->type]){
+        }else if(type->type < ERROR_SENTINEL && valid_symbols[type->type]){
             lexer->result_symbol = type->type;
 
             if(scanner->is_in_directive){

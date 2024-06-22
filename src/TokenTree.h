@@ -292,9 +292,7 @@ TypeNode* token_tree_match(TokenTree* this, TSLexer* lexer)
     TypeNode* type      = 0;
     Node*     node      = this->root;
 
-    while(node){
-        if(lexer->eof(lexer)) return type;
-
+    while(node && !lexer->eof(lexer)){
         if(lookahead < node->character){
             node = node->left;
 
@@ -306,6 +304,8 @@ TypeNode* token_tree_match(TokenTree* this, TSLexer* lexer)
             if(node->type){ // Keep track of the best option
                 lexer->mark_end(lexer);
                 type = node->type;
+            }else if(type && type->type == IDENTIFIER_EXPECTING_LETTER){
+                type = 0;
             }
             node = node->next;
         }
