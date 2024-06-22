@@ -208,6 +208,8 @@ typedef enum TokenTypeTag{
     LIBRARY_NAMESPACE,
     LIBRARY_TYPE,
 
+    END_OF_FILE,
+
     ERROR_SENTINEL,
 
     // For internal use only...
@@ -439,6 +441,8 @@ bool is_base_specifier   (TokenType type);
             case LIBRARY_FUNCTION:                         return "LIBRARY_FUNCTION";
             case LIBRARY_NAMESPACE:                        return "LIBRARY_NAMESPACE";
             case LIBRARY_TYPE:                             return "LIBRARY_TYPE";
+
+            case END_OF_FILE:                              return "END_OF_FILE";
 
             case ERROR_SENTINEL:                           return "ERROR_SENTINEL";
 

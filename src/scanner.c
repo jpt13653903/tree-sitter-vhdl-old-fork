@@ -491,6 +491,11 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
         debug("Error correction mode");
         return false;
 
+    }else if(valid_symbols[END_OF_FILE] && lexer->eof(lexer)){
+        lexer->result_symbol = END_OF_FILE;
+        debug("Returning type END_OF_FILE");
+        return true;
+
     }else if(valid_symbols[IDENTIFIER] && lexer->lookahead == '\\'){
         lexer->advance(lexer, false);
         if(!bounded_token(lexer, '\\')) return false;
@@ -547,7 +552,8 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
         return valid_symbols[TOKEN_STRING_LITERAL];
     }
 
-    bool turn_into_identifier = false;
+    bool found_can_be_identifier    = false;
+    bool found_cannot_be_identifier = false;
 
     while(type){
         if(type->type == COMMENT_LINE_START){
@@ -614,11 +620,13 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
             return true;
 
         }else if(can_be_identifier(scanner, type->type)){
-            turn_into_identifier = true;
+            found_can_be_identifier = true;
+        }else{
+            found_cannot_be_identifier = true;
         }
         type = type->next;
     }
-    if(valid_symbols[IDENTIFIER] && turn_into_identifier){
+    if(valid_symbols[IDENTIFIER] && found_can_be_identifier && !found_cannot_be_identifier){
         lexer->result_symbol = IDENTIFIER;
         debug("Returning type IDENTIFIER");
         return true;

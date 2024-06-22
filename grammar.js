@@ -217,6 +217,8 @@ module.exports = grammar({
         $.library_namespace,
         $.library_type,
 
+        $._end_of_file,
+
         $.error_sentinel,
     ],
 
@@ -228,8 +230,8 @@ module.exports = grammar({
     conflicts: $ => [ ],
 
     rules: {
-        // Design File (the all-permissive reg-ex makes it continue after errors)
-            design_file: $ => repeat1(choice($.design_unit, /.+/)),
+        // Design File
+            design_file: $ => seq(repeat(choice($.design_unit)), $._end_of_file),
 
             design_unit: $ => seq(
                 repeat($._context_item), $._library_unit
@@ -237,7 +239,8 @@ module.exports = grammar({
 
             _library_unit: $ => choice(
                 $._primary_unit,
-                $._secondary_unit
+                $._secondary_unit,
+                /.+/
             ),
 
         // Context Items

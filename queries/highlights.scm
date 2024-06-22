@@ -168,7 +168,12 @@
     (double_less_than)    (double_greater_than)
 ] @punctuation.bracket
 
-[ (colon) (commercial_at) (association_element) ] @punctuation.special
+[
+    (colon)
+    (commercial_at)
+    (association_element)
+    (case_statement_alternative)
+] @punctuation.special
 
 [
     (decimal_literal)
@@ -227,4 +232,6 @@
 (instantiated_unit
   (name
     . (identifier) @module ))
+
+(ERROR) @error
 
