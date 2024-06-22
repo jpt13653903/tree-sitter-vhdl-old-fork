@@ -934,6 +934,7 @@ module.exports = grammar({
                 $.interface_type_declaration,
                 $.interface_subprogram_declaration,
                 $.interface_package_declaration,
+                /.+/
             ),
 
             _interface_object_declaration: $ => choice(
@@ -1655,7 +1656,7 @@ module.exports = grammar({
                 $.sensitivity_list
             ),
 
-            _block_declarative_item: $ => choice(
+            _block_declarative_item: $ => prec(1, choice(
                 $.subprogram_declaration,
                 $.subprogram_body,
                 $.subprogram_instantiation_declaration,
@@ -1677,8 +1678,9 @@ module.exports = grammar({
                 $.disconnection_specification,
                 $.use_clause,
                 $.group_template_declaration,
-                $.group_declaration
-            ),
+                $.group_declaration,
+                /.+/
+            )),
 
             configuration_specification: $ => prec.left(choice(
                 seq($.FOR, $.component_specification, $.binding_indication, optional(seq($.END, $.FOR, $.semicolon))),

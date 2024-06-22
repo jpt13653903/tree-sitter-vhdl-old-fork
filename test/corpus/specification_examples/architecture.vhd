@@ -10,11 +10,12 @@ library ieee;
 entity Full_Adder is
   port(
     Clk   : in  std_logic;
+    adding
     Reset : in  std_logic;
   );
 end entity Full_Adder;
 
--- A body of entity Full_Adder:
+/* -- A body of entity Full_Adder:
 architecture DataFlow of Full_Adder is
   signal A,B: Bit;
 begin
@@ -38,5 +39,5 @@ begin
     end loop;
   end process;
   opHBW_SEL_N <= not(opHBW_SEL);
-end architecture DataFlow;
+end architecture DataFlow; */
 
