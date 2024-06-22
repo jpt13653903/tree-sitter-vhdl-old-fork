@@ -214,6 +214,7 @@ module.exports = grammar({
         $.library_constant_debug,
         $.library_constant_unit,
         $.library_function,
+        $.library_namespace,
         $.library_type,
 
         $.error_sentinel,
@@ -247,7 +248,12 @@ module.exports = grammar({
         ),
 
         logical_name_list: $ => seq(
-            $.identifier, repeat(seq($.comma, $.identifier))
+            $._logical_name, repeat(seq($.comma, $._logical_name))
+        ),
+
+        _logical_name: $ => choice(
+            $.library_namespace,
+            $.identifier
         ),
 
         use_clause: $ => seq(
@@ -255,7 +261,7 @@ module.exports = grammar({
         ),
 
         selected_name: $ => seq(
-            $.identifier, repeat(seq($.dot, choice($.identifier, $.ALL)))
+            choice($.library_namespace, $.identifier), repeat(seq($.dot, choice($.identifier, $.ALL)))
         ),
 
         context_reference: $ => seq(
@@ -1314,7 +1320,7 @@ module.exports = grammar({
 
         instantiated_unit: $ => choice(
             seq($.COMPONENT, $.name), // Optional "component" covered by procedure call
-            seq($.ENTITY, $.name, optional(seq($.left_parenthesis, $.identifier, $.right_parenthesis))),
+            seq($.ENTITY, optional(seq($.library_namespace, $.dot)), $.name, optional(seq($.left_parenthesis, $.identifier, $.right_parenthesis))),
             seq($.CONFIGURATION, $.name)
         ),
 

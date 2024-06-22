@@ -216,6 +216,8 @@
 
 (attribute_identifier) @attribute
 
+(library_namespace) @module.builtin
+
 (library_clause
   (logical_name_list
     (identifier) @module ))

@@ -205,6 +205,7 @@ typedef enum TokenTypeTag{
     LIBRARY_CONSTANT_DEBUG,
     LIBRARY_CONSTANT_UNIT,
     LIBRARY_FUNCTION,
+    LIBRARY_NAMESPACE,
     LIBRARY_TYPE,
 
     ERROR_SENTINEL,
@@ -436,6 +437,7 @@ bool is_base_specifier   (TokenType type);
             case LIBRARY_CONSTANT_DEBUG:                   return "LIBRARY_CONSTANT_DEBUG";
             case LIBRARY_CONSTANT_UNIT:                    return "LIBRARY_CONSTANT_UNIT";
             case LIBRARY_FUNCTION:                         return "LIBRARY_FUNCTION";
+            case LIBRARY_NAMESPACE:                        return "LIBRARY_NAMESPACE";
             case LIBRARY_TYPE:                             return "LIBRARY_TYPE";
 
             case ERROR_SENTINEL:                           return "ERROR_SENTINEL";

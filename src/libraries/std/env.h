@@ -100,11 +100,21 @@ static void register_std_env_functions(TokenTree* token_tree)
 }
 //------------------------------------------------------------------------------
 
+static void register_std_env_namespaces(TokenTree* token_tree)
+{
+    token_tree_insert(token_tree, "work", LIBRARY_NAMESPACE);
+    token_tree_insert(token_tree, "std",  LIBRARY_NAMESPACE);
+    token_tree_insert(token_tree, "ieee", LIBRARY_NAMESPACE);
+}
+//------------------------------------------------------------------------------
+
 void register_std_env(TokenTree* token_tree)
 {
-    register_std_env_types    (token_tree);
-    register_std_env_constants(token_tree);
-    register_std_env_functions(token_tree);
+
+    register_std_env_types     (token_tree);
+    register_std_env_constants (token_tree);
+    register_std_env_functions (token_tree);
+    register_std_env_namespaces(token_tree);
 }
 //------------------------------------------------------------------------------
 
