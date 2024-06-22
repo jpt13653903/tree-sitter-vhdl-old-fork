@@ -821,7 +821,7 @@ module.exports = grammar({
 
             _element: $ => choice(
                 $.simple_expression,
-                $._discrete_range,
+                $._range,
                 $.OTHERS,
                 $.choices
             ),
@@ -829,10 +829,6 @@ module.exports = grammar({
             choices: $ => prec.left(7, seq(
                 $._element, $._vertical_bar, $._element
             )),
-
-            _discrete_range: $ => choice(
-                $._range
-            ),
 
             _range: $ => choice(
                 $._expression,
@@ -1113,7 +1109,7 @@ module.exports = grammar({
             ),
 
             index_constraint: $ => prec.left(seq(
-                $._discrete_range, repeat(seq($.comma, $._discrete_range))
+                $._range, repeat(seq($.comma, $._range))
             )),
 
             index_subtype_definition: $ => seq(
@@ -1494,15 +1490,15 @@ module.exports = grammar({
             ),
 
             parameter_specification: $ => seq(
-                $.identifier, $.IN, $._discrete_range
+                $.identifier, $.IN, $._range
             ),
 
             case_statement_alternative: $ => seq(
-                $.WHEN, $.choices, $._arrow, repeat($._sequential_statement)
+                $.WHEN, $._element, $._arrow, repeat($._sequential_statement)
             ),
 
             selected_waveforms: $ => seq(
-                repeat(seq($.waveform, $.WHEN, $.choices, $.comma)), $.waveform, $.WHEN, $.choices
+                repeat(seq($.waveform, $.WHEN, $._element, $.comma)), $.waveform, $.WHEN, $._element
             ),
 
             waveform: $ => choice(
@@ -1520,7 +1516,7 @@ module.exports = grammar({
             ),
 
             selected_expressions: $ => seq(
-                repeat(seq($._expression, $.WHEN, $.choices, $.comma)), $._expression, $.WHEN, $.choices
+                repeat(seq($._expression, $.WHEN, $._element, $.comma)), $._expression, $.WHEN, $._element
             ),
 
             conditional_waveforms: $ => seq(
@@ -1704,7 +1700,7 @@ module.exports = grammar({
             ),
 
             case_generate_alternative: $ => prec.left(seq(
-                $.WHEN, optional($.label_declaration), $.choices, $.case_generate_body
+                $.WHEN, optional($.label_declaration), $._element, $.case_generate_body
             )),
     }
 });
