@@ -718,10 +718,10 @@ module.exports = grammar({
               $.identifier, optional(seq($.left_parenthesis, $._expression, $.right_parenthesis))
             ),
 
-            function_call: $ => choice(
+            function_call: $ => prec.right(choice(
                 seq(optional($.generic_map_aspect), $.PARAMETER, $.MAP, $.parenthesis_group),
-                seq($.generic_map_aspect, optional(seq($.PARAMETER, $.MAP)), $.parenthesis_group)
-            ),
+                seq($.generic_map_aspect, optional(seq(optional(seq($.PARAMETER, $.MAP)), $.parenthesis_group)))
+            )),
 
             parenthesis_group: $ => seq(
                 $.left_parenthesis,
