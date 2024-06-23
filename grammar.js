@@ -142,46 +142,8 @@ module.exports = grammar({
 
         $.directive_end_marker, // Scanner internal use only
 
-        $._ampersand,
-        $.tick,
-        $.left_parenthesis,
-        $.right_parenthesis,
-        $._multiply,
-        $._plus_sign,
-        $.comma,
-        $._minus_sign,
-        $.dot,
-        $._divide,
-        $.colon,
-        $.semicolon,
-        $._less_than_sign,
-        $._equals_sign,
-        $._greater_than_sign,
         $._grave_accent,
-        $._vertical_bar,
-        $.left_square_bracket,
-        $.right_square_bracket,
-        $._question_mark,
-        $.commercial_at,
-
-        $._arrow,
-        $._circumflex,
-        $.exponentiate,
-        $.variable_assignment,
-        $._inequality,
-        $._greater_than_or_equal,
-        $._less_than_or_equal,
-        $.signal_assignment,
         $.box,
-        $.condition_conversion,
-        $._matching_equality,
-        $._matching_inequality,
-        $._matching_less_than,
-        $._matching_less_than_or_equal,
-        $._matching_greater_than,
-        $._matching_greater_than_or_equal,
-        $.double_less_than,
-        $.double_greater_than,
 
         $.delimiter_end_marker, // Scanner internal use only
 
@@ -495,48 +457,52 @@ module.exports = grammar({
                 seq(optional($.label_declaration), $.RETURN, $.conditional_or_unaffected_expression, ";")
             ),
 
+            signal_assignment: $ => "<=",
+
             simple_waveform_assignment: $ => seq(
-                optional($.label_declaration), $._target, "<=", optional($.delay_mechanism), $.waveform, ";"
+                optional($.label_declaration), $._target, $.signal_assignment, optional($.delay_mechanism), $.waveform, ";"
             ),
 
+            variable_assignment: $ => ":=",
+
             simple_variable_assignment: $ => seq(
-                optional($.label_declaration), $._target, ":=", $.conditional_or_unaffected_expression, ";"
+                optional($.label_declaration), $._target, $.variable_assignment, $.conditional_or_unaffected_expression, ";"
             ),
 
             concurrent_simple_signal_assignment: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $._target, "<=", optional($.GUARDED), optional($.delay_mechanism), $.waveform, ";"
+                optional($.label_declaration), optional($.POSTPONED), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.waveform, ";"
             ),
 
             simple_force_assignment: $ => seq(
-                optional($.label_declaration), $._target, "<=", $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, ";"
+                optional($.label_declaration), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.conditional_or_unaffected_expression, ";"
             ),
 
             simple_release_assignment: $ => seq(
-                optional($.label_declaration), $._target, "<=", $.RELEASE, optional($.force_mode), ";"
+                optional($.label_declaration), $._target, $.signal_assignment, $.RELEASE, optional($.force_mode), ";"
             ),
 
             conditional_signal_assignment: $ => seq(
-                optional($.label_declaration), $._target, "<=", optional($.delay_mechanism), $.conditional_waveforms, ";"
+                optional($.label_declaration), $._target, $.signal_assignment, optional($.delay_mechanism), $.conditional_waveforms, ";"
             ),
 
             concurrent_conditional_signal_assignment: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $._target, "<=", optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, ";"
+                optional($.label_declaration), optional($.POSTPONED), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.conditional_waveforms, ";"
             ),
 
             selected_waveform_assignment: $ => seq(
-                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, "<=", optional($.delay_mechanism), $.selected_waveforms, ";"
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, $.signal_assignment, optional($.delay_mechanism), $.selected_waveforms, ";"
             ),
 
             concurrent_selected_signal_assignment: $ => seq(
-                optional($.label_declaration), optional($.POSTPONED), $.WITH, $._expression, $.SELECT, optional("?"), $._target, "<=", optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, ";"
+                optional($.label_declaration), optional($.POSTPONED), $.WITH, $._expression, $.SELECT, optional("?"), $._target, $.signal_assignment, optional($.GUARDED), optional($.delay_mechanism), $.selected_waveforms, ";"
             ),
 
             selected_force_assignment: $ => seq(
-                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, "<=", $.FORCE, optional($.force_mode), $.selected_expressions, ";"
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, $.signal_assignment, $.FORCE, optional($.force_mode), $.selected_expressions, ";"
             ),
 
             selected_variable_assignment: $ => seq(
-                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, ":=", $.selected_expressions, ";"
+                optional($.label_declaration), $.WITH, $._expression, $.SELECT, optional("?"), $._target, $.variable_assignment, $.selected_expressions, ";"
             ),
 
             wait_statement: $ => seq(
@@ -557,8 +523,10 @@ module.exports = grammar({
             )),
 
             condition_expression: $ => prec(11, seq(
-                "??", $._expression,
+                $.condition_conversion, $._expression,
             )),
+
+            condition_conversion: $ => "??",
 
             logical_expression: $ => prec.left(12, seq(
                 $._expression, $.logical_operator, $._expression,
@@ -642,6 +610,8 @@ module.exports = grammar({
                 $._MOD,
                 $._REM
             ),
+
+            exponentiate: $ => "**",
 
             _primary: $ => choice(
                 $.name,
@@ -995,7 +965,7 @@ module.exports = grammar({
             ),
 
             simple_mode_indication: $ => seq(
-                optional($.mode), $._interface_type_indication, optional($.BUS), optional(seq(":=", $.conditional_expression))
+                optional($.mode), $._interface_type_indication, optional($.BUS), optional(seq($.variable_assignment, $.conditional_expression))
             ),
 
             _mode_view_indication: $ => choice(
@@ -1276,11 +1246,11 @@ module.exports = grammar({
             ),
 
             constant_declaration: $ => seq(
-                $.CONSTANT, $.identifier_list, ":", $.subtype_indication, optional(seq(":=", $.conditional_expression)), ";"
+                $.CONSTANT, $.identifier_list, ":", $.subtype_indication, optional(seq($.variable_assignment, $.conditional_expression)), ";"
             ),
 
             signal_declaration: $ => seq(
-                $.SIGNAL, $.identifier_list, ":", $.subtype_indication, optional($.signal_kind), optional(seq(":=", $.conditional_expression)), ";"
+                $.SIGNAL, $.identifier_list, ":", $.subtype_indication, optional($.signal_kind), optional(seq($.variable_assignment, $.conditional_expression)), ";"
             ),
 
             signal_kind: $ => choice(
@@ -1438,7 +1408,7 @@ module.exports = grammar({
             ),
 
             variable_declaration: $ => seq(
-                optional($.SHARED), $.VARIABLE, $.identifier_list, ":", $.subtype_indication, optional($.generic_map_aspect), optional(seq(":=", $.conditional_expression)), ";"
+                optional($.SHARED), $.VARIABLE, $.identifier_list, ":", $.subtype_indication, optional($.generic_map_aspect), optional(seq($.variable_assignment, $.conditional_expression)), ";"
             ),
 
             protected_type_body: $ => seq(
