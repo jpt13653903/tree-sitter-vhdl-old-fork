@@ -19,6 +19,7 @@ architecture DataFlow of Full_Adder is
   signal A,B: Bit;
 
   function "-"    (A : std_logic) return integer;
+  function MyFunc (A : std_logic) return integer;
   function "??"   (A : std_logic) return integer;
   function "and"  (A : std_logic) return integer;
   function "or"   (A : std_logic) return integer;

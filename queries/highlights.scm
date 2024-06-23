@@ -284,5 +284,14 @@
   (name
     . (identifier) @module ))
 
+(function_specification
+  (operator_symbol) @function.builtin)
+
+(function_specification
+  (identifier) @function)
+
+(procedure_specification
+  (identifier) @function.method)
+
 (ERROR) @error
 
