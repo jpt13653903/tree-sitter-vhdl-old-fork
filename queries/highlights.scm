@@ -160,17 +160,13 @@
     (signal_assignment)
 ] @operator
 
-[ (tick) "," "." ";" ] @punctuation.delimiters
+[ "'" "," "." ";" ] @punctuation.delimiters
 
-[
-    (left_parenthesis)    (right_parenthesis)
-    (left_square_bracket) (right_square_bracket)
-    (double_less_than)    (double_greater_than)
-] @punctuation.bracket
+[ "("  ")" "["  "]" "<<" ">>" ] @punctuation.bracket
 
 [
     ":"
-    (commercial_at)
+    "@"
     (association_element)
     (case_statement_alternative)
 ] @punctuation.special
