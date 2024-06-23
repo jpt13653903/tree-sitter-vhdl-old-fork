@@ -208,6 +208,14 @@
 
 (label) @label
 
+(generic_map_aspect
+    (GENERIC) @constructor
+    (MAP)     @constructor )
+
+(port_map_aspect
+    (PORT) @constructor
+    (MAP)  @constructor )
+
 (subtype_indication
   (name
     (identifier))) @type
