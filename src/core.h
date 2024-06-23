@@ -222,7 +222,7 @@ static void register_operator_symbols(TokenTree* token_tree)
     token_tree_insert(token_tree, "\"rol\"",  TOKEN_OPERATOR_SYMBOL);
     token_tree_insert(token_tree, "\"ror\"",  TOKEN_OPERATOR_SYMBOL);
     token_tree_insert(token_tree, "\"+\"",    TOKEN_OPERATOR_SYMBOL);
-    token_tree_insert(token_tree, "\"–\"",    TOKEN_OPERATOR_SYMBOL);
+    token_tree_insert(token_tree, "\"-\"",    TOKEN_OPERATOR_SYMBOL);
     token_tree_insert(token_tree, "\"&\"",    TOKEN_OPERATOR_SYMBOL);
     token_tree_insert(token_tree, "\"*\"",    TOKEN_OPERATOR_SYMBOL);
     token_tree_insert(token_tree, "\"/\"",    TOKEN_OPERATOR_SYMBOL);
