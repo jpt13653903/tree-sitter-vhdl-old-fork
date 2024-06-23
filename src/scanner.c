@@ -485,12 +485,12 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
 {
     if(valid_symbols[ERROR_SENTINEL]){
         debug("Error correction mode");
-        return false;
+        // return false;
+    }else{
+        show_looking_for(valid_symbols);
     }
 
     skip_whitespace(scanner, lexer);
-
-    show_looking_for(valid_symbols);
 
     if(valid_symbols[END_OF_FILE] && lexer->eof(lexer)){
         lexer->result_symbol = END_OF_FILE;
@@ -520,7 +520,7 @@ bool tree_sitter_vhdl_external_scanner_scan(Scanner* scanner, TSLexer* lexer, co
         debug("returning type %s", token_type_to_string(lexer->result_symbol));
         return true;
 
-    }else if(valid_symbols[DIRECTIVE_BODY] && graphic_characters(lexer)){
+    }else if(!valid_symbols[ERROR_SENTINEL] && valid_symbols[DIRECTIVE_BODY] && graphic_characters(lexer)){
         lexer->result_symbol = DIRECTIVE_BODY;
         debug("returning type DIRECTIVE_BODY");
         return true;
