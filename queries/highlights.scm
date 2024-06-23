@@ -124,22 +124,69 @@
 (identifier) @variable
 
 [
-    (ACCESS) (AFTER) (ALIAS) (ALL) (ARCHITECTURE) (ARRAY) (ASSERT) (ASSUME)
-    (ATTRIBUTE) (BEGIN) (BLOCK) (BODY) (BUFFER) (BUS) (CASE) (COMPONENT)
-    (CONFIGURATION) (CONSTANT) (CONTEXT) (COVER) (DEFAULT) (DISCONNECT)
-    (DOWNTO) (ELSE) (ELSIF) (END) (ENTITY) (EXIT) (FAIRNESS) (FILE) (FOR)
-    (FORCE) (FUNCTION) (GENERATE) (GENERIC) (GROUP) (GUARDED) (IF) (IMPURE)
-    (IN) (INERTIAL) (INOUT) (IS) (LABEL) (LIBRARY) (LINKAGE) (LITERAL) (LOOP)
-    (MAP) (NEW) (NEXT) (NULL) (OF) (ON) (OPEN) (OTHERS) (OUT) (PACKAGE)
-    (PARAMETER) (PORT) (POSTPONED) (PROCEDURE) (PROCESS) (PROPERTY)
-    (PROTECTED) (PRIVATE) (PURE) (RANGE) (RECORD) (REGISTER) (REJECT)
-    (RELEASE) (REPORT) (RESTRICT) (RETURN) (SELECT) (SEQUENCE) (SEVERITY)
-    (SIGNAL) (SHARED) (STRONG) (SUBTYPE) (THEN) (TO) (TRANSPORT) (TYPE)
-    (UNAFFECTED) (UNITS) (UNTIL) (USE) (VARIABLE) (VIEW) (VPKG) (VMODE)
-    (VPROP) (VUNIT) (WAIT) (WHEN) (WHILE) (WITH) (box)
+    (ACCESS) (AFTER) (ALIAS) (ARCHITECTURE) (ARRAY) (ASSUME)
+    (ATTRIBUTE) (BLOCK) (BODY) (COMPONENT)
+    (CONFIGURATION) (CONTEXT) (COVER) (DISCONNECT)
+    (ENTITY) (FAIRNESS) (FILE)
+    (FORCE) (GENERATE) (GENERIC) (GROUP)
+    (LABEL) (LITERAL)
+    (MAP) (NEW) (PACKAGE)
+    (PARAMETER) (PORT) (PROPERTY)
+    (RANGE) (REJECT)
+    (RELEASE) (RESTRICT) (SEQUENCE)
+    (TRANSPORT)
+    (UNAFFECTED) (VIEW) (VPKG) (VMODE)
+    (VPROP) (VUNIT)
 ] @keyword
 
-(tool_directive) @keyword.directive
+[ (ALL) (OTHERS) (box) (DEFAULT) (OPEN) ] @constant.builtin
+
+[ (IS) (BEGIN) (END) ] @keyword
+
+[ (PROCESS) (WAIT) (ON) (UNTIL) ] @keyword.coroutine
+
+[ (FUNCTION) (PROCEDURE) ] @keyword.function
+
+[ (TO) (DOWNTO) (OF) ] @keyword.operator
+
+[ (LIBRARY) (USE) ] @keyword.import
+
+[
+    (SUBTYPE) (TYPE) (RECORD) (UNITS)
+    (CONSTANT) (SIGNAL) (VARIABLE)
+] @keyword.type
+
+[
+    (PROTECTED) (PRIVATE)
+    (PURE) (IMPURE)
+    (INERTIAL) (POSTPONED) (STRONG) (GUARDED)
+    (IN) (OUT) (INOUT) (LINKAGE) (BUFFER)
+    (REGISTER) (BUS)
+    (SHARED)
+] @keyword.modifier
+
+[ (FOR) (WHILE) (LOOP) (NEXT) (EXIT) ] @keyword.repeat
+
+[ (RETURN) ] @keyword.return
+
+[ (ASSERT) (REPORT) (SEVERITY) ] @keyword.debug
+
+[ (IF) (THEN) (ELSIF) (ELSE) (CASE) ] @keyword.conditional
+
+[ (WITH) (WHEN) (SELECT) ] @keyword.conditional.ternary
+
+[ (NULL) ] @constant.builtin
+
+(user_directive) @keyword.directive
+(protect_directive) @keyword.directive
+(warning_directive) @keyword.directive
+(error_directive) @keyword.directive
+
+(if_conditional_analysis) @keyword.directive
+(elsif_conditional_analysis) @keyword.directive
+(else_conditional_analysis) @keyword.directive
+(end_conditional_analysis) @keyword.directive
+
 (directive_body) @keyword.directive
 (directive_constant_builtin) @constant.macro
 (directive_error) @comment.error
@@ -182,7 +229,7 @@
     (based_literal_float)
 ] @number.float
 
-(string_literal) @string
+(string_literal) @string @spell
 (character_literal) @character
 
 [
