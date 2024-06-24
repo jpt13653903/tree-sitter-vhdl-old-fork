@@ -1,4 +1,4 @@
-#define DEBUG
+// #define DEBUG
 //------------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -473,11 +473,13 @@ static bool graphic_characters(TSLexer* lexer)
 
 static void show_looking_for(const bool* valid_symbols)
 {
-    debug("Looking for:");
-    for(int n = 0; n < ERROR_SENTINEL; n++){
-        if(valid_symbols[n]) printf("    %s\n", token_type_to_string(n));
-    }
-    printf("\n");
+    #ifdef DEBUG
+        debug("Looking for:");
+        for(int n = 0; n < ERROR_SENTINEL; n++){
+            if(valid_symbols[n]) printf("    %s\n", token_type_to_string(n));
+        }
+        printf("\n");
+    #endif
 }
 //------------------------------------------------------------------------------
 
